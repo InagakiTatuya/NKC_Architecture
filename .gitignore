@@ -1,0 +1,9 @@
+*.csproj
+*.sln
+*.suo
+UnityProject/CandleDash/Library/
+UnityProject/CandleDash/Temp/
+UnityProject/CandleDash/obj/
+UnityProject/CandleDash/obj/Debug
+
+
