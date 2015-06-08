@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 05 / 2015
+//更新日 :	06 / 08 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -11,11 +11,12 @@
 
 //名前空間//////////////////////////////////////////////////
 using	UnityEngine;
+using	UnityEngine.UI;
 using	System.Collections;
 
 //クラス////////////////////////////////////////////////////
 //タイトルのシステム_Begin//--------------------------------
-public	class TitleSystem : MonoBehaviour{
+public	partial class TitleSystem : MonoBehaviour{
 
 //パブリックフィールド//------------------------------------
 
@@ -27,26 +28,36 @@ public	class TitleSystem : MonoBehaviour{
 		get{return	f_timer;}
 	}
 
+	//初期化////////////////////////////////////////////////
 	public	void	Start(){//初期化_Begin//----------------
+		updateFunc	= new UpdateFunc[]{//更新関数を初期化
+			UpdateNeutral,
+			UpdateGoNext,
+		};
 		canvas	= canvasObject.GetComponent<Canvas>();
 #if	DEBUG_TITLE
 		CreateObujectInCanvas("Title/Debug/DebugBackGround");
 #endif
-		CreateObujectInCanvas("Title/StartButton");
+		CreateObujectInCanvas("Prefab/Title/TitleLogo");
+		GameObject	buttonObj	= CreateObujectInCanvas("Prefab/Title/StartButton");
+		Button		button		= buttonObj.GetComponent<Button>();
+		button.onClick.AddListener(this.OnStartButtonEnter);
+		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
 
+	//更新//////////////////////////////////////////////////
 	public	void	Update(){//更新_Beign//-----------------
-		f_timer	+= Time.deltaTime;
+		if(stateNo < 0 || stateNo >= (int)StateNo.Length)	ChangeState(StateNo.Neutral);
+		if(updateFunc[stateNo] != null)						updateFunc[stateNo]();
+		f_timer		+= Time.deltaTime;
+		stateTime	+= Time.deltaTime;
 	}//更新_End//-------------------------------------------
 
-//プライベートフィールド//----------------------------------
-
-	//背景を生成する_Begin//--------------------------------
-	private	void	CreateObujectInCanvas(string fileName){
-		GameObject	obj	= Resources.Load<GameObject>(fileName);
-		GameObject	bgd	= (GameObject)Instantiate(obj);
-		bgd.transform.SetParent(canvasObject.transform,false);
-	}//背景を生成する_End//---------------------------------
+	//その他関数////////////////////////////////////////////
+	//スタートボタンを押した_Begin//------------------------
+	public	void	OnStartButtonEnter(){
+		ChangeState(StateNo.GoNext);
+	}//スタートボタンを押した_End//-------------------------
 
 }//タイトルのシステム_End//---------------------------------
