@@ -14,26 +14,34 @@ using	System.Collections;
 public	partial	class SelectSystem : MonoBehaviour {
 
 	//プライベートフィールド//------------------------------
-	
-	enum	StateNo : int{//ステート番号_Beign//------------
+
+	//列挙//////////////////////////////////////////////////
+	private	enum	StateNo : int{//ステート番号_Beign//----
 		Neutral,
 		GoNext,
 		Length,
 	}//ステート番号_End//-----------------------------------
-	
-	private	int		stateNo;
-	private	float	stateTime;
+
+	private	enum	ButtonNo : int{//ボタン番号_Beign//-----
+		TutorialButton,
+		MainGameButton,
+		Length,
+	}//ボタン番号_End//-------------------------------------
+
+	//変数//////////////////////////////////////////////////
+	private	int				stateNo;
+	private	float			stateTime;
+	private	Button[]		button	= null;
 	
 	//更新//////////////////////////////////////////////////
 	private	delegate void	UpdateFunc();
 	private	UpdateFunc[]	updateFunc;
 	
 	private	void	UpdateNeutral(){//通常時の更新_Beign//--
-		
 	}//通常時の更新_End//-----------------------------------
 	
 	private	void	UpdateGoNext(){//次のシーンへ_Begin//---
-		if(stateTime > 1.0f)	Application.LoadLevel("Select");
+		if(stateTime > 1.0f)	Application.LoadLevel("CardInput");
 	}//次のシーンへ_End//-----------------------------------
 	
 	//その他関数////////////////////////////////////////////
@@ -44,5 +52,10 @@ public	partial	class SelectSystem : MonoBehaviour {
 		stateNo		= buf;
 		stateTime	= 0.0f;
 	}//ステート遷移_End//-----------------------------------
+
+	//ボタンを無効化する_Begin//----------------------------
+	private	void	ButtonCanceler(){
+		for(int i = 0;i < button.Length;i ++)	button[i].enabled	= false;
+	}//ボタンを無効化する_End//-----------------------------
 
 }//セレクトのシステム_End//---------------------------------

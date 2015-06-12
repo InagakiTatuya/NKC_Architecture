@@ -11,6 +11,7 @@
 
 //名前空間//////////////////////////////////////////////////
 using	UnityEngine;
+using	UnityEngine.Events;
 using	UnityEngine.UI;
 using	System.Collections;
 
@@ -20,6 +21,8 @@ public	partial	class SelectSystem : MonoBehaviour {
 
 //パブリックフィールド//------------------------------------
 
+	//変数//////////////////////////////////////////////////
+	public	GameObject	canvasObject	= null;
 	private	static	float	f_timer;
 	public	static	float	timer{
 		get{return	f_timer;}
@@ -31,34 +34,50 @@ public	partial	class SelectSystem : MonoBehaviour {
 			UpdateNeutral,
 			UpdateGoNext,
 		};
-		TitleSystem.CreateObujectInCanvas("Prefab/Select/BackGround");
-		TitleSystem.CreateObujectInCanvas("Prefab/Select/SelectHeader");
-		GameObject	buttonObj	= null;
-		Button		button		= null;
-		buttonObj	= TitleSystem.CreateObujectInCanvas("Prefab/Select/TutorialButton");
-		button		= buttonObj.GetComponent<Button>();
-		button.onClick.AddListener(this.OnTutorialButtonEnter);
-		buttonObj	= TitleSystem.CreateObujectInCanvas("Prefab/Select/MainGameButton");
-		button		= buttonObj.GetComponent<Button>();
-		button.onClick.AddListener(this.OnMainGameButtonEnter);
-		//ChangeState(StateNo.Neutral);
+		string[]	tablePrefabName	= new string[]{//プレファブの名前
+			"Prefab/Select/BackGround",
+			"Prefab/Select/SelectHeader",
+			"Prefab/Select/TutorialButton",
+			"Prefab/Select/MainGameButton",
+		};
+		UnityAction[]	tableOnButtonEnterFunc;//ボタンを押したときの関数
+		tableOnButtonEnterFunc	= new UnityAction[]{
+			this.OnTutorialButtonEnter,
+			this.OnMainGameButtonEnter,
+		};
+		button	= new Button[tableOnButtonEnterFunc.Length];
+		for(int i = 0,buttonNo = 0;i < tablePrefabName.Length;i ++){
+			GameObject	obj			= TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+			Button		buttonBuf	= obj.GetComponent<Button>();
+			if(buttonBuf == null)							continue;
+			if(buttonNo >= tableOnButtonEnterFunc.Length)	continue;
+			button[buttonNo]		= buttonBuf;
+			button[buttonNo].onClick.AddListener(tableOnButtonEnterFunc[buttonNo]);
+			buttonNo	++;
+		}
+		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
 	
 	//更新//////////////////////////////////////////////////
 	public	void	Update () {//更新_Begin//---------------
-	
+		if(stateNo < 0 || stateNo >= (int)StateNo.Length)	ChangeState(StateNo.Neutral);
+		if(updateFunc[stateNo] != null)						updateFunc[stateNo]();
+		f_timer		+= Time.deltaTime;
+		stateTime	+= Time.deltaTime;
 	}//更新_End//-------------------------------------------
 
 	//その他関数////////////////////////////////////////////
 	//チュートリアルボタンを押した_Begin//------------------
 	public	void	OnTutorialButtonEnter(){
 		ChangeState(StateNo.GoNext);
+		ButtonCanceler();
 	}//チュートリアルボタンを押した_End//-------------------
 
 	//ゲーム開始ボタンを押した_Begin//----------------------
 	public	void	OnMainGameButtonEnter(){
 		ChangeState(StateNo.GoNext);
+		ButtonCanceler();
 	}//ゲーム開始ボタンを押した_End//-----------------------
 
 }//セレクトのシステム_End//---------------------------------

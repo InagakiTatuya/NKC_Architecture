@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 11 / 2015
+//更新日 :	06 / 12 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -20,8 +20,8 @@ public	partial class TitleSystem : MonoBehaviour{
 
 //パブリックフィールド//------------------------------------
 
+	//変数//////////////////////////////////////////////////
 	public	GameObject	canvasObject	= null;
-
 	private	static	float	f_timer;
 	public	static	float	timer{
 		get{return	f_timer;}
@@ -33,11 +33,18 @@ public	partial class TitleSystem : MonoBehaviour{
 			UpdateNeutral,
 			UpdateGoNext,
 		};
-		TitleSystem.CreateObujectInCanvas("Prefab/Title/TitleBackGround");
-		TitleSystem.CreateObujectInCanvas("Prefab/Title/TitleLogo");
-		GameObject	buttonObj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/StartButton");
-		Button		button		= buttonObj.GetComponent<Button>();
-		button.onClick.AddListener(this.OnStartButtonEnter);
+		string[]	tablePrefabName	= new string[]{//プレファブの名前
+			"Prefab/Title/TitleBackGround",
+			"Prefab/Title/TitleLogo",
+			"Prefab/Title/StartButton",
+		};
+		for(int i = 0;i < tablePrefabName.Length;i ++){
+			GameObject	obj			= TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+			Button		buttonBuf	= obj.GetComponent<Button>();
+			if(buttonBuf == null)	continue;
+			button					= buttonBuf;
+			button.onClick.AddListener(this.OnStartButtonEnter);
+		}
 		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
@@ -56,12 +63,12 @@ public	partial class TitleSystem : MonoBehaviour{
 		ChangeState(StateNo.GoNext);
 	}//スタートボタンを押した_End//-------------------------
 
-	//背景を生成する_Begin//--------------------------------
-	public	static	GameObject	CreateObujectInCanvas(string fileName){
+	//プレファブを生成する_Begin//--------------------------
+	public	static	GameObject	CreateObujectInCanvas(string fileName,GameObject parent){
 		GameObject	obj	= Resources.Load<GameObject>(fileName);
 		GameObject	bgd	= (GameObject)Instantiate(obj);
-		bgd.transform.SetParent(canvasObject.transform,false);
+		bgd.transform.SetParent(parent.transform,false);
 		return	bgd;
-	}//背景を生成する_End//---------------------------------
+	}//プレファブを生成する_End//---------------------------
 
 }//タイトルのシステム_End//---------------------------------
