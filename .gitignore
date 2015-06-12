@@ -1,4 +1,5 @@
-﻿*.csproj
+﻿
+*.csproj
 *.sln
 *.suo
 UnityProject/Library/
