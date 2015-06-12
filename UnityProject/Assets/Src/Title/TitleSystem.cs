@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 08 / 2015
+//更新日 :	06 / 11 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -35,9 +35,7 @@ public	partial class TitleSystem : MonoBehaviour{
 			UpdateGoNext,
 		};
 		canvas	= canvasObject.GetComponent<Canvas>();
-#if	DEBUG_TITLE
-		CreateObujectInCanvas("Title/Debug/DebugBackGround");
-#endif
+		CreateObujectInCanvas("Prefab/Title/TitleBackGround");
 		CreateObujectInCanvas("Prefab/Title/TitleLogo");
 		GameObject	buttonObj	= CreateObujectInCanvas("Prefab/Title/StartButton");
 		Button		button		= buttonObj.GetComponent<Button>();
