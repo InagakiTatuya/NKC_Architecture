@@ -1,21 +1,17 @@
 ﻿//----------------------------------------------------------
-//タイトルのシステム
-//更新日 :	06 / 08 / 2015
+//セレクトのシステム
+//更新日 :	06 / 12 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
-//プリプロセッサ////////////////////////////////////////////
-#if UNITY_EDITOR
-	#define	DEBUG_TITLE
-#endif
-
 //名前空間//////////////////////////////////////////////////
 using	UnityEngine;
+using	UnityEngine.UI;
 using	System.Collections;
 
 //クラス////////////////////////////////////////////////////
-//タイトルのシステム_Begin//--------------------------------
-public	partial class TitleSystem : MonoBehaviour{
+//セレクトのシステム_Begin//--------------------------------
+public	partial	class SelectSystem : MonoBehaviour {
 
 	//プライベートフィールド//------------------------------
 	
@@ -31,7 +27,7 @@ public	partial class TitleSystem : MonoBehaviour{
 	//更新//////////////////////////////////////////////////
 	private	delegate void	UpdateFunc();
 	private	UpdateFunc[]	updateFunc;
-
+	
 	private	void	UpdateNeutral(){//通常時の更新_Beign//--
 		
 	}//通常時の更新_End//-----------------------------------
@@ -48,5 +44,5 @@ public	partial class TitleSystem : MonoBehaviour{
 		stateNo		= buf;
 		stateTime	= 0.0f;
 	}//ステート遷移_End//-----------------------------------
-	
-}//タイトルのシステム_End//---------------------------------
+
+}//セレクトのシステム_End//---------------------------------

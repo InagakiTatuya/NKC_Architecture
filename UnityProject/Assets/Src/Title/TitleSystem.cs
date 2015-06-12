@@ -21,7 +21,6 @@ public	partial class TitleSystem : MonoBehaviour{
 //パブリックフィールド//------------------------------------
 
 	public	GameObject	canvasObject	= null;
-	private	Canvas		canvas			= null;
 
 	private	static	float	f_timer;
 	public	static	float	timer{
@@ -34,10 +33,9 @@ public	partial class TitleSystem : MonoBehaviour{
 			UpdateNeutral,
 			UpdateGoNext,
 		};
-		canvas	= canvasObject.GetComponent<Canvas>();
-		CreateObujectInCanvas("Prefab/Title/TitleBackGround");
-		CreateObujectInCanvas("Prefab/Title/TitleLogo");
-		GameObject	buttonObj	= CreateObujectInCanvas("Prefab/Title/StartButton");
+		TitleSystem.CreateObujectInCanvas("Prefab/Title/TitleBackGround");
+		TitleSystem.CreateObujectInCanvas("Prefab/Title/TitleLogo");
+		GameObject	buttonObj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/StartButton");
 		Button		button		= buttonObj.GetComponent<Button>();
 		button.onClick.AddListener(this.OnStartButtonEnter);
 		ChangeState(StateNo.Neutral);
@@ -57,5 +55,13 @@ public	partial class TitleSystem : MonoBehaviour{
 	public	void	OnStartButtonEnter(){
 		ChangeState(StateNo.GoNext);
 	}//スタートボタンを押した_End//-------------------------
+
+	//背景を生成する_Begin//--------------------------------
+	public	static	GameObject	CreateObujectInCanvas(string fileName){
+		GameObject	obj	= Resources.Load<GameObject>(fileName);
+		GameObject	bgd	= (GameObject)Instantiate(obj);
+		bgd.transform.SetParent(canvasObject.transform,false);
+		return	bgd;
+	}//背景を生成する_End//---------------------------------
 
 }//タイトルのシステム_End//---------------------------------
