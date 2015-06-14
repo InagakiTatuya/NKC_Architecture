@@ -124,7 +124,7 @@ public class CardInputSystem : MonoBehaviour {
             this.GetType().Name + " - " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+       //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
     }
     //  更新  OutScene
@@ -132,7 +132,7 @@ public class CardInputSystem : MonoBehaviour {
 
         //一定時間になったら次のシーンへ移行
         if(m_StateTime >= INSCENE_TIME) {
-            Application.LoadLevel("Title");
+            Application.LoadLevel("Game_Inagaki");
         }
     }
 
