@@ -1,4 +1,4 @@
-﻿
+
 *.csproj
 *.sln
 *.suo
@@ -8,3 +8,4 @@ UnityProject/obj/
 UnityProject/obj/Debug
 
 
+*.userprefs
