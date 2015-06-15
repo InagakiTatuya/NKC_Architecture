@@ -50,7 +50,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 		};
 		string[]	tableButtonText	= new string[]{
 			"チュートリアル",
-			"無限建築モード",
+			"こんな漢字",
 		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
 			new Vector3(0.0f, 128.0f,0.0f),
