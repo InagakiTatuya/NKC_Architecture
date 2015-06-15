@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 12 / 2015
+//更新日 :	06 / 13 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -36,15 +36,10 @@ public	partial class TitleSystem : MonoBehaviour{
 		string[]	tablePrefabName	= new string[]{//プレファブの名前
 			"Prefab/Title/TitleBackGround",
 			"Prefab/Title/TitleLogo",
-			"Prefab/Title/StartButton",
 		};
-		for(int i = 0;i < tablePrefabName.Length;i ++){
-			GameObject	obj			= TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
-			Button		buttonBuf	= obj.GetComponent<Button>();
-			if(buttonBuf == null)	continue;
-			button					= buttonBuf;
-			button.onClick.AddListener(this.OnStartButtonEnter);
-		}
+		for(int i = 0;i < tablePrefabName.Length;i ++)
+			TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+		StartCreateButton();
 		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
@@ -53,6 +48,8 @@ public	partial class TitleSystem : MonoBehaviour{
 	public	void	Update(){//更新_Beign//-----------------
 		if(stateNo < 0 || stateNo >= (int)StateNo.Length)	ChangeState(StateNo.Neutral);
 		if(updateFunc[stateNo] != null)						updateFunc[stateNo]();
+		UpdateButton();
+		UpdateFade();
 		f_timer		+= Time.deltaTime;
 		stateTime	+= Time.deltaTime;
 	}//更新_End//-------------------------------------------
@@ -61,12 +58,13 @@ public	partial class TitleSystem : MonoBehaviour{
 	//スタートボタンを押した_Begin//------------------------
 	public	void	OnStartButtonEnter(){
 		ChangeState(StateNo.GoNext);
+		button.enabled	= false;
+		CreateFade();
 	}//スタートボタンを押した_End//-------------------------
 
 	//プレファブを生成する_Begin//--------------------------
 	public	static	GameObject	CreateObujectInCanvas(string fileName,GameObject parent){
-		GameObject	obj	= Resources.Load<GameObject>(fileName);
-		GameObject	bgd	= (GameObject)Instantiate(obj);
+		GameObject	bgd	= Instantiate(Resources.Load<GameObject>(fileName));
 		bgd.transform.SetParent(parent.transform,false);
 		return	bgd;
 	}//プレファブを生成する_End//---------------------------
