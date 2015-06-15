@@ -57,9 +57,20 @@ public class CardManager : MonoBehaviour {
             m_Card[index + 1] = cpTra.GetChild(1).GetComponent<Card>();
             m_Card[index + 2] = cpTra.GetChild(2).GetComponent<Card>();
             //IndexNoを設定 - - - - - - - - - - - - - - - - - - - - - - - - - -
-            m_Card[index + 0].Init( index + 0, OnFhotoEnter, OnEndEdit, OnValueChange );
-            m_Card[index + 1].Init( index + 1, OnFhotoEnter, OnEndEdit, OnValueChange );
-            m_Card[index + 2].Init( index + 2, OnFhotoEnter, OnEndEdit, OnValueChange );
+            m_Card[index + 0].Init(
+                index + 0, OnFhotoEnter, OnPlayerRemoveButtonEnter,
+                OnEndEdit, OnValueChange
+                );
+
+            m_Card[index + 1].Init(
+                index + 1, OnFhotoEnter, OnPlayerRemoveButtonEnter,
+                OnEndEdit, OnValueChange
+                );
+
+            m_Card[index + 2].Init(
+                index + 2, OnFhotoEnter, OnPlayerRemoveButtonEnter,
+                OnEndEdit, OnValueChange
+                );
 
             //要素数加算- - - - - - - - - - - - - - - - - - - - - - - - - - - -
             index += 3;
@@ -162,6 +173,31 @@ public class CardManager : MonoBehaviour {
     //    プレイヤーデータを削除し、参加者数を減らす。
     //------------------------------------------------------------------------
     public void OnPlayerRemoveButtonEnter(int _cardIndex) {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name +
+            "\nCardIndex = " + _cardIndex);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //ステートが通常時以外は、処理しない
+        if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
+        
+        //プレイヤー数が１以下のときは、別処理
+        if(m_PlayerCount <= 1) {
+            m_Card[0].DataReset();
+            return;
+        }
+        
+        //データをコピー
+        for(int i = _cardIndex + 1; i < m_PlayerCount; i++) {
+            m_Card[i].DataCopyTo(ref m_Card[i - 1]);
+        }
+
+        m_PlayerCount--;
+        CardsSetActive(m_PlayerCount);  //アクティブの操作
 
     }
 
@@ -178,6 +214,7 @@ public class CardManager : MonoBehaviour {
             "\nCardIndex = " + _cardIndex);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
         //写真選択ウィンドウを出す---------------------------------------------
         //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
         //  ここに写真選択ウィンドウを出す処理
