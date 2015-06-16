@@ -90,6 +90,7 @@ public class CardManager : MonoBehaviour {
 
     //社員証のアクティブ設定===================================================
     //  Card と CardPack のアクティブの設定を行う
+    //  非アクティブにする際、データをリセットする
     //------------------------------------------------------------------------
     private void CardsSetActive(int _Length, bool _Active = true) {
         //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
@@ -104,6 +105,7 @@ public class CardManager : MonoBehaviour {
                 transform.GetChild(index / 3).gameObject.SetActive(_Active);
             }
             m_Card[index].gameObject.SetActive(_Active);
+            if(_Active == false) m_Card[index].DataReset();
         }
         //_Leingth 以下のものは !_Active を渡す
         for(/**/; index < CARD_MAX; index++) {
@@ -111,6 +113,7 @@ public class CardManager : MonoBehaviour {
                 transform.GetChild(index / 3).gameObject.SetActive(!_Active);
             }
             m_Card[index].gameObject.SetActive(!_Active);
+            if(!_Active == false) m_Card[index].DataReset();
         }
         
     }
