@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameSceneSystem : MonoBehaviour
-{
+public	partial class GameSceneSystem : MonoBehaviour{
 
+	/// <summary>キャンバスを持つオブジェクト</summary>
+	public	GameObject	canvasObject	= null;
+	
 	void Awake()
 	{
 
@@ -12,12 +14,12 @@ public class GameSceneSystem : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-
+		StartKimishimaSystem();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-
+		UpdateKimishimaSystem();
 	}
 }

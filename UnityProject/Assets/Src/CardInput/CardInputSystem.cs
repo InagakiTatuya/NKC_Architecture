@@ -132,7 +132,7 @@ public class CardInputSystem : MonoBehaviour {
 
         //一定時間になったら次のシーンへ移行
         if(m_StateTime >= INSCENE_TIME) {
-            Application.LoadLevel("Game_Inagaki");
+            Application.LoadLevel("Game");
         }
     }
 
