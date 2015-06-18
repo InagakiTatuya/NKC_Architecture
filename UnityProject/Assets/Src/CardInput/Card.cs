@@ -47,7 +47,7 @@ public class Card : MonoBehaviour {
         m_Input = transform.FindChild("InputField").GetComponent<InputField>();
 
         //データ---------------------------------------------------------------
-        m_Data.Init();
+        this.DataReset();
     }
 
     void Start() {
@@ -61,6 +61,7 @@ public class Card : MonoBehaviour {
     //  第三引数：入力するたびに呼ばれる関数
     public void Init(int                _IndexNo,
                      UnityAction<int> _onButtonEnter,
+                     UnityAction<int> _onRemoveEnter,
                      UnityAction<int> _onEndEdit,
                      UnityAction<int> _callValidateInput = null
                     ) {
@@ -68,14 +69,21 @@ public class Card : MonoBehaviour {
         this.INDEXNO = _IndexNo;
 
         //イベント設定---------------------------------------------------------
-        //onButton
+        //onButton-------------------------------------------------------------
         Button.ButtonClickedEvent eve = GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
         eve.AddListener(delegate { _onButtonEnter(INDEXNO); });
+        
+        //onButton(Remove)-----------------------------------------------------
+        eve = transform.FindChild("Remove").GetComponent<Button>().onClick;
+        eve.RemoveAllListeners();
+        eve.AddListener(delegate { _onRemoveEnter(INDEXNO); });
+
         //onEndEdit------------------------------------------------------------
         //  リスナーをすべて削除してから、引数の関数を登録
         m_Input.onEndEdit.RemoveAllListeners();
         m_Input.onEndEdit.AddListener(delegate { _onEndEdit(INDEXNO); });
+
        //onValueChange--------------------------------------------------------
         //  リスナーをすべて削除してから、引数の関数を登録
         m_Input.onValueChange.RemoveAllListeners();
@@ -83,6 +91,22 @@ public class Card : MonoBehaviour {
             m_Input.onValueChange.
                 AddListener(delegate { _callValidateInput(INDEXNO); });
         }
+
+    }
+
+    //データを初期化===========================================================
+    public void DataReset() {
+        this.data.Init();
+        this.input.text = "";
+        this.DataSetName();
+        this.DataSetPhoto(this.data.imageNo);
+    }
+
+    //必要な値をコピー=========================================================
+    public void DataCopyTo(ref Card _Card) {
+        _Card.data         = this.data;
+        _Card.image.sprite = this.image.sprite;
+        _Card.input.text   = this.input.text;
     }
 
     //入力された名前をDataに格納===============================================
@@ -90,7 +114,7 @@ public class Card : MonoBehaviour {
         m_Data.name = m_Input.text;
     }
     //選択された写真の番号をDataに格納=========================================
-    public void DataSetPhotoNo(int _PhotoNo) {
+    public void DataSetPhoto(int _PhotoNo) {
 
     }
 
