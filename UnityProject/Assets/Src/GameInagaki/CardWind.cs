@@ -72,7 +72,7 @@ public class CardWind : MonoBehaviour {
                                  ) {
         StractPlayerData data = Database.obj.getPlayerData[_PlayerNo];
         //m_Image.sprite = Database.obj.FHOT_SPRITE[data.imageNo]; //現在未実装であるためコメントアウト
-        m_Name .text   = data.name;
+        m_Name .text   = data.pleyerName;
         m_Job  .text   = Database.obj.JOB_NAME[_JpbNo];
         //OtherTextは、"変更しない"にすると文字通り変更しないのだ！！
         if(_OtherText != "変更しない") m_Other.text = _OtherText;

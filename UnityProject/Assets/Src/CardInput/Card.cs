@@ -12,8 +12,9 @@ using System.Collections;
 //クラス///////////////////////////////////////////////////////////////////////
 public class Card : MonoBehaviour {
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private Image           m_Image;    //顔写真
-    private InputField      m_Input;    //名前入力
+    private Image m_ImageHair;    //髪イメージ
+    private Image m_ImageHead;    //顔イメージ
+    private Text  m_Text;         //名前表示
 
     //データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private int              INDEXNO;   //CardManagerの管理番号
@@ -21,13 +22,17 @@ public class Card : MonoBehaviour {
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public Image            image {
-        get{ return m_Image;  }
-        set{ m_Image = value; }
+    public Image            imageHair {
+        get{ return m_ImageHair;  }
+        set{ m_ImageHair = value; }
     }
-    public InputField       input {
-        get{ return m_Input;  }
-        set{ m_Input = value; }
+    public Image            imageHead {
+        get{ return m_ImageHead;  }
+        set{ m_ImageHead = value; }
+    }
+    public Text             Text {
+        get{ return m_Text;  }
+        set{ m_Text = value; }
     }
     //データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public int              indexNo {
@@ -43,8 +48,9 @@ public class Card : MonoBehaviour {
     //初期化===================================================================
     void Awake() {
         //参照-----------------------------------------------------------------
-        m_Image = transform.FindChild("Photo"     ).GetComponent<Image     >();
-        m_Input = transform.FindChild("InputField").GetComponent<InputField>();
+        m_ImageHair = transform.FindChild("PhotoHair").GetComponent<Image>();
+        m_ImageHead = transform.FindChild("PhotoHead").GetComponent<Image>();
+        m_Text      = transform.FindChild("Name"     ).GetComponent<Text >();
 
         //データ---------------------------------------------------------------
         this.DataReset();
@@ -79,44 +85,29 @@ public class Card : MonoBehaviour {
         eve.RemoveAllListeners();
         eve.AddListener(delegate { _onRemoveEnter(INDEXNO); });
 
-        //onEndEdit------------------------------------------------------------
-        //  リスナーをすべて削除してから、引数の関数を登録
-        m_Input.onEndEdit.RemoveAllListeners();
-        m_Input.onEndEdit.AddListener(delegate { _onEndEdit(INDEXNO); });
-
-       //onValueChange--------------------------------------------------------
-        //  リスナーをすべて削除してから、引数の関数を登録
-        m_Input.onValueChange.RemoveAllListeners();
-        if(_callValidateInput != null) {
-            m_Input.onValueChange.
-                AddListener(delegate { _callValidateInput(INDEXNO); });
-        }
-
     }
 
     //データを初期化===========================================================
     public void DataReset() {
-        this.data.Init();
-        this.input.text = "";
-        this.DataSetName();
-        this.DataSetPhoto(this.data.imageNo);
+        this.m_Data.Init();
+        this.DataApp(this.m_Data);
     }
 
     //必要な値をコピー=========================================================
     public void DataCopyTo(ref Card _Card) {
-        _Card.data         = this.data;
-        _Card.image.sprite = this.image.sprite;
-        _Card.input.text   = this.input.text;
+        _Card.data             = this.data;
+        _Card.imageHair.sprite = this.imageHair.sprite;
+        _Card.imageHead.sprite = this.imageHead.sprite;
+        _Card.Text.text        = this.Text.text;
     }
 
-    //入力された名前をDataに格納===============================================
-    public void DataSetName() {
-        m_Data.name = m_Input.text;
+    //適応=====================================================================
+    //  渡されたデータから適応するスプライトを込みこみ適応する
+    //  テキストにも名前を入れる
+    public void DataApp(StractPlayerData _data) {
+        this.m_Text.text        = _data.pleyerName;
+        this.m_ImageHair.sprite = Database.obj.SPRITE_HAIR[_data.imageHairNo];
+        this.m_ImageHead.sprite = Database.obj.SPRITE_HAIR[_data.imageHeadNo];
     }
-    //選択された写真の番号をDataに格納=========================================
-    public void DataSetPhoto(int _PhotoNo) {
-
-    }
-
 
 }
