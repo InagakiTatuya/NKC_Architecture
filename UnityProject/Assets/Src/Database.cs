@@ -10,13 +10,17 @@ using System.Collections;
 using System.Collections.Generic;
 
 //クラス///////////////////////////////////////////////////////////////////////
-public class Database : SingletonCustom<Database> {
+public partial class Database : SingletonCustom<Database> {
     //リソースデータ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     //写真^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  const int   FHOT_NO_MAX = 1;
-    private Sprite[]    M_FHOT_SPRITE;
+    private Sprite[]    M_SPRITE_HAIR;
+    private Sprite[]    M_SPRITE_HEAD;
+    private Sprite[]    M_SPRITE_BODY;
 
-    public  Sprite[]    FHOT_SPRITE { get { return M_FHOT_SPRITE; } }
+    public  Sprite[]    SPRITE_HAIR { get { return M_SPRITE_HAIR; } }
+    public  Sprite[]    SPRITE_HEAD { get { return M_SPRITE_HEAD; } }
+    public  Sprite[]    SPRITE_BODY { get { return M_SPRITE_BODY; } }
 
     //職種^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  const int   JOB_NO_MAX = 4;
@@ -66,11 +70,11 @@ public class Database : SingletonCustom<Database> {
         //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         //  デバック用仮データ
         StractPlayerData[] kariData = new StractPlayerData[ 5 ];
-        kariData[0].name = "仮名零";
-        kariData[1].name = "仮名壱";
-        kariData[2].name = "仮名弐";
-        kariData[3].name = "仮名参";
-        kariData[4].name = "仮名私";
+        kariData[0].pleyerName = "仮名零";
+        kariData[1].pleyerName = "仮名壱";
+        kariData[2].pleyerName = "仮名弐";
+        kariData[3].pleyerName = "仮名参";
+        kariData[4].pleyerName = "仮名私";
         this.SetPlyaerDatas(ref kariData);
 
 
