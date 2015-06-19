@@ -38,7 +38,7 @@ public	partial class TitleSystem : MonoBehaviour{
 			"Prefab/Title/TitleLogo",
 		};
 		for(int i = 0;i < tablePrefabName.Length;i ++)
-			TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
 		StartCreateButton();
 		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
@@ -63,7 +63,7 @@ public	partial class TitleSystem : MonoBehaviour{
 	}//スタートボタンを押した_End//-------------------------
 
 	//プレファブを生成する_Begin//--------------------------
-	public	static	GameObject	CreateObujectInCanvas(string fileName,GameObject parent){
+	public	static	GameObject	CreateObjectInCanvas(string fileName,GameObject parent){
 		GameObject	bgd	= Instantiate(Resources.Load<GameObject>(fileName));
 		bgd.transform.SetParent(parent.transform,false);
 		return	bgd;
