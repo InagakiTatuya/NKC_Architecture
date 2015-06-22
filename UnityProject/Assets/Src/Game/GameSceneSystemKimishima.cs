@@ -20,13 +20,21 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//列挙・テーブル//////////////////////////////////////////
-	enum	PartsSelectWindowStateNo{//ステート番号_Begin//--
+	//ステート番号_Begin//-----------------------------------
+	private	enum	PartsSelectWindowStateNo{
 		Open,		//開く
 		Neutral,	//通常
 		Close,		//閉じる
 		Hide,		//隠れている
 		Length,		//長さ
 	}//ステート番号_End//------------------------------------
+
+	//パーツ選択ウィンドウのテキストID_Begin//---------------
+	private	enum	PartsSelectText{
+		Job,		//職種
+		DescText,	//説明
+		Length,		//長さ
+	}//パーツ選択ウィンドウのテキストID_End//----------------
 
 	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
 	//変数//////////////////////////////////////////////////
@@ -39,6 +47,12 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	Vector2	floorSize;
 
 	//パーツ選択関連
+	private	Image	partsSelectWindow		= null;
+	private	Text[]	partsSelectText			= null;
+	private	Button	partsSelectButton		= null;
+	private	Image	partsSelectButtonImage	= null;
+	private	Vector2	partsSelectButtonSize;
+	private	ColorBlock	partsSelectButtonColor;
 	private	int		partsSelectWindowStateNo;
 	private	int		partsSelectWindowStateTime;
 
@@ -55,11 +69,17 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		floorSize	= new Vector2(128.0f,128.0f);
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
+		//Debug
+		partsSelectButtonColor.normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
+		partsSelectButtonColor.highlightedColor	= new Color(0.5f,0.5f,1.0f,1.0f);
+		partsSelectButtonColor.pressedColor		= new Color(1.0f,0.8f,0.0f,1.0f);
+		partsSelectButtonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
+		OpenPartsSelectWindow();
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
 	private	void	StartKimishimaSystemCreateFloorWindow(){
-		GameObject	obj		= TitleSystem.CreateObujectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		floorWindow			= obj.GetComponent<Image>();
 		floorWindow.rectTransform.localPosition	= FLOORWINDOW_POS;
 		floorWindow.color	= new Color(0.0f,0.5f,0.5f,1.0f);
@@ -67,7 +87,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//階層テキストを生成_Begin//----------------------------
 	private	void	StartKimishimaSystemCreateFloorText(){
-		GameObject	obj		= TitleSystem.CreateObujectInCanvas("Prefab/Select/Text",canvasObject);
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 		floorText			= obj.GetComponent<Text>();
 		floorText.rectTransform.localPosition	= FLOORWINDOW_POS;
 		floorText.text		= "1\n階層目";
@@ -103,6 +123,17 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	UpdatePartsSelectWindowClose(){
 	}//ウィンドウを閉じる_End//------------------------------
 
+	//ボタン関連////////////////////////////////////////////
+	//パーツ選択ウィンドウの決定ボタンが押された_Beign//----
+	public	void	OnPartsSelectButtonEnter(){
+		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Close);
+		GameObject.Destroy(partsSelectWindow.gameObject);
+		partsSelectWindow		= null;
+		partsSelectText			= null;
+		partsSelectButton		= null;
+		partsSelectButtonImage	= null;
+	}//パーツ選択ウィンドウの決定ボタンが押された_End//-----
+
 	//その他関数////////////////////////////////////////////
 	/// <summary>フロアを上げていく</summary>
 	private	void	AddFloor(){//階層を進める_Begin//-------
@@ -113,6 +144,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
 	private	void	OpenPartsSelectWindow(){
 		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Open);
+		CreatePartsSelectWindow();
+		CreatePartsSelectText();
+		CreatePartsSelectButton();
 	}//パーツ選択ウィンドウを表示_End//-----------------------
 
 	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
@@ -126,7 +160,49 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択ウィンドウを生成_Beign//---------------------
 	private	void	CreatePartsSelectWindow(){
-
+		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		partsSelectWindow		= obj.GetComponent<Image>();
+		partsSelectWindow.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
+		partsSelectWindow.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
+		partsSelectWindow.color	= new Color(1.0f,1.0f,0.75f,0.5f);
 	}//パーツ選択ウィンドウを生成_End//----------------------
+
+	//パーツウィンドウのテキストを生成_Begin//---------------
+	private	void	CreatePartsSelectText(){
+		GameObject	obj;
+		Vector3[]	tableTextPos	= {new Vector3(-96.0f,240.0f,0.0f),new Vector3(128.0f,240.0f,0.0f),};
+		Vector2[]	tableSizeDelta	= {new Vector2(256.0f,128.0f),new Vector2(256.0f,128.0f),};
+		string[]	tableText		= {
+			"デバッガ","デバッグをする人です。\nがんばってですマーチ\n乗り越えましょう。",
+		};
+		int[]		tableFontSize	= {48,24,};
+		partsSelectText	= new Text[(int)PartsSelectText.Length];
+		for(int i = 0;i < tableText.Length;i ++){
+			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",partsSelectWindow.gameObject);
+			partsSelectText[i]				= obj.GetComponent<Text>();
+			partsSelectText[i].rectTransform.localPosition	= tableTextPos[i];
+			partsSelectText[i].rectTransform.sizeDelta		= tableSizeDelta[i];
+			partsSelectText[i].text			= tableText[i];
+			partsSelectText[i].alignment	= TextAnchor.MiddleLeft;
+			partsSelectText[i].fontSize		= tableFontSize[i];
+			partsSelectText[i].color		= new Color(0.0f,0.5f,0.0f,1.0f);
+		}
+	}//パーツウィンドウのテキストを生成_End//----------------
+
+	//パーツセレクトウィンドウのボタン_Begin//---------------
+	private	void	CreatePartsSelectButton(){
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",partsSelectWindow.gameObject);
+		partsSelectButton			= obj.GetComponent<Button>();
+		partsSelectButton.colors	= partsSelectButtonColor;
+		partsSelectButtonImage		= obj.GetComponent<Image>();
+		partsSelectButtonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
+		partsSelectButtonSize		= new Vector2(128.0f,64.0f);
+		partsSelectButtonImage.rectTransform.sizeDelta	= partsSelectButtonSize;
+		partsSelectButton.onClick.AddListener(OnPartsSelectButtonEnter);
+		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
+		buttonSystem.text			= "決定";
+		buttonSystem.color			= Color.white;
+		buttonSystem.fontSize		= 24;
+	}//パーツセレクトウィンドウのボタン_End//----------------
 
 }//ゲームシーンのシステム_End//------------------------------

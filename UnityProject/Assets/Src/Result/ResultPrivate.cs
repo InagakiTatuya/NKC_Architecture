@@ -58,7 +58,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 		gidePos	= new Vector3[gide.Length];
 		for(int i = 0;i < gide.Length;i ++){
 			GameObject	obj;
-			obj			= TitleSystem.CreateObujectInCanvas("Prefab/Result/Gide",canvasObject);
+			obj			= TitleSystem.CreateObjectInCanvas("Prefab/Result/Gide",canvasObject);
 			gide[i]		= obj.GetComponent<Image>();
 			gidePos[i]	= new Vector3(544.0f,192.0f - i * 128.0f,0.0f);
 			gide[i].rectTransform.localPosition	= gidePos[i];
@@ -70,7 +70,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 		text	= new Text[gide.Length];
 		for(int i = 0;i < gide.Length;i ++){
 			GameObject	obj;
-			obj				= TitleSystem.CreateObujectInCanvas("Prefab/Select/Text",canvasObject);
+			obj				= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 			text[i]			= obj.GetComponent<Text>();
 			text[i].rectTransform.localPosition	= gidePos[i] + new Vector3(0.0f,64.0f,0.0f);
 			text[i].text	= tableText[i];
@@ -86,7 +86,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 		runcGidePos	= new Vector3[runcGide.Length];
 		for(int i = 0;i < runcGide.Length;i ++){
 			GameObject	obj;
-			obj				= TitleSystem.CreateObujectInCanvas("Prefab/Result/Gide",canvasObject);
+			obj				= TitleSystem.CreateObjectInCanvas("Prefab/Result/Gide",canvasObject);
 			runcGide[i]		= obj.GetComponent<Image>();
 			runcGidePos[i]	= new Vector3(544.0f,192.0f - i * 128.0f,0.0f);
 			runcGide[i].rectTransform.localPosition	= runcGidePos[i];
@@ -98,7 +98,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 		runcText	= new Text[runcGide.Length];
 		for(int i = 0;i < runcGide.Length;i ++){
 			GameObject	obj;
-			obj					= TitleSystem.CreateObujectInCanvas("Prefab/Select/Text",canvasObject);
+			obj					= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 			runcText[i]			= obj.GetComponent<Text>();
 			runcText[i].rectTransform.localPosition	= runcGidePos[i] + new Vector3(0.0f,64.0f,0.0f);
 			runcText[i].text	= "0 階層\n- 級";
@@ -162,7 +162,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 		buttonColor.colorMultiplier	= 1;
 		buttonColor.fadeDuration	= 0.1f;
 		for(int i = 0;i < button.Length;i ++){
-			GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Button",canvasObject);
+			GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			button[i]		= obj.GetComponent<Button>();
 			button[i].colors= buttonColor;
 			buttonImage[i]	= obj.GetComponent<Image>();
@@ -178,7 +178,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 
 	//フェード関連を初期化_Begin//--------------------------
 	private	void	CreateFade(){
-		GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Fade",canvasObject);
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Fade",canvasObject);
 		fade			= obj.GetComponent<Image>();
 		fadeColor		= new Color(0.0f,0.0f,0.0f,0.0f);
 		fade.rectTransform.sizeDelta	= new Vector2(1024.0f,1024.0f);

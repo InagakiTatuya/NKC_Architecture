@@ -38,7 +38,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 			"Prefab/Select/SelectHeader",
 		};
 		for(int i = 0;i < tablePrefabName.Length;i ++)
-			TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
 		StartCreateButton();
 		CreateHeaderText();
 		ChangeState(StateNo.Neutral);

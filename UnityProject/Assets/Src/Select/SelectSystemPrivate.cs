@@ -61,7 +61,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 		buttonSize	= new Vector2[button.Length];
 		buttonColor	= new ColorBlock[button.Length];
 		for(int i = 0;i < button.Length;i ++){
-			GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Button",canvasObject);
+			GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			button[i]		= obj.GetComponent<Button>();
 			buttonColor[i].normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
 			buttonColor[i].highlightedColor	= new Color(0.5f,0.5f,1.0f,1.0f);
@@ -136,7 +136,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 
 	//フェード関連を初期化_Begin//--------------------------
 	private	void	CreateFade(){
-		GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Fade",canvasObject);
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Fade",canvasObject);
 		fade			= obj.GetComponent<Image>();
 		fadeColor		= new Color(0.0f,0.0f,0.0f,0.0f);
 		fade.rectTransform.sizeDelta	= new Vector2(1024.0f,1024.0f);
