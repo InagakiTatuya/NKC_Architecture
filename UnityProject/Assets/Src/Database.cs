@@ -15,11 +15,11 @@ public partial class Database : SingletonCustom<Database> {
     //写真^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  const int   FHOT_NO_MAX = 1;
     private Sprite[]    M_SPRITE_HAIR;
-    private Sprite[]    M_SPRITE_HEAD;
+    private Sprite[]    M_SPRITE_FACE;
     private Sprite[]    M_SPRITE_BODY;
 
     public  Sprite[]    SPRITE_HAIR { get { return M_SPRITE_HAIR; } }
-    public  Sprite[]    SPRITE_HEAD { get { return M_SPRITE_HEAD; } }
+    public  Sprite[]    SPRITE_FACE { get { return M_SPRITE_FACE; } }
     public  Sprite[]    SPRITE_BODY { get { return M_SPRITE_BODY; } }
 
     //職種^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -49,9 +49,9 @@ public partial class Database : SingletonCustom<Database> {
         BaseAwake(this); //シングルトンの設定をする
         DontDestroyOnLoad(gameObject); //シーンを切り替えても破棄しない
         //写真データ-----------------------------------------------------------
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-        //  ここにSpriteを読み込む処理
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+        M_SPRITE_HAIR = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Hair");
+        M_SPRITE_FACE = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Face");
+        M_SPRITE_BODY = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Body");
 
 
         //職人データ-----------------------------------------------------------

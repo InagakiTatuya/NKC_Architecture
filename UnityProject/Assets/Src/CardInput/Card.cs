@@ -13,7 +13,7 @@ using System.Collections;
 public class Card : MonoBehaviour {
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private Image m_ImageHair;    //髪イメージ
-    private Image m_ImageHead;    //顔イメージ
+    private Image m_ImageFace;    //顔イメージ
     private Text  m_Text;         //名前表示
 
     //データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -26,9 +26,9 @@ public class Card : MonoBehaviour {
         get{ return m_ImageHair;  }
         set{ m_ImageHair = value; }
     }
-    public Image            imageHead {
-        get{ return m_ImageHead;  }
-        set{ m_ImageHead = value; }
+    public Image            imageFace {
+        get{ return m_ImageFace;  }
+        set{ m_ImageFace = value; }
     }
     public Text             Text {
         get{ return m_Text;  }
@@ -48,28 +48,24 @@ public class Card : MonoBehaviour {
     //初期化===================================================================
     void Awake() {
         //参照-----------------------------------------------------------------
-        m_ImageHair = transform.FindChild("PhotoHair").GetComponent<Image>();
-        m_ImageHead = transform.FindChild("PhotoHead").GetComponent<Image>();
-        m_Text      = transform.FindChild("Name"     ).GetComponent<Text >();
-
-        //データ---------------------------------------------------------------
-        this.DataReset();
+        m_ImageHair = transform.FindChild("PhotoBack/PhotoHair").GetComponent<Image>();
+        m_ImageFace = transform.FindChild("PhotoBack/PhotoFace").GetComponent<Image>();
+        m_Text      = transform.FindChild("Name").GetComponent<Text >();
     }
 
     void Start() {
-
+        //データ---------------------------------------------------------------
+        this.DataReset();
     }
 
     //公開関数/////////////////////////////////////////////////////////////////
     //外部からもらう初期値=====================================================
     //  第一引数：CardManagerで管理されている番号
-    //  第二引数：入力終了時に呼ばれる関数
-    //  第三引数：入力するたびに呼ばれる関数
-    public void Init(int                _IndexNo,
+    //  第二引数：全体をタッチされたとき呼ばれる関数
+    //  第三引数：削除ボタンをタッチされたとき呼ばれる関数
+    public void Init(int              _IndexNo,
                      UnityAction<int> _onButtonEnter,
-                     UnityAction<int> _onRemoveEnter,
-                     UnityAction<int> _onEndEdit,
-                     UnityAction<int> _callValidateInput = null
+                     UnityAction<int> _onRemoveButtonEnter
                     ) {
         //CardManagerの管理番号------------------------------------------------
         this.INDEXNO = _IndexNo;
@@ -83,7 +79,7 @@ public class Card : MonoBehaviour {
         //onButton(Remove)-----------------------------------------------------
         eve = transform.FindChild("Remove").GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
-        eve.AddListener(delegate { _onRemoveEnter(INDEXNO); });
+        eve.AddListener(delegate { _onRemoveButtonEnter(INDEXNO); });
 
     }
 
@@ -97,7 +93,7 @@ public class Card : MonoBehaviour {
     public void DataCopyTo(ref Card _Card) {
         _Card.data             = this.data;
         _Card.imageHair.sprite = this.imageHair.sprite;
-        _Card.imageHead.sprite = this.imageHead.sprite;
+        _Card.imageFace.sprite = this.imageFace.sprite;
         _Card.Text.text        = this.Text.text;
     }
 
@@ -107,7 +103,7 @@ public class Card : MonoBehaviour {
     public void DataApp(StractPlayerData _data) {
         this.m_Text.text        = _data.pleyerName;
         this.m_ImageHair.sprite = Database.obj.SPRITE_HAIR[_data.imageHairNo];
-        this.m_ImageHead.sprite = Database.obj.SPRITE_HAIR[_data.imageHeadNo];
+        this.m_ImageFace.sprite = Database.obj.SPRITE_FACE[_data.imageFaceNo];
     }
 
 }

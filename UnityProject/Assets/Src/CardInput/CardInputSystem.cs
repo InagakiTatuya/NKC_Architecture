@@ -12,11 +12,13 @@ using System.Collections;
 public class CardInputSystem : MonoBehaviour {
 
     //ステート定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public const int STATE_INSCENE     = 0;   //シーンに入ってきた
-    public const int STATE_USUALLY     = 1;   //通常
-    public const int STATE_OUTSCENE    = 2;   //シーンを出る
+    public const int STATE_INSCENE   = 0;  //シーンに入ってきた
+    public const int STATE_USUALLY   = 1;  //通常
+    public const int STATE_OUTSCENE  = 2;  //シーンを出る
+    public const int STATE_CARDINPUT = 3;  //カードのデータを入力
 
-    public const int STATE_MAX_CNT     = 3;   //ステートの種類数
+
+    public const int STATE_MAX_CNT   = 4;   //ステートの種類数
 
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private int m_StateNo;      //ステート番号
@@ -30,6 +32,10 @@ public class CardInputSystem : MonoBehaviour {
     private delegate void StateFunc();
     private StateFunc[] m_fnIniteArr;   //初期化用
     private StateFunc[] m_fnUpdateArr;  //更新用
+
+    //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    private CardManager     cardMgr;
+    private CardInputWind   ciWind;
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  int getState        { get{return m_StateNo;       } }
@@ -47,12 +53,20 @@ public class CardInputSystem : MonoBehaviour {
             InitForInScene,
             InitForUsually,
             InitForOutScene,
+            InitForCardInput,
         };
         m_fnUpdateArr = new StateFunc[STATE_MAX_CNT] {
             UpdateForInScene,
             UpdateForUsually,
             UpdateForOutScene,
+            null,
         };
+        //参照-----------------------------------------------------------------
+        cardMgr = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
+            .GetComponent<CardManager>();
+        ciWind = GameObject.Find("Canvas/CardInputWind")
+            .GetComponent<CardInputWind>();
+    
     }
 
     //更新=====================================================================
@@ -107,6 +121,9 @@ public class CardInputSystem : MonoBehaviour {
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //最初の一人目のデータを入力するため社員証入力ウィンドウを開く
+        ciWind.OpenCradInputWind( 0 );
     }
 
     //  更新  Usually
@@ -135,10 +152,32 @@ public class CardInputSystem : MonoBehaviour {
             Application.LoadLevel("Game");
         }
     }
+    //========================================================= CardInput ======
+    //  初期化  OutScene
+    private void InitForCardInput() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+       //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+    }
+    //  更新  OutScene
+    //  何も処理しないためコメントアウト
+    //private void UpdateForCardInput() { }
+    
+    //CardInput終了
+    //  CardInptuState終了イベント CardInptuWindからよび出される
+    public void EndCardInputEvent() {
+        m_NextStateNo = STATE_USUALLY;
+    }
 
     //OnButtonイベント=========================================================
     
     //完了ボタン===============================================================
+    //  シーンから出るステートに移行する
     public void OnAppButtonEnter() {
         if(m_StateNo != STATE_USUALLY) return;
         m_NextStateNo = STATE_OUTSCENE;
