@@ -48,13 +48,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択関連
 	private	Image	partsSelectWindow		= null;
+	private	Vector3	partsSelectWindowSize;
 	private	Text[]	partsSelectText			= null;
 	private	Button	partsSelectButton		= null;
 	private	Image	partsSelectButtonImage	= null;
-	private	Vector2	partsSelectButtonSize;
 	private	ColorBlock	partsSelectButtonColor;
 	private	int		partsSelectWindowStateNo;
-	private	int		partsSelectWindowStateTime;
+	private float	partsSelectWindowStateTime;
 
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
@@ -74,6 +74,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectButtonColor.highlightedColor	= new Color(0.5f,0.5f,1.0f,1.0f);
 		partsSelectButtonColor.pressedColor		= new Color(1.0f,0.8f,0.0f,1.0f);
 		partsSelectButtonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
+		partsSelectButtonColor.colorMultiplier	= 1;
+		partsSelectButtonColor.fadeDuration		= 0.1f;
 		OpenPartsSelectWindow();
 	}//俺の初期化関数_End//---------------------------------
 
@@ -94,7 +96,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		floorText.fontSize	= 48;
 		floorText.color		= Color.white;
 	}//階層テキストを生成_End//-----------------------------
-
+	
 	//更新//////////////////////////////////////////////////
 	//俺の更新関数_Begin//----------------------------------
 	private	void	UpdateKimishimaSystem(){
@@ -103,6 +105,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		UpdateFloorWindow();
 		if(partsSelectWindowUpdateFunc[partsSelectWindowStateNo] != null)
 			partsSelectWindowUpdateFunc[partsSelectWindowStateNo]();
+		if(partsSelectWindow != null)	partsSelectWindow.rectTransform.localScale	= partsSelectWindowSize;
+		partsSelectWindowStateTime	+= Time.deltaTime;
 	}//俺の更新関数_End//-----------------------------------
 
 	//階層ウィンドウを更新_Begin//--------------------------
@@ -113,6 +117,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//ウィンドウを開く_Beign//------------------------------
 	private	void	UpdatePartsSelectWindowOpen(){
+		float	n	= partsSelectWindowStateTime * 4.0f;
+		partsSelectWindowSize.x	= Mathf.Max(2.0f - n,1.0f);
+		partsSelectWindowSize.y	= Mathf.Min(n,1.0f);
+		if(n >= 1.0f)	ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Neutral);
 	}//ウィンドウを開く_End//-------------------------------
 
 	//待機_Beign//-----------------------------------------
@@ -143,10 +151,12 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
 	private	void	OpenPartsSelectWindow(){
+		partsSelectWindowSize	= new Vector3(2.0f,0.0f,1.0f);
 		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Open);
 		CreatePartsSelectWindow();
 		CreatePartsSelectText();
 		CreatePartsSelectButton();
+		CreatePartsSelectScrollView();
 	}//パーツ選択ウィンドウを表示_End//-----------------------
 
 	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
@@ -196,13 +206,17 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectButton.colors	= partsSelectButtonColor;
 		partsSelectButtonImage		= obj.GetComponent<Image>();
 		partsSelectButtonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
-		partsSelectButtonSize		= new Vector2(128.0f,64.0f);
-		partsSelectButtonImage.rectTransform.sizeDelta	= partsSelectButtonSize;
+		partsSelectButtonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
 		partsSelectButton.onClick.AddListener(OnPartsSelectButtonEnter);
 		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
 		buttonSystem.text			= "決定";
 		buttonSystem.color			= Color.white;
 		buttonSystem.fontSize		= 24;
 	}//パーツセレクトウィンドウのボタン_End//----------------
+
+	//スクロールビューを生成_Begin//------------------------
+	private	void	CreatePartsSelectScrollView(){
+		TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectScrollView",partsSelectWindow.gameObject);
+	}//スクロールビューを生成_End//-------------------------
 
 }//ゲームシーンのシステム_End//------------------------------
