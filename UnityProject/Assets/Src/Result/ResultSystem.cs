@@ -40,7 +40,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 			"Prefab/Select/SelectHeader",
 		};
 		for(int i = 0;i < tablePrefabName.Length;i ++){
-			TitleSystem.CreateObujectInCanvas(tablePrefabName[i],canvasObject);
+			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
 		}
 		CreateHeaderText();
 		StartCreateGide();

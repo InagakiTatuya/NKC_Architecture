@@ -24,10 +24,11 @@ public class CardManager : MonoBehaviour {
     private CardInputSystem ciSystem;  //このシーンを統括するSystem
     
     //管理データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private Card[]      m_Card;             //社員証
-    private int         m_PlayerCount;      //参加するプレイヤー数
+    private Card[] m_Card;             //社員証
+    private int    m_PlayerCount;      //参加するプレイヤー数
     
-    
+    //公開プロパティ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    public  int getPlayerCount { get{ return m_PlayerCount; } }
 
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
@@ -57,20 +58,14 @@ public class CardManager : MonoBehaviour {
             m_Card[index + 1] = cpTra.GetChild(1).GetComponent<Card>();
             m_Card[index + 2] = cpTra.GetChild(2).GetComponent<Card>();
             //IndexNoを設定 - - - - - - - - - - - - - - - - - - - - - - - - - -
-            m_Card[index + 0].Init(
-                index + 0, OnFhotoEnter, OnPlayerRemoveButtonEnter,
-                OnEndEdit, OnValueChange
-                );
+            m_Card[index + 0].Init( index + 0,
+                OnFhotoEnter, OnPlayerRemoveButtonEnter);
 
-            m_Card[index + 1].Init(
-                index + 1, OnFhotoEnter, OnPlayerRemoveButtonEnter,
-                OnEndEdit, OnValueChange
-                );
+            m_Card[index + 1].Init( index + 1,
+                OnFhotoEnter, OnPlayerRemoveButtonEnter);
 
-            m_Card[index + 2].Init(
-                index + 2, OnFhotoEnter, OnPlayerRemoveButtonEnter,
-                OnEndEdit, OnValueChange
-                );
+            m_Card[index + 2].Init( index + 2,
+                OnFhotoEnter, OnPlayerRemoveButtonEnter);
 
             //要素数加算- - - - - - - - - - - - - - - - - - - - - - - - - - - -
             index += 3;
@@ -91,7 +86,7 @@ public class CardManager : MonoBehaviour {
     //社員証のアクティブ設定===================================================
     //  Card と CardPack のアクティブの設定を行う
     //  非アクティブにする際、データをリセットする
-    //------------------------------------------------------------------------
+    //=========================================================================
     private void CardsSetActive(int _Length, bool _Active = true) {
         //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
         //  配列の先頭からすべてアクティブにする。
@@ -123,7 +118,7 @@ public class CardManager : MonoBehaviour {
     //完了ボタン===============================================================
     //  タイミング：ＯＫボタンがタップされた瞬間。
     //    Databaseのフォーマットにあわせデータを作り、Databaseに入れる。
-    //------------------------------------------------------------------------
+    //=========================================================================
     public void OnAppButtonEnter() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -159,22 +154,43 @@ public class CardManager : MonoBehaviour {
 
     //社員追加ボタン===========================================================
     //  タイミング：社員追加ボタンがタップされた瞬間。
-    //    プレイヤーデータを追加し、参加者数を増やす。
-    //------------------------------------------------------------------------
+    //    社員証入力ウィンドウを呼び出す
+    //=========================================================================
     public void OnPlayerAddButtonEnter() {
         //ステートが通常時以外は、処理しない
         if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
         //プレイヤー数が最大値に達していたら処理しない
         if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) return;
 
-        m_PlayerCount++;                //プレイヤー数加算
-        CardsSetActive(m_PlayerCount);  //アクティブの操作
+        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+        //  ここに社員証入力ウィンドウを呼び出す処理
+        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+    }
+
+    //写真を変更===============================================================
+    //  タイミング：写真がタップされた瞬間。
+    //    社員証入力ウィンドウを呼び出し、タッチされたカードのデータを渡す
+    //=========================================================================
+    public void OnFhotoEnter(int _cardIndex) {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name +
+            "\nCardIndex = " + _cardIndex);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //写真選択ウィンドウを出す---------------------------------------------
+        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
+        //  ここに写真選択ウィンドウを出す処理
+        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
     }
 
     //社員証の削除ボタン=======================================================
     //  タイミング：社員証削除ボタンがタップされた瞬間。
     //    プレイヤーデータを削除し、参加者数を減らす。
-    //------------------------------------------------------------------------
+    //=========================================================================
     public void OnPlayerRemoveButtonEnter(int _cardIndex) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
@@ -203,51 +219,6 @@ public class CardManager : MonoBehaviour {
         CardsSetActive(m_PlayerCount);  //アクティブの操作
 
     }
-
-    //写真を変更===============================================================
-    //  タイミング：写真がタップされた瞬間。
-    //    写真選択ウィンドウを出す
-    //-------------------------------------------------------------------------
-    public void OnFhotoEnter(int _cardIndex) {
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR
-        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name +
-            "\nCardIndex = " + _cardIndex);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        
-        //写真選択ウィンドウを出す---------------------------------------------
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
-        //  ここに写真選択ウィンドウを出す処理
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
-    }
-
-    //名前入力終了=============================================================
-    //  タイミング：入力が終えたら呼び出される。
-    //    CardのDataに入力された値を入れる。
-    //-------------------------------------------------------------------------
-    public void OnEndEdit(int _cardIndex) {
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR 
-        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name +
-            "\nCardIndex = " + _cardIndex);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-
-        //CardのDataに入力された値を入れる-------------------------------------
-        m_Card[_cardIndex].DataSetName();
-     
-    }
-
-    //名前入力中===============================================================
-    //  タイミング：入力するたびに呼ばれる。
-    //    今のところ特に処理することはない。
-    //    演出の強化に使えたらいいなぁ
-    //-------------------------------------------------------------------------
-    public void OnValueChange(int _cardIndex) { }
+   
 
 }

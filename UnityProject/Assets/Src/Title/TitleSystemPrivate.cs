@@ -35,7 +35,7 @@ public	partial class TitleSystem : MonoBehaviour{
 	//初期化////////////////////////////////////////////////
 	//ボタンを初期化_Begin//--------------------------------
 	private	void	StartCreateButton(){
-		GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Button",canvasObject);
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		button			= obj.GetComponent<Button>();
 		buttonColor.normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
 		buttonColor.highlightedColor= new Color(0.5f,0.5f,1.0f,1.0f);
@@ -91,7 +91,7 @@ public	partial class TitleSystem : MonoBehaviour{
 
 	//フェード関連を初期化_Begin//--------------------------
 	private	void	CreateFade(){
-		GameObject	obj	= TitleSystem.CreateObujectInCanvas("Prefab/Title/Fade",canvasObject);
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Fade",canvasObject);
 		fade			= obj.GetComponent<Image>();
 		fadeColor		= new Color(0.0f,0.0f,0.0f,0.0f);
 		fade.rectTransform.sizeDelta	= new Vector2(1024.0f,1024.0f);

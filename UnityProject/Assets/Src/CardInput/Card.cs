@@ -12,8 +12,9 @@ using System.Collections;
 //クラス///////////////////////////////////////////////////////////////////////
 public class Card : MonoBehaviour {
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private Image           m_Image;    //顔写真
-    private InputField      m_Input;    //名前入力
+    private Image m_ImageHair;    //髪イメージ
+    private Image m_ImageFace;    //顔イメージ
+    private Text  m_Text;         //名前表示
 
     //データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private int              INDEXNO;   //CardManagerの管理番号
@@ -21,13 +22,17 @@ public class Card : MonoBehaviour {
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public Image            image {
-        get{ return m_Image;  }
-        set{ m_Image = value; }
+    public Image            imageHair {
+        get{ return m_ImageHair;  }
+        set{ m_ImageHair = value; }
     }
-    public InputField       input {
-        get{ return m_Input;  }
-        set{ m_Input = value; }
+    public Image            imageFace {
+        get{ return m_ImageFace;  }
+        set{ m_ImageFace = value; }
+    }
+    public Text             Text {
+        get{ return m_Text;  }
+        set{ m_Text = value; }
     }
     //データ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public int              indexNo {
@@ -43,27 +48,24 @@ public class Card : MonoBehaviour {
     //初期化===================================================================
     void Awake() {
         //参照-----------------------------------------------------------------
-        m_Image = transform.FindChild("Photo"     ).GetComponent<Image     >();
-        m_Input = transform.FindChild("InputField").GetComponent<InputField>();
-
-        //データ---------------------------------------------------------------
-        this.DataReset();
+        m_ImageHair = transform.FindChild("PhotoBack/PhotoHair").GetComponent<Image>();
+        m_ImageFace = transform.FindChild("PhotoBack/PhotoFace").GetComponent<Image>();
+        m_Text      = transform.FindChild("Name").GetComponent<Text >();
     }
 
     void Start() {
-
+        //データ---------------------------------------------------------------
+        this.DataReset();
     }
 
     //公開関数/////////////////////////////////////////////////////////////////
     //外部からもらう初期値=====================================================
     //  第一引数：CardManagerで管理されている番号
-    //  第二引数：入力終了時に呼ばれる関数
-    //  第三引数：入力するたびに呼ばれる関数
-    public void Init(int                _IndexNo,
+    //  第二引数：全体をタッチされたとき呼ばれる関数
+    //  第三引数：削除ボタンをタッチされたとき呼ばれる関数
+    public void Init(int              _IndexNo,
                      UnityAction<int> _onButtonEnter,
-                     UnityAction<int> _onRemoveEnter,
-                     UnityAction<int> _onEndEdit,
-                     UnityAction<int> _callValidateInput = null
+                     UnityAction<int> _onRemoveButtonEnter
                     ) {
         //CardManagerの管理番号------------------------------------------------
         this.INDEXNO = _IndexNo;
@@ -77,46 +79,31 @@ public class Card : MonoBehaviour {
         //onButton(Remove)-----------------------------------------------------
         eve = transform.FindChild("Remove").GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
-        eve.AddListener(delegate { _onRemoveEnter(INDEXNO); });
-
-        //onEndEdit------------------------------------------------------------
-        //  リスナーをすべて削除してから、引数の関数を登録
-        m_Input.onEndEdit.RemoveAllListeners();
-        m_Input.onEndEdit.AddListener(delegate { _onEndEdit(INDEXNO); });
-
-       //onValueChange--------------------------------------------------------
-        //  リスナーをすべて削除してから、引数の関数を登録
-        m_Input.onValueChange.RemoveAllListeners();
-        if(_callValidateInput != null) {
-            m_Input.onValueChange.
-                AddListener(delegate { _callValidateInput(INDEXNO); });
-        }
+        eve.AddListener(delegate { _onRemoveButtonEnter(INDEXNO); });
 
     }
 
     //データを初期化===========================================================
     public void DataReset() {
-        this.data.Init();
-        this.input.text = "";
-        this.DataSetName();
-        this.DataSetPhoto(this.data.imageNo);
+        this.m_Data.Init();
+        this.DataApp(this.m_Data);
     }
 
     //必要な値をコピー=========================================================
     public void DataCopyTo(ref Card _Card) {
-        _Card.data         = this.data;
-        _Card.image.sprite = this.image.sprite;
-        _Card.input.text   = this.input.text;
+        _Card.data             = this.data;
+        _Card.imageHair.sprite = this.imageHair.sprite;
+        _Card.imageFace.sprite = this.imageFace.sprite;
+        _Card.Text.text        = this.Text.text;
     }
 
-    //入力された名前をDataに格納===============================================
-    public void DataSetName() {
-        m_Data.name = m_Input.text;
+    //適応=====================================================================
+    //  渡されたデータから適応するスプライトを込みこみ適応する
+    //  テキストにも名前を入れる
+    public void DataApp(StractPlayerData _data) {
+        this.m_Text.text        = _data.pleyerName;
+        this.m_ImageHair.sprite = Database.obj.SPRITE_HAIR[_data.imageHairNo];
+        this.m_ImageFace.sprite = Database.obj.SPRITE_FACE[_data.imageFaceNo];
     }
-    //選択された写真の番号をDataに格納=========================================
-    public void DataSetPhoto(int _PhotoNo) {
-
-    }
-
 
 }

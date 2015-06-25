@@ -5,12 +5,16 @@
 
 
 public struct StractPlayerData {
-    public string name;
-    public int    imageNo;
+    public string pleyerName;
+    public int    imageHairNo;
+    public int    imageFaceNo;
+    public int    imageBodyNo;
 
     public void Init() {
-        name = "";
-        imageNo = 0;
+        pleyerName  = "";
+        imageHairNo = 0;
+        imageFaceNo = 0;
+        imageBodyNo = 0;
     }
 }
 
