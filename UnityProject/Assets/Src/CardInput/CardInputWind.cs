@@ -242,6 +242,8 @@ public class CardInputWind : MonoBehaviour {
     //    そうでない場合は、メッセージウィンドウをだす
     //=========================================================================
     public void OnAppButtonEnter() {
+        if(m_StateNo != STATE_INPUTDATA) return;
+        
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
@@ -250,7 +252,6 @@ public class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
-        if(m_StateNo != STATE_INPUTDATA) return;
 
         //仮処理
         m_NextStateNo = STATE_CLAUSEWIND;
