@@ -49,10 +49,9 @@ public class CardWind : MonoBehaviour {
         m_Name  = transform.FindChild("Text_Name" ).GetComponent<Text >();
         m_Job   = transform.FindChild("Text_Job"  ).GetComponent<Text >();
         m_Other = transform.FindChild("Text_Other").GetComponent<Text >();
-
     }
     void Start() {
-
+        gameObject.SetActive(false);
     }
 
     //更新=====================================================================

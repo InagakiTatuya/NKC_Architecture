@@ -10,6 +10,7 @@ using System.Collections;
 //クラス///////////////////////////////////////////////////////////////////////
 public partial class GameSceneSystem : MonoBehaviour {
 
+    //しょきかー
 	void AwakeInagaki() {
         CardAwake(); //社員証初期化
     }
