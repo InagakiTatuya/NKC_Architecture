@@ -12,4 +12,27 @@ public partial class GameSceneSystem : MonoBehaviour
 	{
 		
 	}
+
+	//更新関数
+	private	void	UpdateIntro(){
+
+	}
+	private	void	UpdatePartsSet(){
+
+	}
+	private	void	UpdateCheck(){
+
+	}
+	private	void	UpdateGameOver(){
+
+	}
+	private	void	UpdatePauseBegin(){
+
+	}
+	private	void	UpdatePause(){
+		
+	}
+	private	void	UpdatePauseEnd(){
+		
+	}
 }

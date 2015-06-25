@@ -8,21 +8,21 @@ using UnityEngine;
 using System.Collections;
 
 //クラス///////////////////////////////////////////////////////////////////////
-public partial class GameSystem : MonoBehaviour {
+public partial class GameSceneSystem : MonoBehaviour {
 
-    void Awake() {
+	void AwakeInagaki() {
         CardAwake(); //社員証初期化
     }
 
 	// Use this for initialization
-	void Start () {
+	void StartInagaki () {
 	
 	}
 	
     int ply = 0;
     int job    = 0;
 
-	void Update () {
+	void UpdateInagaki () {
         if(Input.GetKeyDown(KeyCode.Q)) { OpenCardWind(ply, job);       }
 	    if(Input.GetKeyDown(KeyCode.W)) { CloseCardWind();              }
 	    if(Input.GetKeyDown(KeyCode.E)) { OpenNextPleyarWind(ply, job); }
@@ -38,4 +38,9 @@ public partial class GameSystem : MonoBehaviour {
         }
 	
     }
+
+	//更新関数
+	private	void	UpdateCardView(){
+
+	}
 }

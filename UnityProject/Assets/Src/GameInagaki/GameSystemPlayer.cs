@@ -11,7 +11,7 @@ using System.Collections;
 
 
 //クラス///////////////////////////////////////////////////////////////////////
-public partial class GameSystem : MonoBehaviour {
+public partial class GameSceneSystem : MonoBehaviour {
 
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardWind m_CardWind; //社員証

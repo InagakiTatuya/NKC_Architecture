@@ -98,6 +98,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}//階層テキストを生成_End//-----------------------------
 	
 	//更新//////////////////////////////////////////////////
+	private	void	UpdatePartsSelect(){
+
+	}
+
+	private	void	UpdateResualt(){
+
+	}
+
 	//俺の更新関数_Begin//----------------------------------
 	private	void	UpdateKimishimaSystem(){
 		if(partsSelectWindowStateNo < 0 || partsSelectWindowStateNo >= (int)PartsSelectWindowStateNo.Length)
