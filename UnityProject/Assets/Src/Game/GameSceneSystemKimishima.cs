@@ -36,7 +36,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		Length,		//長さ
 	}//パーツ選択ウィンドウのテキストID_End//----------------
 
+	//リザルトシーンのステート番号_Begin//-------------------
+	private	enum	ResualtStateNo{
+		Open,		//開く
+		Neutral,	//通常
+	}//リザルトシーンのステート番号_End//--------------------
+
 	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
+	private	UnityAction[]	resualtUpdateFunc			= null;
 	//変数//////////////////////////////////////////////////
 	private	Vector2	FLOORWINDOW_POS	= new Vector2(-192.0f,-384.0f);
 
@@ -47,6 +54,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	Vector2	floorSize;
 
 	//パーツ選択関連
+	private	bool	partsSelectWindowOpenFlg;
 	private	Image	partsSelectWindow		= null;
 	private	Vector3	partsSelectWindowSize;
 	private	Text[]	partsSelectText			= null;
@@ -55,6 +63,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	ColorBlock	partsSelectButtonColor;
 	private	int		partsSelectWindowStateNo;
 	private float	partsSelectWindowStateTime;
+
+	//リザルト関連
+	private	Image	resualtWindow		= null;
+	private	Vector3	resualtWindowSize;
+	private	Text[]	resualtText			= null;
+	private	Button	resualtButton		= null;
+	private	Image	resualtButtonImage	= null;
+	private	int		resualtStateNo;
+	private	float	resualtStateTime;
 
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
@@ -65,8 +82,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdatePartsSelectWindowClose,
 			null,
 		};
-		floor		= 1;
-		floorSize	= new Vector2(128.0f,128.0f);
+		resualtUpdateFunc	= new UnityAction[]{
+			this.UpdateResualtOpen,
+			this.UpdateResualtNeutral,
+		};
+		floor						= 1;
+		partsSelectWindowOpenFlg	= false;
+		floorSize					= new Vector2(128.0f,128.0f);
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
 		//Debug
@@ -76,7 +98,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectButtonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
 		partsSelectButtonColor.colorMultiplier	= 1;
 		partsSelectButtonColor.fadeDuration		= 0.1f;
-		OpenPartsSelectWindow();
+		CloseCardWind();
+	//	CloseCardMiniWind();
+		CloseNextPleyarWind();
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
@@ -98,13 +122,18 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}//階層テキストを生成_End//-----------------------------
 	
 	//更新//////////////////////////////////////////////////
+	//パーツ選択ステート_Begin//----------------------------
 	private	void	UpdatePartsSelect(){
+		if(!partsSelectWindowOpenFlg){
+			OpenPartsSelectWindow();
+			partsSelectWindowOpenFlg	= true;
+		}
+	}//パーツ選択ステート_End//-----------------------------
 
-	}
-
+	//リザルト_Beign//--------------------------------------
 	private	void	UpdateResualt(){
-
-	}
+		if(resualtUpdateFunc[resualtStateNo] != null)	resualtUpdateFunc[resualtStateNo]();
+	}//リザルト_End//---------------------------------------
 
 	//俺の更新関数_Begin//----------------------------------
 	private	void	UpdateKimishimaSystem(){
@@ -139,6 +168,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	UpdatePartsSelectWindowClose(){
 	}//ウィンドウを閉じる_End//------------------------------
 
+	//リザルトを開く_Begin//--------------------------------
+	private	void	UpdateResualtOpen(){
+	}//リザルトを開く_End//---------------------------------
+
+	//リザルトのニュートラル_Begin//------------------------
+	private	void	UpdateResualtNeutral(){
+	}//リザルトのニュートラル_End//-------------------------
+
 	//ボタン関連////////////////////////////////////////////
 	//パーツ選択ウィンドウの決定ボタンが押された_Beign//----
 	public	void	OnPartsSelectButtonEnter(){
@@ -148,6 +185,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectText			= null;
 		partsSelectButton		= null;
 		partsSelectButtonImage	= null;
+		partsSelectWindowOpenFlg= false;
+		ChangeState(StateNo.PartsSet);
 	}//パーツ選択ウィンドウの決定ボタンが押された_End//-----
 
 	//その他関数////////////////////////////////////////////
