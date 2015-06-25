@@ -15,11 +15,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	void Start()
 	{
 		StartKimishimaSystem();
+		StartTanabe();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
 		UpdateKimishimaSystem();
+		UpdateTanabe();
 	}
 }
