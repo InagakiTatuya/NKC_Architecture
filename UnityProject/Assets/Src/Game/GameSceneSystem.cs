@@ -12,7 +12,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		PartsSet,		//パーツをセット
 		Check,			//チェック
 		GameOver,		//ゲーム終了
-		Resualt,		//リザルト
+		Result,			//リザルト
 		PauseBegin,		//ポーズ開始
 		Pause,			//ポーズ
 		PauseEnd,		//ポーズ終了
@@ -38,7 +38,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdatePartsSet,
 			this.UpdateCheck,
 			this.UpdateGameOver,
-			this.UpdateResualt,
+			this.UpdateResult,
 			this.UpdatePauseBegin,
 			this.UpdatePause,
 			this.UpdatePauseEnd,
