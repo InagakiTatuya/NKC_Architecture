@@ -51,6 +51,7 @@ public class CardWind : MonoBehaviour {
         m_Other = transform.FindChild("Text_Other").GetComponent<Text >();
     }
     void Start() {
+        //初期状態で非アクティブにする
         gameObject.SetActive(false);
     }
 
