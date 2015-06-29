@@ -13,14 +13,7 @@ using System.Collections.Generic;
 public partial class Database : SingletonCustom<Database> {
     //リソースデータ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     //写真^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public  const int   FHOT_NO_MAX = 1;
-    private Sprite[]    M_SPRITE_HAIR;
-    private Sprite[]    M_SPRITE_FACE;
-    private Sprite[]    M_SPRITE_BODY;
-
-    public  Sprite[]    SPRITE_HAIR { get { return M_SPRITE_HAIR; } }
-    public  Sprite[]    SPRITE_FACE { get { return M_SPRITE_FACE; } }
-    public  Sprite[]    SPRITE_BODY { get { return M_SPRITE_BODY; } }
+    // DatabaseTexCardInput.cs に定義
 
     //職種^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  const int   JOB_NO_MAX = 4;
@@ -44,15 +37,14 @@ public partial class Database : SingletonCustom<Database> {
     public  int                getPlayerCount{ get{ return m_PlayerDatas.Length; } }
     public  StractPlayerData[] getPlayerData { get{ return m_PlayerDatas;        } }
 
+    //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
     void Awake() {
         BaseAwake(this); //シングルトンの設定をする
         DontDestroyOnLoad(gameObject); //シーンを切り替えても破棄しない
-        //写真データ-----------------------------------------------------------
-        M_SPRITE_HAIR = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Hair");
-        M_SPRITE_FACE = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Face");
-        M_SPRITE_BODY = Resources.LoadAll<Sprite>("Texture/CardInput/PleyarParts/Body");
 
+        //写真データ-----------------------------------------------------------
+        this.CardInputAwake(); //DatabaseTexCardInput.cs に定義
 
         //職人データ-----------------------------------------------------------
 	    M_JOB_NAME = new string[JOB_NO_MAX] {
@@ -78,7 +70,7 @@ public partial class Database : SingletonCustom<Database> {
         this.SetPlyaerDatas(ref kariData);
 
 
-        Debug.Log("Database.awake()");
+        Debug.Log("Database.Awake End");
     }
 
 	void Start () {
@@ -90,7 +82,7 @@ public partial class Database : SingletonCustom<Database> {
 	
 	}
 
-    //公開関数=================================================================
+    //公開関数/////////////////////////////////////////////////////////////////
     
     //プレイヤーデータを入れる=================================================
     //  CardInputシーンで作られたデータを保存

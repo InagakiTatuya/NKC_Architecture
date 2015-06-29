@@ -102,8 +102,10 @@ public class Card : MonoBehaviour {
     //  テキストにも名前を入れる
     public void DataApp(StractPlayerData _data) {
         this.m_Text.text        = _data.pleyerName;
-        this.m_ImageHair.sprite = Database.obj.SPRITE_HAIR[_data.imageHairNo];
-        this.m_ImageFace.sprite = Database.obj.SPRITE_FACE[_data.imageFaceNo];
+        this.m_ImageHair.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, _data.imageHairNo];
+        this.m_ImageFace.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, _data.imageFaceNo];
     }
 
 }

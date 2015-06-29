@@ -9,16 +9,16 @@ using UnityEngine.UI;
 using System.Collections;
 
 //クラス///////////////////////////////////////////////////////////////////////
-public class CardInputWind : MonoBehaviour {
+public partial class CardInputWind : MonoBehaviour {
     
     //ステート定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public const int STATE_NOTACTIVE      = 0;  //非アクティブ
     public const int STATE_OPENWIND       = 1;  //ウィンドウを開く
-    public const int STATE_CLAUSEWIND     = 2;  //ウィンドウを閉じる
-    public const int STATE_INPUTDATA      = 3;  //データを入力
-    public const int STATE_PAGECHANGE     = 4;  //パーツのタブを変更する
-    public const int STATE_OPENMESSWIND   = 5;  //メッセージウィンドウを出す
-    public const int STATE_CLAUSEMESSWIND = 6;  //メッセージウィンドウを閉じる
+    public const int STATE_INPUTDATA      = 2;  //データを入力
+    public const int STATE_PABCHANGE      = 3;  //パーツのタブを変更する
+    public const int STATE_OPENMESSWIND   = 4;  //メッセージウィンドウを出す
+    public const int STATE_CLAUSEMESSWIND = 5;  //メッセージウィンドウを閉じる
+    public const int STATE_CLAUSEWIND     = 6;  //ウィンドウを閉じる
 
     public const int STATE_MAX_CNT        = 7;   //ステートの種類数
     
@@ -56,7 +56,35 @@ public class CardInputWind : MonoBehaviour {
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
     void Awake() {
-        //this.gameObject.SetActive(false);
+        //制御する子の参照-----------------------------------------------------
+        m_Back      = transform.FindChild("InputWindBack") as RectTransform;
+        m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
+        m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
+            .GetComponent<Image>();
+        m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
+            .GetComponent<Image>();
+        m_ImageBody = m_Wind.FindChild("Card/PhotoBack/PhotoBody")
+            .GetComponent<Image>();
+        
+        //パーツアイコンの初期化-----------------------------------------------
+        Transform tra = m_Wind.FindChild("TabArea/PartsTabBottonHair/PageBack");
+        for(int i = 0; i < tra.childCount; i++) {
+            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+                Init(Database.PLAYER_PARTS_HAIR, i, OnPartsButtonEnter);
+        }
+
+        tra = m_Wind.FindChild("TabArea/PartsTabBottonFace/PageBack");
+        for(int i = 0; i < tra.childCount; i++) {
+            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+                Init(Database.PLAYER_PARTS_FACE, i, OnPartsButtonEnter);
+        }
+        
+        tra = m_Wind.FindChild("TabArea/PartsTabBottonBody/PageBack");
+        for(int i = 0; i < tra.childCount; i++) {
+            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+                Init(Database.PLAYER_PARTS_BODY, i, OnPartsButtonEnter);
+        }
+
     }
     
     void Start() {
@@ -64,20 +92,20 @@ public class CardInputWind : MonoBehaviour {
         m_fnIniteArr = new StateFunc[STATE_MAX_CNT] {
             null,
             InitForOpenWind,
-            InitForClauseWind,
             InitForInputData,
             null,
             null,
             null,
+            InitForClauseWind,
         };
         m_fnUpdateArr = new StateFunc[STATE_MAX_CNT] {
             null,
             UpdateForOpenWind,
-            UpdateForClauseWind,
             UpdateForInputData,
             null,
             null,
             null,
+            UpdateForClauseWind,
         };
 
         //システムの参照-------------------------------------------------------
@@ -85,18 +113,10 @@ public class CardInputWind : MonoBehaviour {
         cardMgr  = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
             .GetComponent<CardManager>();
 
-        //制御する子の参照-----------------------------------------------------
-        m_Back      = transform.FindChild("InputWindBack") as RectTransform;
-        m_Wind      = m_Back.FindChild("Wind") as RectTransform;
-        m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
-            .GetComponent<Image>();
-        m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
-            .GetComponent<Image>();
-        m_ImageBody = m_Wind.FindChild("Card/PhotoBack/PhotoBody")
-            .GetComponent<Image>();
 
         //非表示にする---------------------------------------------------------
         m_Back.gameObject.SetActive(false);
+        m_Wind.gameObject.SetActive(false);
 
         //参照以外の初期化-----------------------------------------------------
         Init();
@@ -149,6 +169,7 @@ public class CardInputWind : MonoBehaviour {
         
         //アクティブ
         m_Back.gameObject.SetActive(true);
+        m_Wind.gameObject.SetActive(true);
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
@@ -205,11 +226,14 @@ public class CardInputWind : MonoBehaviour {
     //  第一引数：カードの管理番号
     //  第二引数：カードに入っているデータ
     public void OpenCradInputWind(int _CardIndex, StractPlayerData _data) {
-        Init();
-        m_NextStateNo = STATE_OPENWIND; //ウィンドウを開く
-        //データを一時保存
+
+        //データを一時保存-----------------------------------------------------
         m_IndexBff = _CardIndex;
         m_DataBff  = _data;
+
+        //ステート移行---------------------------------------------------------
+        Init(); //念のため初期化
+        m_NextStateNo = STATE_OPENWIND; //ウィンドウを開く
 
     }
     //オーバーロード===========================================================
@@ -220,42 +244,7 @@ public class CardInputWind : MonoBehaviour {
         this.OpenCradInputWind(_CardIndex, data);
     }
 
-    //イベント=================================================================
-
-    //社員追加ボタン===========================================================
-    //  タイミング：社員追加ボタンがタップされた瞬間。
-    //    ウィンドウをアクティブにし、初期化する
-    //=========================================================================
-    public void OnPlayerAddButtonEnter() {
-        //ステートが通常時以外は、処理しない
-        if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
-        //プレイヤー数が最大値に達していたら処理しない
-        if(cardMgr.getPlayerCount >= Database.PLAYER_MAX_COUNT) return;
-
-        Init(); //初期化
-
-    }
-    
-    //完了ボタン===============================================================
-    //  タイミング：ＯＫボタンがタップされた瞬間。
-    //    データが正しければ、データをCardManagerに渡す
-    //    そうでない場合は、メッセージウィンドウをだす
-    //=========================================================================
-    public void OnAppButtonEnter() {
-        if(m_StateNo != STATE_INPUTDATA) return;
-        
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR
-        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        
-
-        //仮処理
-        m_NextStateNo = STATE_CLAUSEWIND;
-    }
-    
+    //イベント/////////////////////////////////////////////////////////////////
+    //  CradInptuWindEvent.cs に定義
 
 }
