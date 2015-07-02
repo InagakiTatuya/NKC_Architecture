@@ -54,7 +54,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	Text[]	partsSelectText			= null;
 	private	Button	partsSelectButton		= null;
 	private	Image	partsSelectButtonImage	= null;
-	private	ColorBlock	partsSelectButtonColor;
 	private	int		partsSelectWindowStateNo;
 	private float	partsSelectWindowStateTime;
 	//初期化////////////////////////////////////////////////
@@ -74,19 +73,16 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		floor						= 1;
 		partsSelectWindowOpenFlg	= false;
 		floorSize					= new Vector2(128.0f,128.0f);
+		BackFadeInit();
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
-		//Debug
-		partsSelectButtonColor.normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
-		partsSelectButtonColor.highlightedColor	= new Color(0.75f,0.75f,1.0f,1.0f);
-		partsSelectButtonColor.pressedColor		= new Color(1.0f,0.8f,0.0f,1.0f);
-		partsSelectButtonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
-		partsSelectButtonColor.colorMultiplier	= 1;
-		partsSelectButtonColor.fadeDuration		= 0.1f;
+#if DEBUG_GAMESCENE
+		Database.InitColorBlock();
+#endif
 	//	CloseCardWind();
 	//	CloseCardMiniWind();
 	//	CloseNextPleyarWind();
-	//	ChangeState(StateNo.Result);
+		ChangeState(StateNo.PartsSelect);
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
@@ -94,7 +90,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		floorWindow			= obj.GetComponent<Image>();
 		floorWindow.rectTransform.localPosition	= FLOORWINDOW_POS;
-		floorWindow.color	= new Color(0.0f,0.5f,0.5f,1.0f);
+		floorWindow.color	= Color.white;
 	}//階層ウィンドウを生成_End//---------------------------
 
 	//階層テキストを生成_Begin//----------------------------
@@ -102,9 +98,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 		floorText			= obj.GetComponent<Text>();
 		floorText.rectTransform.localPosition	= FLOORWINDOW_POS;
-		floorText.text		= "1\n階層目";
+		floorText.text		= "1";
 		floorText.fontSize	= 48;
-		floorText.color		= Color.white;
+		floorText.color		= Color.black;
 	}//階層テキストを生成_End//-----------------------------
 	
 	//更新//////////////////////////////////////////////////
@@ -118,6 +114,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//俺の更新関数_Begin//----------------------------------
 	private	void	UpdateKimishimaSystem(){
+		BackFadeUpdate();
 		if(partsSelectWindowStateNo < 0 || partsSelectWindowStateNo >= (int)PartsSelectWindowStateNo.Length)
 			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide,true);
 		UpdateFloorWindow();
@@ -173,7 +170,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	/// <summary>フロアを上げていく</summary>
 	private	void	AddFloor(){//階層を進める_Begin//-------
 		floor	++;
-		floorText.text	= "" + floor + "\n階層目";
+		floorText.text	= floor.ToString();
 	}//階層を進める_End//-----------------------------------
 
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
@@ -200,6 +197,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	CreatePartsSelectWindow(){
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		partsSelectWindow		= obj.GetComponent<Image>();
+		partsSelectWindow.sprite= Resources.Load<Sprite>("Texture/Game/Window");
 		partsSelectWindow.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
 		partsSelectWindow.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
 		partsSelectWindow.color							= new Color(1.0f,1.0f,0.75f,0.5f);
@@ -232,7 +230,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	CreatePartsSelectButton(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",partsSelectWindow.gameObject);
 		partsSelectButton			= obj.GetComponent<Button>();
-		partsSelectButton.colors	= partsSelectButtonColor;
+		partsSelectButton.colors	= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
 		partsSelectButtonImage		= obj.GetComponent<Image>();
 		partsSelectButtonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
 		partsSelectButtonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
@@ -266,9 +264,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		obj.transform.SetParent(contents.transform);
 		Button		button		= obj.GetComponent<Button>();
-		button.colors			= partsSelectButtonColor;
+		button.colors			= Database.colorBlocks[(int)Database.ColorBlockID.White];
 		Image		image		= obj.GetComponent<Image>();
 		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
+		image.sprite			= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
 		image.rectTransform.localPosition	= imagePos;
 		image.rectTransform.sizeDelta		= new Vector2(128.0f,128.0f);
 		ButtonSystem	bs		= obj.GetComponent<ButtonSystem>();

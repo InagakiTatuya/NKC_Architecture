@@ -140,7 +140,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		for(int i = 0;i < resultButton.Length;i ++){
 			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			resultButton[i]		= obj.GetComponent<Button>();
-			resultButton[i].colors	= partsSelectButtonColor;
+			resultButton[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.White];
 			resultButtonImage[i]	= obj.GetComponent<Image>();
 			resultButtonImage[i].rectTransform.localPosition	= tableButtonPos[i];
 			resultButtonImage[i].rectTransform.sizeDelta		= new Vector2(256.0f,96.0f);
