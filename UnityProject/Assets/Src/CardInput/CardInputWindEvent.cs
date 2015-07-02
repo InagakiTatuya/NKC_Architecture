@@ -20,9 +20,9 @@ public partial class CardInputWind : MonoBehaviour {
         //ステートが通常時以外は、処理しない
         if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
         //プレイヤー数が最大値に達していたら処理しない
-        if(cardMgr.getPlayerCount >= Database.PLAYER_MAX_COUNT) return;
+        if(ciSystem.getCardMgr.getPlayerCount >= Database.PLAYER_MAX_COUNT) return;
 
-        OpenCradInputWind(cardMgr.getPlayerCount - 1);
+        OpenCradInputWind(ciSystem.getCardMgr.getPlayerCount - 1);
 
     }
     
@@ -61,7 +61,7 @@ public partial class CardInputWind : MonoBehaviour {
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
             "ImageType = " + _ImageType + "  ImageID = " + _ImageID);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
