@@ -84,8 +84,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}//リザルトのニュートラル_End//-------------------------
 	
 	//ボタン関連////////////////////////////////////////////
-	private	void	OnresultButtonRetryEnter(){}
-	private	void	OnresultButtonBackEnter(){}
+	//リトライ_Begin//--------------------------------------
+	private	void	OnresultButtonRetryEnter(){
+		Application.LoadLevel("Game");
+	}//リトライ_End//---------------------------------------
+
+	//セレクト_Begin//--------------------------------------
+	private	void	OnresultButtonBackEnter(){
+		Application.LoadLevel("Select");
+	}//セレクト_End//---------------------------------------
 
 	//その他関数////////////////////////////////////////////
 	//リザルトのステートを遷移する_Begin//--------------------

@@ -83,10 +83,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectButtonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
 		partsSelectButtonColor.colorMultiplier	= 1;
 		partsSelectButtonColor.fadeDuration		= 0.1f;
-		CloseCardWind();
+	//	CloseCardWind();
 	//	CloseCardMiniWind();
-		CloseNextPleyarWind();
-		ChangeState(StateNo.Result);
+	//	CloseNextPleyarWind();
+	//	ChangeState(StateNo.Result);
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
