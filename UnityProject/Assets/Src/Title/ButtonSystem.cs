@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //ボタンのシステム
-//更新日 :	06 / 13 / 2015
+//更新日 :	06 / 29 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -21,7 +21,11 @@ public class ButtonSystem : MonoBehaviour {
 //パブリックフィールド//------------------------------------
 
 	//変数//////////////////////////////////////////////////
+	public	delegate	void	ButtonEnter(ButtonSystem buttonSystem);
+	public	ButtonEnter	buttonEnter	= null;
 	public	string		text		= "debug";
+	public	Vector3		textPos		= Vector3.zero;
+	public	int			buttonID	= -1;
 	public	int			fontSize	= 32;
 	public	Color		color		= Color.white;
 
@@ -29,6 +33,8 @@ public class ButtonSystem : MonoBehaviour {
 	public	void	Start () {//初期化_Begin//--------------
 		buttonImage	= GetComponent<Image>();
 		StartCreateText();
+		Button	button	= GetComponent<Button>();
+		button.onClick.AddListener(OnButtonEnter);
 	}//初期化_End//-----------------------------------------
 
 	//更新//////////////////////////////////////////////////
@@ -51,8 +57,15 @@ public class ButtonSystem : MonoBehaviour {
 		textObject.text							= text;
 		textObject.fontSize						= fontSize;
 		textObject.color						= color;
-		textObject.rectTransform.localPosition	= Vector3.zero;
+		textObject.rectTransform.localPosition	= textPos;
 		textObject.rectTransform.localScale		= Vector3.one;
 	}//ボタンの文字を生成_End//-----------------------------
+
+	//その他関数///////////////////////////////////////////
+	//ボタンが押された_Begin//------------------------------
+	private	void	OnButtonEnter(){
+		if(buttonEnter == null)	return;
+		buttonEnter(this);
+	}//ボタンが押された_End//-------------------------------
 
 }//ボタンのシステム_End//-----------------------------------
