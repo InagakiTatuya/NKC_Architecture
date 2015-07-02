@@ -5,7 +5,7 @@ using System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//列挙/////////////////////////////////////////////////
-	private	enum	StateNo : int{//ステート番号_Begin//---
+	public	enum	StateNo : int{//ステート番号_Begin//---
 		Intro,			//イントロ
 		CardView,		//カード表示
 		PartsSelect,	//パーツ選択
@@ -22,7 +22,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	/// <summary>キャンバスを持つオブジェクト</summary>
 	public	GameObject	canvasObject	= null;
 
-	private	int		stateNo;
+	public	int		stateNo;
 	private	float	stateTime;
 	
 	void Awake(){
