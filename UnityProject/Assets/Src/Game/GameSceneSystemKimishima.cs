@@ -107,6 +107,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//パーツ選択ステート_Begin//----------------------------
 	private	void	UpdatePartsSelect(){
 		if(!partsSelectWindowOpenFlg){
+			ChangeBackFadeState(BackFadeStateNo.FadeOut);
 			OpenPartsSelectWindow();
 			partsSelectWindowOpenFlg	= true;
 		}
@@ -154,6 +155,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			partsSelectButton		= null;
 			partsSelectButtonImage	= null;
 			partsSelectWindowOpenFlg= false;
+			ChangeBackFadeState(BackFadeStateNo.FadeIn);
 			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide);
 			ChangeState(StateNo.PartsSet);
 		}
@@ -274,7 +276,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		bs.text					= Database.tablePartsName[job,id];
 		bs.textPos				= new Vector3(0.0f,-48.0f,0.0f);
 		bs.buttonID				= id;
-		bs.color				= Color.white;
+		bs.color				= Color.black;
 		bs.fontSize				= 24;
 		bs.buttonEnter			= GetButtonID;
 	}//パーツ選択ウィンドウのボタンを生成_End//--------------

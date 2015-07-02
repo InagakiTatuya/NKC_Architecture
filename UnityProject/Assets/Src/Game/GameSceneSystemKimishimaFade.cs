@@ -59,9 +59,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//フェードイン_Beign//---------------------------------
 	private	void	BackFadeUpdateFadeIn(){
-		float	n		= Mathf.Max(backFadeTimer * 4.0f,1.0f);
-		backFadeColor.a	= 1.0f - n;
-		if(n >= 1.0f)	ChangeBackFadeState(BackFadeStateNo.Hide);
+		float	n		= Mathf.Max(backFadeTimer * 4.0f,0.5f);
+		backFadeColor.a	= 0.5f - n;
+		if(n >= 0.5f)	ChangeBackFadeState(BackFadeStateNo.Hide);
 	}//フェードイン_End//----------------------------------
 
 	//見えない_Beign//------------------------------------
@@ -71,14 +71,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//フェードアウト_Beign//-------------------------------
 	private	void	BackFadeUpdateFadeOut(){
-		float	n		= Mathf.Max(backFadeTimer * 4.0f,1.0f);
+		float	n		= Mathf.Max(backFadeTimer * 4.0f,0.5f);
 		backFadeColor.a	= n;
-		if(n >= 1.0f)	ChangeBackFadeState(BackFadeStateNo.Black);
+		if(n >= 0.5f)	ChangeBackFadeState(BackFadeStateNo.Black);
 	}//フェードアウト_End//--------------------------------
 
 	//見えない_Beign//------------------------------------
 	private	void	BackFadeUpdateBlack(){
-		backFadeColor.a	= 1.0f;
+		backFadeColor.a	= 0.5f;
 	}//見えない_End//-------------------------------------
 
 	//その他関数///////////////////////////////////////////
