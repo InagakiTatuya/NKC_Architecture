@@ -6,20 +6,42 @@
 //名前空間/////////////////////////////////////////////////////////////////////
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 
 //クラス///////////////////////////////////////////////////////////////////////
 public class PlayerPartsSelection : MonoBehaviour {
     
+    //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    private const int         STATE_INPUT      = 0; //入力可能
+    private const int         STATE_CHANGE_TAB = 1; //タブ変更
+
+    private const int         STATE_NO_MAX     = 2; //ステートの数
+
+    private ClassStateManager m_State;
+
+    //ステート　タブ変更
+    private Transform  m_toListTab; //一番上に持ってくるタブの参照
+
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardInputWind ciWind;
     private Transform     traTabHair, traTabFace, traTabBody;
 
+    
+    //非公開関数///////////////////////////////////////////////////////////////
+    //初期化===================================================================
     void Awake() {
 
     }
 	
 	void Start () {
+        //ステート-------------------------------------------------------------
+        UnityAction[] initFanc   = new UnityAction[] { null, InitForChangeTab   };
+        UnityAction[] updateFanc = new UnityAction[] { null, UptateForChangeTab };
+
+        m_State = new ClassStateManager(STATE_NO_MAX, initFanc, updateFanc);
+
+
         //タブの初期化---------------------------------------------------------
         //  タブのOnClickイベントにOnTabButtonEnterを設定し
         //  引数にプレイヤーパーツの種類番号を渡す。
@@ -62,16 +84,42 @@ public class PlayerPartsSelection : MonoBehaviour {
 	
 	
 	void Update () {
-	
+	    m_State.Update();
 	}
+
+    //ステート関数/////////////////////////////////////////////////////////////
+
+    //========================================================= ChangeTab =====
+    //初期化
+    //  演出に必要な変数の初期化をする
+    public void InitForChangeTab() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+    }
+
+    //更新 
+    //  タッチされたタブを一番上に持ってくる
+    public void UptateForChangeTab() {
+        m_toListTab.SetAsLastSibling();
+
+        //ステート変更
+        m_State.setNextState = STATE_INPUT;
+    }
 
     //イベント/////////////////////////////////////////////////////////////////
     
     //タブをタッチ=============================================================
-    //  タッチされたタブを先頭に持ってくる
-    //
+    //  タッチされたらタブを変更するステートに移行
     //=========================================================================
     public void OnTabButtonEnter(Transform _tra) {
+        //ステートがINPUT以外は、処理しない
+        if(m_State.getState != STATE_INPUT) return;
+
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
@@ -81,13 +129,17 @@ public class PlayerPartsSelection : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
-        _tra.SetAsLastSibling();
+        m_State.setNextState = STATE_CHANGE_TAB;
+        m_toListTab = _tra;
     }
 
     //パーツを選択=============================================================
     //
     //=========================================================================
     public void OnPartsButtonEnter(int _ImageType, int _ImageID) {
+        //ステートがINPUT以外は、処理しない
+        if(m_State.getState != STATE_INPUT) return;
+
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
@@ -96,6 +148,7 @@ public class PlayerPartsSelection : MonoBehaviour {
             "ImageType = " + _ImageType + "  ImageID = " + _ImageID);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
     }
 
 }
