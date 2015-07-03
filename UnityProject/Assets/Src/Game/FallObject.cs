@@ -49,6 +49,7 @@ public class FallObject : MonoBehaviour {
 		{
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
+			rBody.useGravity = false;
 			rBody.velocity = Vector3.zero;
 		}
 	}

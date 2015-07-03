@@ -23,7 +23,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	public	GameObject	canvasObject	= null;
 
 	public	int		stateNo;
-	private	float	stateTime;
+	public	float	stateTime;
+
+	private bool	chengedFlag;
 	
 	void Awake(){
 		AwakeInagaki();
@@ -62,12 +64,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		UpdateInagaki();
 		UpdateKimishimaSystem();
 		UpdateTanabe();
-		stateTime	+= Time.deltaTime;
+		if (chengedFlag)	chengedFlag = false;
+		else				stateTime += Time.deltaTime;
 	}//更新_End//------------------------------------------
 
 	//その他関数///////////////////////////////////////////
 	//ステート遷移_Beign//---------------------------------
 	private	void	ChangeState(StateNo value,bool overrapFlg = false){
+		chengedFlag = true;
 		int	buf		= (int)value;
 		if(!overrapFlg && stateNo == buf)	return;
 		stateNo		= buf;

@@ -71,6 +71,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			downObj.GetComponent<Rigidbody>().useGravity = true;
 			downObj.GetComponent<Collider>().enabled = true;
 			downObj.GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
+			gameObject.SetActive(false);
 		}
 		moveObj.SetActive(false);
 	}
