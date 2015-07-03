@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //セレクトのシステム
-//更新日 :	06 / 13 / 2015
+//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -50,7 +50,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 		};
 		string[]	tableButtonText	= new string[]{
 			"チュートリアル",
-			"こんな漢字",
+			"ゲームスタート!!",
 		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
 			new Vector3(0.0f, 128.0f,0.0f),
@@ -93,7 +93,9 @@ public	partial	class SelectSystem : MonoBehaviour {
 		buttonSize[selectNo].x	*= 1.25f;
 		buttonSize[selectNo].y	*= 0.8f;
 		fadeColor.a	= n;
-		if(stateTime > 0.5f)	Application.LoadLevel("CardInput");
+		if(stateTime < 0.5f)	return;
+		Database.obj.StageId	= selectNo;
+		Application.LoadLevel("CardInput");
 	}//次のシーンへ_End//-----------------------------------
 
 	private	void	UpdateButton(){//ボタンを更新_Beign//---

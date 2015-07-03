@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //データベース
-//更新日 :	06 / 29 / 2015
+//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -44,5 +44,46 @@ public partial class Database : SingletonCustom<Database> {
 		"壁を作るスーパー職人。\nその腕前は超一流で\n見るものを魅了する。",
 		"屋根を作るスーパー職人。\nその腕前は超一流で\n見るものを魅了する。",
 	};//職業の説明文_End//----------------------------------
+
+	public	enum 	ColorBlockID{//色のID_Beign//-----------
+		White,
+		Black,
+		Red,
+		Yellow,
+		Green,
+		Cyan,
+		Blue,
+		Length,
+	}//色のID_End//-----------------------------------------
+	public	static	ColorBlock[]	colorBlocks;
+	//色を初期化_Begin//------------------------------------
+	public	static	void	InitColorBlock(){
+		Color[]	nomalColor		= new Color[]{
+			Color.white,Color.black,Color.red,Color.yellow,
+			Color.green,Color.cyan,Color.blue,
+		};
+		Color[]	highlightColor	= new Color[]{
+			Color.yellow + Color.gray,
+			Color.yellow + Color.gray,
+			Color.yellow + Color.gray,
+			Color.white,
+			Color.yellow + Color.gray,
+			Color.yellow + Color.gray,
+			Color.yellow + Color.gray,
+		};
+		Color[]	pressedColor	= new Color[]{
+			Color.yellow,Color.yellow,Color.yellow,Color.white,
+			Color.yellow,Color.yellow,Color.yellow,
+		};
+		colorBlocks	= new ColorBlock[(int)ColorBlockID.Length];
+		for(int i = 0;i < colorBlocks.Length;i ++){
+			colorBlocks[i].normalColor		= nomalColor[i];
+			colorBlocks[i].highlightedColor	= highlightColor[i];
+			colorBlocks[i].pressedColor		= pressedColor[i];
+			colorBlocks[i].disabledColor	= nomalColor[i] - Color.gray;
+			colorBlocks[i].colorMultiplier	= 1;
+			colorBlocks[i].fadeDuration		= 0.1f;
+		}
+	}//色を初期化_End//-------------------------------------
 
 }//データベース_End//---------------------------------------
