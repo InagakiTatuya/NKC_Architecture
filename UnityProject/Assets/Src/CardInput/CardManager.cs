@@ -40,7 +40,8 @@ public class CardManager : MonoBehaviour {
 
     void Start() {
         //システムの参照-------------------------------------------------------
-        ciSystem = GameObject.Find("System").GetComponent<CardInputSystem>();
+        ciSystem = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME)
+                                        .GetComponent<CardInputSystem>();
 
         //CardPackを生成と初期化-----------------------------------------------
         for(int i=0; i < CARDPACK_MAX; i++) {

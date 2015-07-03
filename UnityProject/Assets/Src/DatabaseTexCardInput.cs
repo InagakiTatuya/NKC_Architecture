@@ -1,5 +1,4 @@
 ﻿//#############################################################################
-//  すべてのシーンで使う共通のデータを保管する
 //  tex_CardInputのスプライト配列のインデックス番号を定義する
 //  作者：稲垣達也
 //#############################################################################
@@ -14,7 +13,7 @@ using System.Collections.Generic;
 public partial class Database : SingletonCustom<Database> {
 	private const int TEXCARDINPUT_OFFSET_HAIR =  0; //社員パーツ髪型
 	private const int TEXCARDINPUT_OFFSET_FACE =  9; //社員パーツ顔
-	private const int TEXCARDINPUT_OFFSET_BODY = 17; //社員パーツ体
+	private const int TEXCARDINPUT_OFFSET_BODY = 18; //社員パーツ体
 
     //プレイヤーパーツの種類
     public  const int   PLAYER_PARTS_HAIR = 0;
