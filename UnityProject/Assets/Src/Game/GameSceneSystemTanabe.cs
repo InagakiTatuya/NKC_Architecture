@@ -3,36 +3,71 @@ using System.Collections;
 
 public partial class GameSceneSystem : MonoBehaviour
 {
+	private bool execute;
+
 	void StartTanabe()
 	{
 
 	}
-	
-	void UpdateTanabe()
-	{
-		
-	}
 
 	//更新関数
-	private	void	UpdateIntro(){
+	void UpdateTanabe()
+	{
 
 	}
-	private	void	UpdatePartsSet(){
+
+	//初期化
+	private void UpdateIntro()
+	{
+		if (execute)
+		{
+			ChangeState(StateNo.PartsSet, false);
+			execute = false;
+		}
+		//ChangeState(StateNo.CardView, false);
+	}
+
+	//パーツ配置
+	private void UpdatePartsSet()
+	{
+		if (execute)
+		{
+			ChangeState(StateNo.Check, false);
+			execute = false;
+		}
+	}
+
+	//建物倒壊チェック
+	private void UpdateCheck()
+	{
+		if (execute)
+		{
+			ChangeState(StateNo.CardView, false);
+			execute = false;
+		}
+	}
+
+	//建物倒壊
+	private void UpdateGameOver()
+	{
 
 	}
-	private	void	UpdateCheck(){
+
+	//ポーズ初期化
+	private void UpdatePauseBegin()
+	{
 
 	}
-	private	void	UpdateGameOver(){
+
+	//ポーズ実行中
+	private void UpdatePause()
+	{
 
 	}
-	private	void	UpdatePauseBegin(){
 
-	}
-	private	void	UpdatePause(){
-		
-	}
-	private	void	UpdatePauseEnd(){
-		
+	//ポーズ終わり
+	private void UpdatePauseEnd()
+	{
+
 	}
 }

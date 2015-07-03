@@ -84,8 +84,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}//リザルトのニュートラル_End//-------------------------
 	
 	//ボタン関連////////////////////////////////////////////
-	private	void	OnresultButtonRetryEnter(){}
-	private	void	OnresultButtonBackEnter(){}
+	//リトライ_Begin//--------------------------------------
+	private	void	OnresultButtonRetryEnter(){
+		Application.LoadLevel("Game");
+	}//リトライ_End//---------------------------------------
+
+	//セレクト_Begin//--------------------------------------
+	private	void	OnresultButtonBackEnter(){
+		Application.LoadLevel("Select");
+	}//セレクト_End//---------------------------------------
 
 	//その他関数////////////////////////////////////////////
 	//リザルトのステートを遷移する_Begin//--------------------
@@ -133,7 +140,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		for(int i = 0;i < resultButton.Length;i ++){
 			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			resultButton[i]		= obj.GetComponent<Button>();
-			resultButton[i].colors	= partsSelectButtonColor;
+			resultButton[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.White];
 			resultButtonImage[i]	= obj.GetComponent<Image>();
 			resultButtonImage[i].rectTransform.localPosition	= tableButtonPos[i];
 			resultButtonImage[i].rectTransform.sizeDelta		= new Vector2(256.0f,96.0f);

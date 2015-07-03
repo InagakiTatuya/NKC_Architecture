@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 13 / 2015
+//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -37,21 +37,20 @@ public	partial class TitleSystem : MonoBehaviour{
 	private	void	StartCreateButton(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		button			= obj.GetComponent<Button>();
-		buttonColor.normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
-		buttonColor.highlightedColor= new Color(0.5f,0.5f,1.0f,1.0f);
-		buttonColor.pressedColor	= new Color(1.0f,0.8f,0.0f,1.0f);
-		buttonColor.disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
+		buttonColor.normalColor		= new Color(1.0f,1.0f,1.0f,1.0f);
+		buttonColor.highlightedColor= new Color(1.0f,1.0f,1.0f,1.0f);
+		buttonColor.pressedColor	= new Color(0.5f,0.5f,0.5f,1.0f);
+		buttonColor.disabledColor	= new Color(0.25f,0.25f,0.25f,1.0f);
 		buttonColor.colorMultiplier	= 1;
 		buttonColor.fadeDuration	= 0.1f;
-		button.colors	= buttonColor;
-		buttonImage		= obj.GetComponent<Image>();
+		button.colors				= buttonColor;
+		buttonImage					= obj.GetComponent<Image>();
+		buttonImage.sprite			= Resources.Load<Sprite>("Texture/Title/start");
 		buttonImage.rectTransform.localPosition	= new Vector3(0.0f,-256.0f,0.0f);
-		buttonSize		= new Vector2(256.0f,64.0f);
+		buttonSize					= new Vector2(320.0f,80.0f);
 		button.onClick.AddListener(this.OnStartButtonEnter);
-		ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
-		buttonSystem.text		= "タッチしてスタート!!";
-		buttonSystem.color		= Color.white;
-		buttonSystem.fontSize	= 24;
+		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
+		buttonSystem.text			= " ";
 	}//ボタンを初期化_End//---------------------------------
 
 	//更新//////////////////////////////////////////////////

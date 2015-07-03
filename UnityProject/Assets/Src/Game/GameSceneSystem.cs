@@ -5,7 +5,7 @@ using System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//列挙/////////////////////////////////////////////////
-	private	enum	StateNo : int{//ステート番号_Begin//---
+	public	enum	StateNo : int{//ステート番号_Begin//---
 		Intro,			//イントロ
 		CardView,		//カード表示
 		PartsSelect,	//パーツ選択
@@ -22,8 +22,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	/// <summary>キャンバスを持つオブジェクト</summary>
 	public	GameObject	canvasObject	= null;
 
-	private	int		stateNo;
-	private	float	stateTime;
+	public	int		stateNo;
+	public	float	stateTime;
+
+	private bool	chengedFlag;
 	
 	void Awake(){
 		AwakeInagaki();
@@ -62,12 +64,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		UpdateInagaki();
 		UpdateKimishimaSystem();
 		UpdateTanabe();
-		stateTime	+= Time.deltaTime;
+		if (chengedFlag)	chengedFlag = false;
+		else				stateTime += Time.deltaTime;
 	}//更新_End//------------------------------------------
 
 	//その他関数///////////////////////////////////////////
 	//ステート遷移_Beign//---------------------------------
 	private	void	ChangeState(StateNo value,bool overrapFlg = false){
+		chengedFlag = true;
 		int	buf		= (int)value;
 		if(!overrapFlg && stateNo == buf)	return;
 		stateNo		= buf;
