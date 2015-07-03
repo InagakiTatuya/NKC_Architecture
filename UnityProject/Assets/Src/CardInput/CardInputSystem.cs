@@ -11,6 +11,11 @@ using System.Collections;
 //クラス///////////////////////////////////////////////////////////////////////
 public class CardInputSystem : MonoBehaviour {
 
+    //公開定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+    //アタッチされてるGameObjectの名前
+    public const string GAMEOBJCT_NAME = "System"; 
+
     //ステート定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public const int STATE_INSCENE   = 0;  //シーンに入ってきた
     public const int STATE_USUALLY   = 1;  //通常
@@ -41,10 +46,15 @@ public class CardInputSystem : MonoBehaviour {
     public  int getState        { get{return m_StateNo;       } }
     public  int setNextState    { set{ m_NextStateNo = value; } }
 
+    public CardManager   getCardMgr       { get{ return cardMgr;  } }
+    public CardManager   setCardMgr       { set{ cardMgr = value; } }
+    public CardInputWind getCardInputWind { get{ return ciWind;   } }
+    public CardInputWind setCardInputWind { set{ ciWind = value;  } }
+
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
     void Awake() {
-
+        gameObject.name = GAMEOBJCT_NAME;
     }
     
     void Start() {

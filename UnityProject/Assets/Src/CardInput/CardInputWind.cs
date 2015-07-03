@@ -38,11 +38,10 @@ public partial class CardInputWind : MonoBehaviour {
     
     //統括しているシステム^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardInputSystem ciSystem;  //このシーンを統括するSystem
-    private CardManager     cardMgr;   //社員証を管理するMaanager
     
     //制御する子の参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private RectTransform   m_Back;     //黒背景
-    private RectTransform   m_Wind;     //ウィンドウ
+    private RectTransform   m_Back;      //黒背景
+    private RectTransform   m_Wind;      //ウィンドウ
     private InputField      m_Input;     //名前入力
     private Image           m_ImageHair; //髪型
     private Image           m_ImageFace; //顔
@@ -59,31 +58,33 @@ public partial class CardInputWind : MonoBehaviour {
         //制御する子の参照-----------------------------------------------------
         m_Back      = transform.FindChild("InputWindBack") as RectTransform;
         m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
+        m_Input     = m_Wind.FindChild("Card/InputField")
+                                                .GetComponent<InputField>();
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
-            .GetComponent<Image>();
+                                                .GetComponent<Image>();
         m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
-            .GetComponent<Image>();
+                                                .GetComponent<Image>();
         m_ImageBody = m_Wind.FindChild("Card/PhotoBack/PhotoBody")
-            .GetComponent<Image>();
+                                                .GetComponent<Image>();
         
-        //パーツアイコンの初期化-----------------------------------------------
-        Transform tra = m_Wind.FindChild("TabArea/PartsTabBottonHair/PageBack");
-        for(int i = 0; i < tra.childCount; i++) {
-            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
-                Init(Database.PLAYER_PARTS_HAIR, i, OnPartsButtonEnter);
-        }
+        ////パーツアイコンの初期化-----------------------------------------------
+        //Transform tra = m_Wind.FindChild("TabArea-PlayerPartsTab/PartsTabBottonHair/PageBack");
+        //for(int i = 0; i < tra.childCount; i++) {
+        //    tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+        //        Init(Database.PLAYER_PARTS_HAIR, i, OnPartsButtonEnter);
+        //}
 
-        tra = m_Wind.FindChild("TabArea/PartsTabBottonFace/PageBack");
-        for(int i = 0; i < tra.childCount; i++) {
-            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
-                Init(Database.PLAYER_PARTS_FACE, i, OnPartsButtonEnter);
-        }
+        //tra = m_Wind.FindChild("TabArea-PlayerPartsTab/PartsTabBottonFace/PageBack");
+        //for(int i = 0; i < tra.childCount; i++) {
+        //    tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+        //        Init(Database.PLAYER_PARTS_FACE, i, OnPartsButtonEnter);
+        //}
         
-        tra = m_Wind.FindChild("TabArea/PartsTabBottonBody/PageBack");
-        for(int i = 0; i < tra.childCount; i++) {
-            tra.GetChild(i).GetComponent<PlayerPartsIcon>().
-                Init(Database.PLAYER_PARTS_BODY, i, OnPartsButtonEnter);
-        }
+        //tra = m_Wind.FindChild("TabArea-PlayerPartsTab/PartsTabBottonBody/PageBack");
+        //for(int i = 0; i < tra.childCount; i++) {
+        //    tra.GetChild(i).GetComponent<PlayerPartsIcon>().
+        //        Init(Database.PLAYER_PARTS_BODY, i, OnPartsButtonEnter);
+        //}
 
     }
     
@@ -109,10 +110,8 @@ public partial class CardInputWind : MonoBehaviour {
         };
 
         //システムの参照-------------------------------------------------------
-        ciSystem = GameObject.Find("System").GetComponent<CardInputSystem>();
-        cardMgr  = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
-            .GetComponent<CardManager>();
-
+        ciSystem = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME)
+                                        .GetComponent<CardInputSystem>();
 
         //非表示にする---------------------------------------------------------
         m_Back.gameObject.SetActive(false);
@@ -132,13 +131,13 @@ public partial class CardInputWind : MonoBehaviour {
 	void Update () {
         //ステートの初期化-----------------------------------------------------
         if(0 <= m_NextStateNo && m_NextStateNo < STATE_MAX_CNT) {
-            //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+            //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
             #if UNITY_EDITOR 
             Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
                 this.GetType().Name + " - StateChange : old=" +
                 m_StateNo + " => new="+m_NextStateNo);
             #endif
-            //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+            //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
             m_StateNo = m_NextStateNo;
             m_NextStateNo = -1; //Initを一回だけ呼ぶために-1を入れてる
             if(m_fnIniteArr[m_StateNo] != null) m_fnIniteArr[m_StateNo]();
@@ -152,7 +151,7 @@ public partial class CardInputWind : MonoBehaviour {
         } 
 	}
 
-    //ステート更新関数=========================================================
+    //ステート更新関数/////////////////////////////////////////////////////////
     
     //========================================================= OpenWind ======
     //  初期化  OpenWind

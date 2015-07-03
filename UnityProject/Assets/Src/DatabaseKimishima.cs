@@ -55,9 +55,11 @@ public partial class Database : SingletonCustom<Database> {
 		Blue,
 		Length,
 	}//色のID_End//-----------------------------------------
+	private	static	bool			colorBlocksInitedFlg	= false;
 	public	static	ColorBlock[]	colorBlocks;
 	//色を初期化_Begin//------------------------------------
 	public	static	void	InitColorBlock(){
+		if(colorBlocksInitedFlg)	return;
 		Color[]	nomalColor		= new Color[]{
 			Color.white,Color.black,Color.red,Color.yellow,
 			Color.green,Color.cyan,Color.blue,
@@ -84,6 +86,7 @@ public partial class Database : SingletonCustom<Database> {
 			colorBlocks[i].colorMultiplier	= 1;
 			colorBlocks[i].fadeDuration		= 0.1f;
 		}
+		colorBlocksInitedFlg	= true;
 	}//色を初期化_End//-------------------------------------
 
 }//データベース_End//---------------------------------------
