@@ -82,7 +82,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//	CloseCardWind();
 	//	CloseCardMiniWind();
 	//	CloseNextPleyarWind();
-		ChangeState(StateNo.PartsSelect);
+	//	ChangeState(StateNo.PartsSelect);
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
