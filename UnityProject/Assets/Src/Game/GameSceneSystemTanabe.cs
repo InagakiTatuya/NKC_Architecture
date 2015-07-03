@@ -19,12 +19,12 @@ public partial class GameSceneSystem : MonoBehaviour
 	//初期化
 	private void UpdateIntro()
 	{
-		if (execute)
+		if (execute || true)
 		{
-			ChangeState(StateNo.PartsSet, false);
+			//ChangeState(StateNo.CardView, false);
+			ChangeState(StateNo.PartsSelect, false);
 			execute = false;
 		}
-		//ChangeState(StateNo.CardView, false);
 	}
 
 	//パーツ配置

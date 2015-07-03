@@ -28,12 +28,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private bool	chengedFlag;
 	
 	void Awake(){
-		AwakeInagaki();
-	}
-
-	//初期化///////////////////////////////////////////////
-	void Start (){//初期化_Begin//-------------------------
-		updateFunc	= new UnityAction[]{
+		updateFunc = new UnityAction[]{
 			this.UpdateIntro,
 			this.UpdateCardView,
 			this.UpdatePartsSelect,
@@ -45,16 +40,23 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdatePause,
 			this.UpdatePauseEnd,
 		};
+		AwakeInagaki();
+
 		StartStateInit();
 		StartInagaki();
 		StartKimishimaSystem();
 		StartTanabe();
+	}
+
+	//初期化///////////////////////////////////////////////
+	void Start (){//初期化_Begin//-------------------------
+
 	}//初期化_End//----------------------------------------
 
 	//ステート番号を初期化_Begin//-------------------------
 	private	void	StartStateInit(){
 		stateNo		= (int)StateNo.Intro;
-		stateTime	= 0.0f;
+		stateTime = 0.0f;
 	}//ステート番号を初期化_End//--------------------------
 
 	//更新/////////////////////////////////////////////////

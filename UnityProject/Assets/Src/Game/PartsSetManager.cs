@@ -17,7 +17,6 @@ public class PartsSetManager : MonoBehaviour
 	{
 		if (system.stateNo == (int)GameSceneSystem.StateNo.PartsSet)
 		{
-			Debug.Log(system.stateTime);
 			if (system.stateTime == 0) touchAbleArea.SetActive(true);
 		}
 	}
