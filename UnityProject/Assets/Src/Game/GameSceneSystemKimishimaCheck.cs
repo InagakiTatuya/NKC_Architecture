@@ -26,20 +26,29 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数_Begin//------------------------------
 	private void UpdateCheckKimishima(){
-		if(beginObject != null && endObject != null){
-			Vector2	beginPos	= beginObject.transform.position;
-			Vector2	endPos		= endObject.transform.position;
-			float	n			= beginPos.x * endPos.x + beginPos.y * endPos.y;
-			float	rad			= Mathf.Acos(n);
-		}
 		if(stateTime >= 3.0f){
 			ChangeState(StateNo.CardView);
 			return;
 		}
+		if(beginObject != null && endObject != null){
+			Vector2	beginPos	= beginObject.transform.position;
+			Vector2	endPos		= endObject.transform.position;
+			float	n			= beginPos.x * endPos.x + beginPos.y * endPos.y;
+			float	deg			= Mathf.Acos(n) * Mathf.PI;
+			if(deg <= 45.0f)	ChangeState(StateNo.GameOver);
+		}
 	}//チェック用の関数_End//-------------------------------
 
-	//GameOverしたら実行しようね。
+	//GameOverしたら実行しようね。_Begin//------------------
 	private void UpdateGameOverKimishima(){
-	}
+		bool	nextFlg	= false;
+#if DEBUG_GAMESCENE
+		Debug.Log("Debug:タッチされたボタンは" + partsID);
+#endif
+		if(stateTime >= 1.0f && nextFlg){
+			ChangeState(StateNo.Result);
+			return;
+		}
+	}//GameOverしたら実行しようね。_End//-------------------
 
 }//ゲームシーンのシステム_End//-----------------------------
