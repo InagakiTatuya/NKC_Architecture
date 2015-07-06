@@ -51,7 +51,7 @@ public partial class GameSceneSystem : MonoBehaviour
 	//建物倒壊
 	private void UpdateGameOver()
 	{
-
+		UpdateGameOverKimishima();
 	}
 
 	//ポーズ初期化

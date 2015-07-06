@@ -38,4 +38,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		}
 	}//チェック用の関数_End//-------------------------------
 
+	//GameOverしたら実行しようね。
+	private void UpdateGameOverKimishima(){
+	}
+
 }//ゲームシーンのシステム_End//-----------------------------

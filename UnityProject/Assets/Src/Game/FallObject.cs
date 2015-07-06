@@ -36,8 +36,10 @@ public class FallObject : MonoBehaviour {
 				break;
 			case STATE.FALLEND:
 				rBody.isKinematic = false;
+
 				break;
 			case STATE.STOP:
+				rBody.isKinematic = true;
 				break;
 		}
 	}
@@ -49,8 +51,7 @@ public class FallObject : MonoBehaviour {
 		{
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
-			rBody.useGravity = false;
-			rBody.velocity = Vector3.zero;
+			//rBody.velocity = Vector3.zero;
 		}
 	}
 }
