@@ -289,4 +289,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 #endif
 	}//押されたボタンのIDを受け取る_End//-------------------
 
+	//チェック用の関数
+	private void UpdateCheckKimishima(){
+	}
+
 }//ゲームシーンのシステム_End//------------------------------

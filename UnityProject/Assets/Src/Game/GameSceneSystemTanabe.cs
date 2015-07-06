@@ -40,6 +40,7 @@ public partial class GameSceneSystem : MonoBehaviour
 	//建物倒壊チェック
 	private void UpdateCheck()
 	{
+		UpdateCheckKimishima();
 		if (execute)
 		{
 			ChangeState(StateNo.CardView, false);
