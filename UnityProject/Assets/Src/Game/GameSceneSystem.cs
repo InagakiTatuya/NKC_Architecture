@@ -61,7 +61,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//更新/////////////////////////////////////////////////
 	private	UnityAction[]	updateFunc;
-	void Update (){//更新_Begin//--------------------------
+	void Update(){//更新_Begin//--------------------------
 		if(updateFunc[stateNo] != null)	updateFunc[stateNo]();
 		UpdateInagaki();
 		UpdateKimishimaSystem();

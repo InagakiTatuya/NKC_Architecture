@@ -12,7 +12,7 @@ public class PauseSceneSystem : MonoBehaviour
 	};
 
 	//初期化
-	private void Awake()
+	private void Start()
 	{
 		system = transform.root.GetComponent<GameSceneSystem>();
 		gameObject.SetActive(false);
