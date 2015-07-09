@@ -68,10 +68,10 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			pos = Camera.main.ScreenToWorldPoint(pos);
 
 			downObj = (GameObject)Instantiate(Resources.Load<GameObject>(fileName), pos, Quaternion.identity);
-			downObj.GetComponent<Rigidbody>().useGravity = true;
+			downObj.transform.parent = transform.root;
 			downObj.GetComponent<Collider>().enabled = true;
 			downObj.GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
-			//gameObject.SetActive(false);
+			gameObject.SetActive(false);
 		}
 		moveObj.SetActive(false);
 	}
