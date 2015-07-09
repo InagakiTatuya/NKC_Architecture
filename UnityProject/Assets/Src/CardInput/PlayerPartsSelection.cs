@@ -41,6 +41,9 @@ public class PlayerPartsSelection : MonoBehaviour {
 
         m_State = new ClassStateManager(STATE_NO_MAX, initFanc, updateFanc);
 
+        //参照の取得-----------------------------------------------------------
+        ciWind = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME).
+                            GetComponent<CardInputSystem>().getCardInputWind;
 
         //タブの初期化---------------------------------------------------------
         //  タブのOnClickイベントにOnTabButtonEnterを設定し
@@ -108,7 +111,7 @@ public class PlayerPartsSelection : MonoBehaviour {
         m_toListTab.SetAsLastSibling();
 
         //ステート変更
-        m_State.setNextState = STATE_INPUT;
+        m_State.SetNextState(STATE_INPUT);
     }
 
     //イベント/////////////////////////////////////////////////////////////////
@@ -129,25 +132,19 @@ public class PlayerPartsSelection : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
-        m_State.setNextState = STATE_CHANGE_TAB;
+        m_State.SetNextState(STATE_CHANGE_TAB);
         m_toListTab = _tra;
     }
 
     //パーツを選択=============================================================
     //
     //=========================================================================
-    public void OnPartsButtonEnter(int _ImageType, int _ImageID) {
+    public void OnPartsButtonEnter(int _ImageType, int _ImageNo) {
         //ステートがINPUT以外は、処理しない
         if(m_State.getState != STATE_INPUT) return;
 
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR
-        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
-            "ImageType = " + _ImageType + "  ImageID = " + _ImageID);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        //ウィンドウにデータを渡す
+        ciWind.SetPartsData(_ImageType, _ImageNo);
 
     }
 

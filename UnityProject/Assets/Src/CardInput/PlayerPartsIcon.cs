@@ -33,11 +33,11 @@ public class PlayerPartsIcon : MonoBehaviour {
     //    第一引数：データベースで管理されている種類番号
     //    第二引数：データベースで管理されているID
     //    第三引数：タッチされたとき呼ばれる関数
-    public void Init(int _ImageType, int _ImageID, UnityAction<int,int> _onButtonEnter) {
+    public void Init(int _ImageType, int _ImageNo, UnityAction<int,int> _onButtonEnter) {
         
         //データ---------------------------------------------------------------
         this.IMAGE_TYPE = _ImageType;
-        this.IMAGE_ID   = _ImageID;
+        this.IMAGE_ID   = _ImageNo;
 
         //onButton-------------------------------------------------------------
         Button.ButtonClickedEvent eve = GetComponent<Button>().onClick;
