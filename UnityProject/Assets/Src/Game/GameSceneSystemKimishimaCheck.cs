@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------
-//ゲームシーンのシステム
+//ゲームシーンのシステムゲームオーバー
 //更新日 :	06 / 29 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
@@ -20,8 +20,8 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
-	GameObject	beginObject	= null;
-	GameObject	endObject	= null;
+	public	GameObject	beginObject	= null;
+	public	GameObject	endObject	= null;
 
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数_Begin//------------------------------
