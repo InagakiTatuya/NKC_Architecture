@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FallObject : MonoBehaviour {
+public partial class FallObject : MonoBehaviour {
 	//ステート
 	enum STATE
 	{

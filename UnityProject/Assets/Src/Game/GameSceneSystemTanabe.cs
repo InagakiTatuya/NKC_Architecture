@@ -20,8 +20,8 @@ public partial class GameSceneSystem : MonoBehaviour
 
 	void StartTanabe()
 	{
-		execute = false;
 		building = new List<FallObject>();
+		execute = false;
 	}
 
 	//更新関数
@@ -36,7 +36,7 @@ public partial class GameSceneSystem : MonoBehaviour
 		if (execute || true)
 		{
 			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSelect);
+			ChangeState(StateNo.PartsSet);
 			execute = false;
 		}
 	}
@@ -58,7 +58,7 @@ public partial class GameSceneSystem : MonoBehaviour
 		if (execute)
 		{
 			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSelect);
+			ChangeState(StateNo.PartsSet);
 			execute = false;
 		}
 	}
