@@ -32,7 +32,7 @@ public partial class CardInputWind : MonoBehaviour {
     //    そうでない場合は、メッセージウィンドウをだす
     //=========================================================================
     public void OnAppButtonEnter() {
-        if(m_StateNo != STATE_INPUTDATA) return;
+        if(m_State.getState != STATE_INPUTDATA) return;
         
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
@@ -50,21 +50,9 @@ public partial class CardInputWind : MonoBehaviour {
         //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 
         //仮処理
-        m_NextStateNo = STATE_CLAUSEWIND;
+        m_State.SetNextState(STATE_CLAUSEWIND);
     }
     
-    //パーツを選択=============================================================
-    //
-    //=========================================================================
-    public void OnPartsButtonEnter(int _ImageType, int _ImageID) {
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR
-        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
-            "ImageType = " + _ImageType + "  ImageID = " + _ImageID);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-    }
+
 
 }

@@ -24,10 +24,10 @@ class ClassStateManager {
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public int   getState       { get{ return m_StateNo;      } }
-    public int   setNextState   { set{ m_NextStateNo = value; } }
+    //public int   setNextState   { set{ m_NextStateNo = value; } }
     public float getStateTime   { get{ return m_StateTime;    } }
     
-    //初期化===================================================================
+    //コンストラクタ///////////////////////////////////////////////////////////
     public ClassStateManager(int _StateMax,
         UnityAction[] _InitFuncArr, UnityAction[] _UdataFuncArr) {
         
@@ -36,7 +36,7 @@ class ClassStateManager {
         m_fnIniteArr  = _InitFuncArr;
         m_fnUpdateArr = _UdataFuncArr;
     }
-
+    //公開関数/////////////////////////////////////////////////////////////////
     //更新=====================================================================
     public void Update() {
 
@@ -54,4 +54,12 @@ class ClassStateManager {
             m_StateTime += Time.deltaTime;
         }   
     }
+
+    //ステート移行=============================================================
+    //  ステートを移行する予約をする。
+    //  実際のステート移行は、Updateで行われる。
+    public void SetNextState(int _state) {
+        m_NextStateNo = _state;
+    }
+    
 }

@@ -16,5 +16,18 @@ public struct StractPlayerData {
         imageFaceNo = 0;
         imageBodyNo = 0;
     }
+
+    public void SetImageData(int _ImageType, int _no) {
+        
+        switch(_ImageType) {
+            case Database.PLAYER_PARTS_BODY:
+                imageBodyNo = _no; break;
+            case Database.PLAYER_PARTS_FACE:
+                imageFaceNo = _no; break;
+            case Database.PLAYER_PARTS_HAIR:
+                imageHairNo = _no; break;
+        }
+
+    }
 }
 
