@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------
-//ゲームシーンのシステム
+//ゲームシーンのシステムのリザルト
 //更新日 :	06 / 29 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
@@ -105,6 +105,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	CreateResultWindow(){
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		resultWindow		= obj.GetComponent<Image>();
+		resultWindow.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
 		resultWindow.rectTransform.localPosition	= new Vector3(0.0f,192.0f);
 		resultWindow.rectTransform.sizeDelta		= new Vector2(480.0f,320.0f);
 		resultWindow.color							= new Color(0.0f,1.0f,1.0f,1.0f);
