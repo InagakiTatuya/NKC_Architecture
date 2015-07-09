@@ -1,13 +1,27 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public partial class GameSceneSystem : MonoBehaviour
 {
+	private List<FallObject> building;
+	public List<FallObject> Building
+	{
+		get { return building; }
+		set { building = value; }
+	}
+
 	private bool execute;
+	public bool Execute
+	{
+		get { return execute; }
+		set { execute = value; }
+	}
 
 	void StartTanabe()
 	{
-
+		execute = false;
+		building = new List<FallObject>();
 	}
 
 	//更新関数
@@ -43,7 +57,8 @@ public partial class GameSceneSystem : MonoBehaviour
 		UpdateCheckKimishima();
 		if (execute)
 		{
-			ChangeState(StateNo.CardView, false);
+			//ChangeState(StateNo.CardView, false);
+			ChangeState(StateNo.PartsSelect, false);
 			execute = false;
 		}
 	}
