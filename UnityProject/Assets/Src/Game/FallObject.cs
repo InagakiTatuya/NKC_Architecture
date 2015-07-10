@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FallObject : MonoBehaviour {
+public partial class FallObject : MonoBehaviour {
 	//ステート
 	enum STATE
 	{
@@ -32,11 +32,20 @@ public class FallObject : MonoBehaviour {
 		state = STATE.FALL;
 		prevState = state;
 		stateTime = 0;
+
+		if (system.beginObject == null) system.beginObject = gameObject;
+		else system.endObject = gameObject;
 	}
 
 	//更新
 	void Update()
 	{
+		if (system.stateNo == (int)GameSceneSystem.StateNo.GameOver ||
+			system.stateNo == (int)GameSceneSystem.StateNo.Result)
+		{
+			if (state == STATE.STOP) return;
+			state = STATE.STOP;
+		}
 		//ステート変更時ステート内時間を初期化
 		if (state != prevState)
 		{
@@ -68,7 +77,6 @@ public class FallObject : MonoBehaviour {
 						e.rBody.angularVelocity = e.angVel;
 					});
 				}
-
 
 				if (stateTime >= 3.0f || Input.GetMouseButtonDown(0))
 				{

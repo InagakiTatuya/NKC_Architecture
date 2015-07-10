@@ -1,5 +1,5 @@
 ﻿//----------------------------------------------------------
-//ゲームシーンのシステム
+//ゲームシーンのシステムゲームオーバー
 //更新日 :	06 / 29 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
@@ -20,32 +20,36 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
-	GameObject	beginObject	= null;
-	GameObject	endObject	= null;
+	public	GameObject	beginObject	= null;
+	public	GameObject	endObject	= null;
+	private	bool		collapseFlg	= false;
 
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数_Begin//------------------------------
 	private void UpdateCheckKimishima(){
 		if(stateTime >= 3.0f){
+			job	= (job + 1) % 3;
+			if(job == 0){
+				Vector3	cameraPos				= Camera.main.transform.position;
+				cameraPos.y						= endObject.transform.position.y + 30.0f;
+				Camera.main.transform.position	= cameraPos;
+				AddFloor();
+			}
 			ChangeState(StateNo.CardView);
-			return;
 		}
 		if(beginObject != null && endObject != null){
-			Vector2	beginPos	= beginObject.transform.position;
-			Vector2	endPos		= endObject.transform.position;
-			float	n			= beginPos.x * endPos.x + beginPos.y * endPos.y;
-			float	deg			= Mathf.Acos(n) * Mathf.PI;
-			if(deg <= 45.0f)	ChangeState(StateNo.GameOver);
+			if(collapseFlg)	ChangeState(StateNo.GameOver);
 		}
 	}//チェック用の関数_End//-------------------------------
 
+	//落下フラグを反映_Beign//------------------------------
+	void	SetCollapseFlg(){
+		collapseFlg	= true;
+	}//落下フラグを反映_End//-------------------------------
+
 	//GameOverしたら実行しようね。_Begin//------------------
 	private void UpdateGameOverKimishima(){
-		bool	nextFlg	= false;
-#if DEBUG_GAMESCENE
-		Debug.Log("Debug:タッチされたボタンは" + partsID);
-#endif
-		if(stateTime >= 1.0f && nextFlg){
+		if(stateTime >= 1.0f){
 			ChangeState(StateNo.Result);
 			return;
 		}

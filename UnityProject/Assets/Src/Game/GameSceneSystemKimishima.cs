@@ -70,7 +70,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdateResultLiquidation,
 			this.UpdateResultNeutral,
 		};
-		floor						= 1;
+		FallObject.collapseFunc		= this.SetCollapseFlg;
+		floor						= 0;
 		partsSelectWindowOpenFlg	= false;
 		floorSize					= new Vector2(128.0f,128.0f);
 		BackFadeInit();
