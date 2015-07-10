@@ -29,5 +29,10 @@ public struct StractPlayerData {
         }
 
     }
+
+    public string ToString() {
+        return "[ Name = "+pleyerName+ ", HairNo = "+ imageHairNo +
+             ", FaceNo = "+ imageFaceNo + ", BodyNo = "+ imageBodyNo + " ]";
+    }
 }
 

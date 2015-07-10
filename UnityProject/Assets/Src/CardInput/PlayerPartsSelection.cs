@@ -83,6 +83,8 @@ public class PlayerPartsSelection : MonoBehaviour {
             traParts.GetChild(i).GetComponent<PlayerPartsIcon>().
                 Init(Database.PLAYER_PARTS_BODY, i, OnPartsButtonEnter);
         }
+        //髪型のタブを一番上に持ってくる---------------------------------------
+
 	}
 	
 	
@@ -106,10 +108,12 @@ public class PlayerPartsSelection : MonoBehaviour {
     }
 
     //更新 
+    //  演出を行った後に
     //  タッチされたタブを一番上に持ってくる
     public void UptateForChangeTab() {
+        //演出を入れるなら、ここに書く
+        //タッチされたタブを一番上に持ってくる
         m_toListTab.SetAsLastSibling();
-
         //ステート変更
         m_State.SetNextState(STATE_INPUT);
     }

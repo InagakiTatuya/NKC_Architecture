@@ -86,7 +86,7 @@ public class Card : MonoBehaviour {
     //データを初期化===========================================================
     public void DataReset() {
         this.m_Data.Init();
-        this.DataApp(this.m_Data);
+        this.DataApp();
     }
 
     //必要な値をコピー=========================================================
@@ -97,15 +97,15 @@ public class Card : MonoBehaviour {
         _Card.Text.text        = this.Text.text;
     }
 
-    //適応=====================================================================
-    //  渡されたデータから適応するスプライトを込みこみ適応する
+    //適用=====================================================================
+    //  渡されたデータから適用するスプライトを込みこみ適用する
     //  テキストにも名前を入れる
-    public void DataApp(StractPlayerData _data) {
-        this.m_Text.text        = _data.pleyerName;
+    public void DataApp() {
+        this.m_Text.text        = this.m_Data.pleyerName;
         this.m_ImageHair.sprite = Database.obj.
-            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, _data.imageHairNo];
+            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, this.m_Data.imageHairNo];
         this.m_ImageFace.sprite = Database.obj.
-            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, _data.imageFaceNo];
+            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, this.m_Data.imageFaceNo];
     }
 
 }

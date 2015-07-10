@@ -114,48 +114,32 @@ public class CardManager : MonoBehaviour {
         
     }
 
-    //イベント=================================================================
+    //公開関数/////////////////////////////////////////////////////////////////
 
-    //完了ボタン===============================================================
-    //  タイミング：ＯＫボタンがタップされた瞬間。
-    //    Databaseのフォーマットにあわせデータを作り、Databaseに入れる。
+    //カードにデータを入れる===================================================
+    //  CardInputWindでOKボタンが押されたときに呼ばれる。
+    //  受け取ったデータを格納する
     //=========================================================================
-    public void OnAppButtonEnter() {
+    public void SetCardData(ref int _index, ref StractPlayerData _data) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR 
-        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " - " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
-            "State="+(ciSystem.getState == CardInputSystem.STATE_USUALLY) +
-            " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
+            "Index=" + _index + " data=" + _data.ToString());
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        
-        //ステートが通常時以外は、処理しない
-        if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
-        //プレイヤーがいない場合、メッセージ処理をする
-        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
-            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-            //  ここに"社員がいません。"メッセージを出す処理
-            //  または、そのフラグ。
-            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-            return;
-        }
 
-        //Databaseに渡すデータを作る-------------------------------------------
-        StractPlayerData[] data = new StractPlayerData[m_PlayerCount];
-        for(int i = 0; i < m_PlayerCount; i++) {
-            data[i] = m_Card[i].data;
-        }
-        //Databaseに渡す-------------------------------------------------------
-        Database.obj.SetPlyaerDatas(ref data);
-
-
+        //データを適用---------------------------------------------------------
+        m_Card[_index].data = _data;
+        m_Card[_index].DataApp();
     }
+
+    //イベント/////////////////////////////////////////////////////////////////
 
     //社員追加ボタン===========================================================
     //  タイミング：社員追加ボタンがタップされた瞬間。
-    //    社員証入力ウィンドウを呼び出す
+    //    プレイヤーデータを追加し、参加者数を増やす。
     //=========================================================================
     public void OnPlayerAddButtonEnter() {
         //ステートが通常時以外は、処理しない
@@ -163,9 +147,8 @@ public class CardManager : MonoBehaviour {
         //プレイヤー数が最大値に達していたら処理しない
         if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) return;
 
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-        //  ここに社員証入力ウィンドウを呼び出す処理
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+        m_PlayerCount++;                //プレイヤー数加算
+        CardsSetActive(m_PlayerCount);  //アクティブの操作
     }
 
     //写真を変更===============================================================
@@ -183,9 +166,8 @@ public class CardManager : MonoBehaviour {
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //写真選択ウィンドウを出す---------------------------------------------
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
-        //  ここに写真選択ウィンドウを出す処理
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=
+        ciSystem.getCardInputWind.
+            OpenCradInputWind(_cardIndex, m_Card[_cardIndex].data);
     }
 
     //社員証の削除ボタン=======================================================
@@ -221,5 +203,40 @@ public class CardManager : MonoBehaviour {
 
     }
    
+
+    //完了ボタン===============================================================
+    //  タイミング：ＯＫボタンがタップされた瞬間。
+    //    Databaseのフォーマットにあわせデータを作り、Databaseに入れる。
+    //=========================================================================
+    public void OnAppButtonEnter() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            "State="+(ciSystem.getState == CardInputSystem.STATE_USUALLY) +
+            " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //ステートが通常時以外は、処理しない
+        if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
+        //プレイヤーがいない場合、メッセージ処理をする
+        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
+            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+            //  ここに"社員がいません。"メッセージを出す処理
+            //  または、そのフラグ。
+            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+            return;
+        }
+
+        //Databaseに渡すデータを作る-------------------------------------------
+        StractPlayerData[] data = new StractPlayerData[m_PlayerCount];
+        for(int i = 0; i < m_PlayerCount; i++) {
+            data[i] = m_Card[i].data;
+        }
+        //Databaseに渡す-------------------------------------------------------
+        Database.obj.SetPlyaerDatas(ref data);
+    }
 
 }

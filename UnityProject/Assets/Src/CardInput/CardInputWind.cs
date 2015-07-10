@@ -50,8 +50,10 @@ public partial class CardInputWind : MonoBehaviour {
         //制御する子の参照-----------------------------------------------------
         m_Back      = transform.FindChild("InputWindBack") as RectTransform;
         m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
+        
         m_Input     = m_Wind.FindChild("Card/InputField")
                                                 .GetComponent<InputField>();
+
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
                                                 .GetComponent<Image>();
         m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
@@ -64,7 +66,7 @@ public partial class CardInputWind : MonoBehaviour {
     void Start() {
         //ステートの関数ポインタを初期化---------------------------------------
         UnityAction[] fnInitArr = new UnityAction[STATE_NO_MAX] {
-            null,
+            InitForNotActive,
             InitForOpenWind,
             InitForInputData,
             null,
@@ -87,20 +89,10 @@ public partial class CardInputWind : MonoBehaviour {
         //システムの参照-------------------------------------------------------
         ciSystem = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME)
                                         .GetComponent<CardInputSystem>();
-
-        //非表示にする---------------------------------------------------------
-        m_Back.gameObject.SetActive(false);
-        m_Wind.gameObject.SetActive(false);
-
-        //参照以外の初期化-----------------------------------------------------
-        Init();
-    }
-	
-    //参照以外の初期化=========================================================
-    private void Init() {
+        //ステート-------------------------------------------------------------
         m_State.SetNextState(STATE_NOTACTIVE);
     }
-
+	
     //更新=====================================================================
 	void Update () {
         //ステートの更新-------------------------------------------------------
@@ -109,6 +101,22 @@ public partial class CardInputWind : MonoBehaviour {
 	}
 
     //ステート更新関数/////////////////////////////////////////////////////////
+    //========================================================= NotActive =====
+    //  初期化  NotActive
+    //    非表示にする
+    private void InitForNotActive() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //アクティブ
+        m_Back.gameObject.SetActive(false);
+        m_Wind.gameObject.SetActive(false);
+    }
     
     //========================================================= OpenWind ======
     //  初期化  OpenWind
@@ -126,6 +134,9 @@ public partial class CardInputWind : MonoBehaviour {
         //アクティブ
         m_Back.gameObject.SetActive(true);
         m_Wind.gameObject.SetActive(true);
+
+        //データを適用
+        DataApp();
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
@@ -133,28 +144,6 @@ public partial class CardInputWind : MonoBehaviour {
         //一定時間になったら次のステートへ移行
         if(m_State.getStateTime >= OPENWIND_TIME) {
             m_State.SetNextState(STATE_INPUTDATA);
-        }
-    }
-    
-    //========================================================= ClauseWind ====
-    //  初期化  ClauseWind
-    private void InitForClauseWind() {
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR 
-        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name);
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-    }
-    //  更新  ClauseWind
-    private void UpdateForClauseWind() {
-
-        //一定時間になったら自分を非表示にし
-        //処理が終えたことをシステムに伝える
-        if(m_State.getStateTime >= CLAUSEWIND_TIME) {
-            this.gameObject.SetActive(false);
-            ciSystem.EndCardInputEvent();
         }
     }
     
@@ -174,6 +163,45 @@ public partial class CardInputWind : MonoBehaviour {
     
     }
     
+    //========================================================= ClauseWind ====
+    //  初期化  ClauseWind
+    private void InitForClauseWind() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+    }
+    //  更新  ClauseWind
+    private void UpdateForClauseWind() {
+
+        //一定時間になったら
+        //自分を非表示にして、
+        //処理が終えたことをシステムに伝える
+        if(m_State.getStateTime >= CLAUSEWIND_TIME) {
+            //ステート変更＝＞非アクティブ
+            m_State.SetNextState(STATE_NOTACTIVE);
+            //システムにウィンドウが閉じたことを伝える
+            ciSystem.EndCardInputEvent(); 
+        }
+    }
+
+    //データを画像とテキストに適用=============================================
+    private void DataApp() {
+        //----------------------------------------------------------- Name
+        m_Input.text = m_DataBff.pleyerName;
+
+        //----------------------------------------------------------- sprite
+        m_ImageBody.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_BODY, m_DataBff.imageBodyNo];
+        m_ImageFace.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, m_DataBff.imageFaceNo];
+        m_ImageHair.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, m_DataBff.imageHairNo];
+    }
+
     //公開関数/////////////////////////////////////////////////////////////////
     
     //ウィンドウを表示する=====================================================
@@ -182,14 +210,21 @@ public partial class CardInputWind : MonoBehaviour {
     //  第一引数：カードの管理番号
     //  第二引数：カードに入っているデータ
     public void OpenCradInputWind(int _CardIndex, StractPlayerData _data) {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            "Index=" + _CardIndex + " data=" + _data.ToString());
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
         //データを一時保存-----------------------------------------------------
         m_IndexBff = _CardIndex;
         m_DataBff  = _data;
 
         //ステート移行---------------------------------------------------------
-        Init(); //念のため初期化
-        m_State.SetNextState(STATE_OPENWIND); //ウィンドウを開く
+        m_State.SetNextState(STATE_OPENWIND); //＝＞ウィンドウを開く
 
     }
     //オーバーロード = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
@@ -217,25 +252,21 @@ public partial class CardInputWind : MonoBehaviour {
             //------------------------------------------------------- Body
             case Database.PLAYER_PARTS_BODY:
                 m_DataBff.imageBodyNo = _ImageNo;
-                m_ImageBody.sprite    =
-                    Database.obj.PLAYER_SPRITE[_ImageType, _ImageNo];
-                return;
+                break;
             //------------------------------------------------------- Face
             case Database.PLAYER_PARTS_FACE:
                 m_DataBff.imageFaceNo = _ImageNo;
-                m_ImageFace.sprite    =
-                    Database.obj.PLAYER_SPRITE[_ImageType, _ImageNo];
-                return;
+                break;
             //------------------------------------------------------- Hair
             case Database.PLAYER_PARTS_HAIR:
                 m_DataBff.imageHairNo = _ImageNo;
-                m_ImageHair.sprite    =
-                    Database.obj.PLAYER_SPRITE[_ImageType, _ImageNo];
-                return;
+                break;
         }
 
-
+        //イメージ適用
+        DataApp();
     }
+
     //イベント/////////////////////////////////////////////////////////////////
     //  CradInptuWindEvent.cs に定義
 
