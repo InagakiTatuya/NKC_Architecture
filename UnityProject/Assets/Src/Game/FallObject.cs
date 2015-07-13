@@ -79,9 +79,8 @@ public partial class FallObject : MonoBehaviour {
 					});
 				}
 
-				if (stateTime >= 3.0f || Input.GetMouseButtonDown(0))
+				if (system.completeFlg)
 				{
-					system.Execute = true;//PARTSSETシーンへ
 					state = STATE.STOP;
 
 					//建築物の物理計算を不許可
