@@ -83,8 +83,9 @@ public class PlayerPartsSelection : MonoBehaviour {
             traParts.GetChild(i).GetComponent<PlayerPartsIcon>().
                 Init(Database.PLAYER_PARTS_BODY, i, OnPartsButtonEnter);
         }
+        
         //髪型のタブを一番上に持ってくる---------------------------------------
-
+        traTabHair.SetAsLastSibling();
 	}
 	
 	
@@ -141,7 +142,7 @@ public class PlayerPartsSelection : MonoBehaviour {
     }
 
     //パーツを選択=============================================================
-    //
+    //  CardInputWindにデータを渡す
     //=========================================================================
     public void OnPartsButtonEnter(int _ImageType, int _ImageNo) {
         //ステートがINPUT以外は、処理しない
