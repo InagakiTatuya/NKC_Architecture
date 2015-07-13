@@ -70,7 +70,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdateResultLiquidation,
 			this.UpdateResultNeutral,
 		};
-		floor						= 1;
+		FallObject.collapseFunc		= this.SetCollapseFlg;
+		floor						= 0;
 		partsSelectWindowOpenFlg	= false;
 		floorSize					= new Vector2(128.0f,128.0f);
 		BackFadeInit();
@@ -98,7 +99,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 		floorText			= obj.GetComponent<Text>();
 		floorText.rectTransform.localPosition	= FLOORWINDOW_POS;
-		floorText.text		= "1";
+		floorText.text		= "0";
 		floorText.fontSize	= 48;
 		floorText.color		= Color.black;
 	}//階層テキストを生成_End//-----------------------------

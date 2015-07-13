@@ -44,7 +44,7 @@ public class PlayerPartsIcon : MonoBehaviour {
         eve.RemoveAllListeners();
         eve.AddListener(delegate { _onButtonEnter(IMAGE_TYPE, IMAGE_ID); });
         
-        //Imageの適応----------------------------------------------------------
+        //Imageの適用----------------------------------------------------------
         m_Image.sprite = Database.obj.PLAYER_SPRITE[IMAGE_TYPE, IMAGE_ID];
 
     }

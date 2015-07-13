@@ -133,7 +133,7 @@ public class CardInputSystem : MonoBehaviour {
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //最初の一人目のデータを入力するため社員証入力ウィンドウを開く
-        ciWind.OpenCradInputWind( 0 );
+        //ciWind.OpenCradInputWind( 0 );
     }
 
     //  更新  Usually

@@ -40,7 +40,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     private void OpenCardWind( int _PlayerNo, int _JobNo,
                                float _animeTime = 0.0f
                              ) {
-        //取り出したデータを適応
+        //取り出したデータを適用
         m_CardWind.SetImageAndTexts(_PlayerNo, _JobNo, 
             Database.obj.JOB_TEXT[_JobNo]);
         //アクティブの設定
@@ -66,7 +66,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     private void OpenNextPleyarWind( int _PlayerNo, int _JobNo,
                                      float _animeTime = 0.0f
                                     ) {
-        //取り出したデータを適応
+        //取り出したデータを適用
         m_NextWind.SetImageAndTexts(_PlayerNo, _JobNo);
         //アクティブの設定
         m_NextWind.gameObject.SetActive(true);
@@ -90,7 +90,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     //-------------------------------------------------------------------------
     private void OpenCardMiniWind( int _PlayerNo, int _JobNo,
                                    float _animeTime = 0.0f) {
-        //取り出したデータを適応
+        //取り出したデータを適用
         m_MiniWind.SetImageAndTexts(_PlayerNo, _JobNo);
         //アクティブの設定
         m_MiniWind.gameObject.SetActive(true);
@@ -102,7 +102,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     //-------------------------------------------------------------------------
     private void ChangeCardMiniWind( int _PlayerNo, int _JobNo,
                                      float _animeTime = 0.0f) {
-        //取り出したデータを適応
+        //取り出したデータを適用
         m_MiniWind.SetImageAndTexts(_PlayerNo, _PlayerNo);
     }
 

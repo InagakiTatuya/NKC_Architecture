@@ -42,6 +42,14 @@ class ClassStateManager {
 
         //ステートの初期化-----------------------------------------------------
         if(0 <= m_NextStateNo && m_NextStateNo < m_STATE_NO_MAX) {
+            //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+            #if UNITY_EDITOR
+            Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+                this.GetType().Name + " \n" +
+                "StateChange: oldNo = " + m_StateNo+ ", newNo = "+m_NextStateNo);
+            #endif
+            //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+            
             m_StateNo     = m_NextStateNo;
             m_NextStateNo = -1; //Initを一回だけ呼ぶために-1を入れてる
             if(m_fnIniteArr[m_StateNo] != null) m_fnIniteArr[m_StateNo]();

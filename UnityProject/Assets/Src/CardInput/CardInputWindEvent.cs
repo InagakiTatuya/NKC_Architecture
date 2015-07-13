@@ -26,12 +26,50 @@ public partial class CardInputWind : MonoBehaviour {
 
     }
     
+    //名前入力中===============================================================
+    //  タイミング：新たに入力がされたとき
+    //    演出用
+    //=========================================================================
+    public void OnChangeValueName() {
+        //ステートがデータ入力状態以外は、処理しない
+        if(m_State.getState != STATE_INPUTDATA) return;
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            "Text = " + m_Input.text);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+    }
+
+    //名前入力完了=============================================================
+    //  タイミング：入力が完了したとき
+    //    入力されたデータを一時保存する
+    //=========================================================================
+    public void OnEndNameEidt() {
+        //ステートがデータ入力状態以外は、処理しない
+        if(m_State.getState != STATE_INPUTDATA) return;
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            "Text = " + m_Input.text);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        //一時保存
+        m_DataBff.pleyerName = m_Input.text;
+    }
+
+    
     //完了ボタン===============================================================
     //  タイミング：ＯＫボタンがタップされた瞬間。
     //    データが正しければ、データをCardManagerに渡す
     //    そうでない場合は、メッセージウィンドウをだす
     //=========================================================================
     public void OnAppButtonEnter() {
+        //ステートがデータ入力状態以外は、処理しない
         if(m_State.getState != STATE_INPUTDATA) return;
         
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -49,10 +87,8 @@ public partial class CardInputWind : MonoBehaviour {
         //    そうでない場合は、メッセージウィンドウをだす
         //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
 
-        //仮処理
+        ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
+        
         m_State.SetNextState(STATE_CLAUSEWIND);
     }
-    
-
-
 }

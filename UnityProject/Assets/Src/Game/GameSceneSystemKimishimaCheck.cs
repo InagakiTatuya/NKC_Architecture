@@ -22,6 +22,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//変数//////////////////////////////////////////////////
 	public	GameObject	beginObject	= null;
 	public	GameObject	endObject	= null;
+	private	bool		collapseFlg	= false;
 
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数_Begin//------------------------------
@@ -37,16 +38,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			ChangeState(StateNo.CardView);
 		}
 		if(beginObject != null && endObject != null){
-			Vector3	beginPos= beginObject.transform.position;
-			Vector3	endPos	= endObject.transform.position;
-			endPos	-= beginPos;
-			float	deg	= Mathf.Atan2(endPos.y,endPos.x) * 180 / Mathf.PI;
-#if	DEBUG_GAMESCENE
-			Debug.Log("角度差 : " + deg);
-#endif
-			if(deg <= 60.0f || deg >= 120.0f)	ChangeState(StateNo.GameOver);
+			if(collapseFlg)	ChangeState(StateNo.GameOver);
 		}
 	}//チェック用の関数_End//-------------------------------
+
+	//落下フラグを反映_Beign//------------------------------
+	void	SetCollapseFlg(){
+		collapseFlg	= true;
+	}//落下フラグを反映_End//-------------------------------
 
 	//GameOverしたら実行しようね。_Begin//------------------
 	private void UpdateGameOverKimishima(){
