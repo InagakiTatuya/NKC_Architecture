@@ -36,7 +36,7 @@ public partial class GameSceneSystem : MonoBehaviour
 		if (execute || true)
 		{
 			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSet);
+			ChangeState(StateNo.PartsSelect);
 			execute = false;
 		}
 	}
@@ -58,7 +58,7 @@ public partial class GameSceneSystem : MonoBehaviour
 		if (execute)
 		{
 			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSet);
+			ChangeState(StateNo.PartsSelect);
 			execute = false;
 		}
 	}

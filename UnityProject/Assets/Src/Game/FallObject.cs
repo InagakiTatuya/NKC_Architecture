@@ -24,6 +24,7 @@ public partial class FallObject : MonoBehaviour {
 	void Start()
 	{
 		vel = new Vector3();
+		angVel = new Vector3();
 
 		rBody = GetComponent<Rigidbody>();
 		system = transform.root.GetComponent<GameSceneSystem>();
@@ -105,7 +106,11 @@ public partial class FallObject : MonoBehaviour {
 		{
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
-			//rBody.velocity = Vector3.zero;
 		}
+	}
+	void OnCollisionExit(Collision col)
+	{
+		system.stateNo = (int)GameSceneSystem.StateNo.Result;
+		Debug.Log("東海");
 	}
 }
