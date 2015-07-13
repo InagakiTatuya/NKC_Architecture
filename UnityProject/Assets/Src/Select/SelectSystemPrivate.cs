@@ -36,7 +36,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 	private	Button[]	button		= null;
 	private	Image[]		buttonImage	= null;
 	private	Vector2[]	buttonSize	= null;
-	private	ColorBlock[]buttonColor	= null;
 	private	Image		fade		= null;
 	private	Color		fadeColor;
 
@@ -48,34 +47,29 @@ public	partial	class SelectSystem : MonoBehaviour {
 			this.OnTutorialButtonEnter,
 			this.OnMainGameButtonEnter,
 		};
-		string[]	tableButtonText	= new string[]{
-			"チュートリアル",
-			"ゲームスタート!!",
-		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
 			new Vector3(0.0f, 128.0f,0.0f),
 			new Vector3(0.0f,-128.0f,0.0f),
 		};
+		string[]	spriteName		= new string[]{
+			"Texture/Select/tutorial",
+			"Texture/Select/gamestart"
+		};
 		button		= new Button[tableOnButtonEnterFunc.Length];
 		buttonImage	= new Image[button.Length];
 		buttonSize	= new Vector2[button.Length];
-		buttonColor	= new ColorBlock[button.Length];
+		Database.InitColorBlock();
 		for(int i = 0;i < button.Length;i ++){
-			GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
-			button[i]		= obj.GetComponent<Button>();
-			buttonColor[i].normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
-			buttonColor[i].highlightedColor	= new Color(0.5f,0.5f,1.0f,1.0f);
-			buttonColor[i].pressedColor		= new Color(1.0f,0.8f,0.0f,1.0f);
-			buttonColor[i].disabledColor	= new Color(0.25f,0.25f,0.5f,1.0f);
-			buttonColor[i].colorMultiplier	= 1;
-			buttonColor[i].fadeDuration		= 0.1f;
-			button[i].colors= buttonColor[i];
-			buttonImage[i]	= obj.GetComponent<Image>();
+			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
+			button[i]				= obj.GetComponent<Button>();
+			button[i].colors		= Database.colorBlocks[(int)Database.ColorBlockID.White];
+			buttonImage[i]			= obj.GetComponent<Image>();
+			buttonImage[i].sprite	= Resources.Load<Sprite>(spriteName[i]);
 			buttonImage[i].rectTransform.localPosition	= tableButtonPos[i];
-			buttonSize[i]	= new Vector2(256.0f,64.0f);
+			buttonSize[i]			= new Vector2(512.0f,256.0f);
 			button[i].onClick.AddListener(tableOnButtonEnterFunc[i]);
 			ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
-			buttonSystem.text		= tableButtonText[i];
+			buttonSystem.text		= " ";
 			buttonSystem.color		= Color.white;
 			buttonSystem.fontSize	= 24;
 		}
