@@ -22,12 +22,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//変数//////////////////////////////////////////////////
 	public	GameObject	beginObject	= null;
 	public	GameObject	endObject	= null;
+	public	bool		completeFlg = false;
 	private	bool		collapseFlg	= false;
 
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数_Begin//------------------------------
 	private void UpdateCheckKimishima(){
-		if(stateTime >= 3.0f){
+		if (completeFlg){
 			job	= (job + 1) % 3;
 			if(job == 0){
 				Vector3	cameraPos				= Camera.main.transform.position;
@@ -35,7 +36,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 				Camera.main.transform.position	= cameraPos;
 				AddFloor();
 			}
-			ChangeState(StateNo.CardView);
+			completeFlg = false;
+			//ChangeState(StateNo.CardView);
+			ChangeState(StateNo.PartsSelect);
 		}
 		if(beginObject != null && endObject != null){
 			if(collapseFlg)	ChangeState(StateNo.GameOver);
