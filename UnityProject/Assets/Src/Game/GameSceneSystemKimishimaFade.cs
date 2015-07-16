@@ -20,7 +20,7 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数/////////////////////////////////////////////////
-	private	FadeClass	fadeClass;
+	public	FadeClass	fadeClass;
 
 	//初期化///////////////////////////////////////////////
 	//初期化_Begin//---------------------------------------
