@@ -1,6 +1,6 @@
 ﻿//----------------------------------------------------------
 //ゲームシーンのシステムフェードアウト
-//更新日 :	06 / 29 / 2015
+//更新日 :	07 / 16 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -26,16 +26,22 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//初期化_Begin//---------------------------------------
 	private	void	BackFadeInit(){
 		fadeClass	= new FadeClass(this,canvasObject);
-		fadeClass.init();
+		fadeClass.Init();
 	}//初期化_End//----------------------------------------
 
 	//更新/////////////////////////////////////////////////
 	//更新_Begin//----------------------------------------
 	private	void	BackFadeUpdate(){
-		fadeClass.update();
+		fadeClass.Update();
 	}//更新_End//-----------------------------------------
 
 }//ゲームシーンのシステム_End//------------------------------
+
+//----------------------------------------------------------
+//フェードアウト
+//更新日 :	07 / 16 / 2015
+//更新者 :	君島一刀
+//----------------------------------------------------------
 
 class	FadeClass{//フェードを管理するクラス_Begin//---------
 
@@ -66,7 +72,7 @@ class	FadeClass{//フェードを管理するクラス_Begin//---------
 
 	//初期化/////////////////////////////////////////////////
 	//初期化_Begin//-----------------------------------------
-	public	void	init(){
+	public	void	Init(){
 		backFadeColor	= Color.black;
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Game/Fade",canvasObject);
 		backFadeImage	= obj.GetComponent<Image>();
@@ -80,7 +86,7 @@ class	FadeClass{//フェードを管理するクラス_Begin//---------
 	
 	//更新///////////////////////////////////////////////////
 	//更新_Begin//-------------------------------------------
-	public	void	update(){
+	public	void	Update(){
 		if(tableBackFade[backFadeStateNo] != null)	tableBackFade[backFadeStateNo]();
 		backFadeImage.color	= backFadeColor;
 		backFadeTimer	+= Time.deltaTime;
