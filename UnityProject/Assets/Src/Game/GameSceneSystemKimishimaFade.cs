@@ -20,7 +20,11 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数/////////////////////////////////////////////////
-	public	FadeClass	fadeClass;
+	private	FadeClass	fadeClass;
+	//フェードクラスを取得_Beign//-------------------------
+	public	FadeClass	GetFadeClass(){
+		return	fadeClass;
+	}//フェードクラスを取得_End//--------------------------
 
 	//初期化///////////////////////////////////////////////
 	//初期化_Begin//---------------------------------------
@@ -43,7 +47,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
-class	FadeClass{//フェードを管理するクラス_Begin//---------
+public	class	FadeClass{//フェードを管理するクラス_Begin//
 
 	//列挙/////////////////////////////////////////////////
 	//フェードステート_Begin//------------------------------
