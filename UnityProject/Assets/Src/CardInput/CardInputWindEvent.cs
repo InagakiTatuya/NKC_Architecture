@@ -98,15 +98,6 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-        //　ここに以下の処理を書く
-        //
-        //    データが正しければ、データをCardManagerに渡す
-        //    そうでない場合は、メッセージウィンドウをだす
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-
-        m_DataBff.pleyerName = m_DataBff.pleyerName.Replace(" ", "");
-        Debug.Log(m_DataBff.pleyerName);
         if(m_DataBff.pleyerName != "") {
             //CardManagerにデータを渡す
             ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
@@ -114,6 +105,7 @@ public partial class CardInputWind : MonoBehaviour {
         }else {
             Debug.Log("名前を入力してください");
             //ステート変更　＝＞　メッセージ表示
+            m_State.SetNextState(STATE_OPENMESWIND);
         }
 
     }
