@@ -108,7 +108,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//パーツ選択ステート_Begin//----------------------------
 	private	void	UpdatePartsSelect(){
 		if(!partsSelectWindowOpenFlg){
-			ChangeBackFadeState(BackFadeStateNo.FadeOut);
+			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
 			OpenPartsSelectWindow();
 			partsSelectWindowOpenFlg	= true;
 		}
@@ -156,7 +156,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			partsSelectButton		= null;
 			partsSelectButtonImage	= null;
 			partsSelectWindowOpenFlg= false;
-			ChangeBackFadeState(BackFadeStateNo.FadeIn);
+			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
 			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide);
 			ChangeState(StateNo.PartsSet);
 		}
