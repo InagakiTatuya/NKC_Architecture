@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PauseSceneSystem : MonoBehaviour
 {
+	[SerializeField]
 	private GameSceneSystem system;
 	//移動シーン名
 	private string[] sceneName = new string[]
@@ -21,6 +22,8 @@ public class PauseSceneSystem : MonoBehaviour
 	//ポーズシーンコール
 	public void CallPauseGUI()
 	{
+		if(!gameObject.activeSelf) system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
+		else system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
 		gameObject.SetActive(!gameObject.activeSelf);
 	}
 

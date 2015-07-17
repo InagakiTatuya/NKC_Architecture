@@ -19,29 +19,33 @@ public class CountDown : MonoBehaviour {
 
 	void Update()
 	{
-		if (system.stateNo == (int)GameSceneSystem.StateNo.Check)
+		if (true)
 		{
-			text.text = "" + viewTimer;
-			text.fontSize = (int)(280 * time);
-			if (time >= 1.0f || Input.GetMouseButtonDown(0))
+			if (system.stateNo == (int)GameSceneSystem.StateNo.Check)
 			{
-				viewTimer--;
-				time = 0;
-				if (viewTimer <= 0 || Input.GetMouseButtonDown(0))
+				text.text = "" + viewTimer;
+				text.fontSize = (int)(280 * time);
+				if (time >= 1.0f || Input.GetMouseButtonDown(0))
 				{
-					text.text = "";
+					viewTimer--;
 					time = 0;
-					viewTimer = 3;
-					system.completeFlg = true;
+					if (viewTimer <= 0 || Input.GetMouseButtonDown(0))
+					{
+						text.text = "";
+						time = 0;
+						viewTimer = 3;
+						system.completeFlg = true;
+					}
 				}
+				time += Time.deltaTime;
 			}
-			time += Time.deltaTime;
+			else
+			{
+				text.text = "";
+				time = 0;
+				viewTimer = 3;
+			}
 		}
-		else
-		{
-			text.text = "";
-			time = 0;
-			viewTimer = 3;
 		}
 	}
 }
