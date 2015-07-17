@@ -46,7 +46,8 @@ class ClassStateManager {
             #if UNITY_EDITOR
             Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
                 this.GetType().Name + " \n" +
-                "StateChange: oldNo = " + m_StateNo+ ", newNo = "+m_NextStateNo);
+                "StateChange: oldNo = " + m_StateNo+ ", newNo = "+m_NextStateNo + 
+                ", OldStateTime = " + m_StateTime );
             #endif
             //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
             

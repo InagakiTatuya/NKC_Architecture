@@ -39,17 +39,17 @@ public class CardInputSystem : MonoBehaviour {
     private StateFunc[] m_fnUpdateArr;  //更新用
 
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private CardManager     cardMgr;
-    private CardInputWind   ciWind;
+    private MessageWind     m_MesWind;  //メッセージウィンドウ
+
+    private CardManager     m_cardMgr;
+    private CardInputWind   m_ciWind;
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  int getState        { get{return m_StateNo;       } }
     public  int setNextState    { set{ m_NextStateNo = value; } }
 
-    public CardManager   getCardMgr       { get{ return cardMgr;  } }
-    public CardManager   setCardMgr       { set{ cardMgr = value; } }
-    public CardInputWind getCardInputWind { get{ return ciWind;   } }
-    public CardInputWind setCardInputWind { set{ ciWind = value;  } }
+    public CardManager   getCardMgr       { get{ return m_cardMgr;  } }
+    public CardInputWind getCardInputWind { get{ return m_ciWind;   } }
 
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
@@ -72,10 +72,12 @@ public class CardInputSystem : MonoBehaviour {
             null,
         };
         //参照-----------------------------------------------------------------
-        cardMgr = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
-            .GetComponent<CardManager>();
-        ciWind = GameObject.Find("Canvas/CardInputWind")
-            .GetComponent<CardInputWind>();
+        m_MesWind = GameObject.Find("Canvas/MessageWind")
+                                                .GetComponent<MessageWind>();
+        m_cardMgr = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
+                                                .GetComponent<CardManager>();
+        m_ciWind  = GameObject.Find("Canvas/CardInputWind")
+                                                .GetComponent<CardInputWind>();
     
     }
 
@@ -185,9 +187,21 @@ public class CardInputSystem : MonoBehaviour {
     //OnButtonイベント=========================================================
     
     //完了ボタン===============================================================
-    //  シーンから出るステートに移行する
+    //  タイミング：完了ボタンが押されたとき
+    //    カードマネージャーにデータをデータベースに送るよう指示をだす
+    //    カードマネージャーが失敗したらメッセージをだす
+    //    成功したらシーン移行する。
+    //=========================================================================
     public void OnAppButtonEnter() {
         if(m_StateNo != STATE_USUALLY) return;
+
+        bool error = m_cardMgr.SendDataToDatabese();
+
+        if(error) {
+            m_MesWind.OpenWind();
+            return;
+        }
+
         m_NextStateNo = STATE_OUTSCENE;
     }
 
