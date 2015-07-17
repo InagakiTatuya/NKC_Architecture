@@ -17,8 +17,8 @@ public partial class CardInputWind : MonoBehaviour {
     public const int STATE_OPENWIND       = 1;  //ウィンドウを開く
     public const int STATE_INPUTDATA      = 2;  //データを入力
     public const int STATE_PABCHANGE      = 3;  //パーツのタブを変更する
-    public const int STATE_OPENMESSWIND   = 4;  //メッセージウィンドウを出す
-    public const int STATE_CLAUSEMESSWIND = 5;  //メッセージウィンドウを閉じる
+    public const int STATE_OPENMESWIND    = 4;  //メッセージウィンドウを出す
+    public const int STATE_CLAUSEMESWIND  = 5;  //メッセージウィンドウを閉じる
     public const int STATE_CLAUSEWIND     = 6;  //ウィンドウを閉じる
 
     public const int STATE_NO_MAX        = 7;   //ステートの種類数
@@ -26,8 +26,10 @@ public partial class CardInputWind : MonoBehaviour {
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
 
-    private float OPENWIND_TIME   = 0.1f; //開く際の演出時間
-    private float CLAUSEWIND_TIME = 0.1f; //閉じる際の演出時間
+    private float OPEN_WIND_TIME      = 0.1f; //開く際の演出時間
+    private float CLAUSE_WIND_TIME    = 0.1f; //閉じる際の演出時間
+    private float OPEN_MESWIND_TIME   = 0.1f; //メッセージウィンドウを開く演出時間
+    private float CLAUSE_MESWIND_TIME = 1.0f; //メッセージウィンドウを閉じる演出時間
     
     //編集するカード^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private int               m_IndexBff; //管理番号
@@ -36,6 +38,8 @@ public partial class CardInputWind : MonoBehaviour {
     //制御する子の参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private RectTransform     m_Back;      //黒背景
     private RectTransform     m_Wind;      //ウィンドウ
+    private RectTransform     m_MesWind;  //メッセージウィンドウ
+    //見た目
     private InputField        m_Input;     //名前入力
     private Image             m_ImageHair; //髪型
     private Image             m_ImageFace; //顔
@@ -50,6 +54,8 @@ public partial class CardInputWind : MonoBehaviour {
         //制御する子の参照-----------------------------------------------------
         m_Back      = transform.FindChild("InputWindBack") as RectTransform;
         m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
+        m_MesWind   = transform.FindChild("MessageWind"  ) as RectTransform;
+
         
         m_Input     = m_Wind.FindChild("Card/InputField")
                                                 .GetComponent<InputField>();
@@ -70,8 +76,8 @@ public partial class CardInputWind : MonoBehaviour {
             InitForOpenWind,
             InitForInputData,
             null,
-            null,
-            null,
+            InitForOpenMesWind,
+            InitForClauseMesWind,
             InitForClauseWind,
         };
         UnityAction[] fnUpdateArr = new UnityAction[STATE_NO_MAX] {
@@ -79,8 +85,8 @@ public partial class CardInputWind : MonoBehaviour {
             UpdateForOpenWind,
             UpdateForInputData,
             null,
-            null,
-            null,
+            UpdateForOpenMesWind,
+            UpdateForClauseMesWind,
             UpdateForClauseWind,
         };
 
@@ -114,8 +120,7 @@ public partial class CardInputWind : MonoBehaviour {
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //アクティブ
-        m_Back.gameObject.SetActive(false);
-        m_Wind.gameObject.SetActive(false);
+        ChildSetActive(false);
     }
     
     //========================================================= OpenWind ======
@@ -142,7 +147,7 @@ public partial class CardInputWind : MonoBehaviour {
     private void UpdateForOpenWind() {
 
         //一定時間になったら次のステートへ移行
-        if(m_State.getStateTime >= OPENWIND_TIME) {
+        if(m_State.getStateTime >= OPEN_WIND_TIME) {
             m_State.SetNextState(STATE_INPUTDATA);
         }
     }
@@ -162,7 +167,49 @@ public partial class CardInputWind : MonoBehaviour {
     private void UpdateForInputData() {
     
     }
-    
+
+    //========================================================= OpenMesWind ===
+    //  初期化  OpenMesWind
+    private void InitForOpenMesWind() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //メッセージウィンドウを初期化
+        m_MesWind.gameObject.SetActive(true);
+
+    }
+    //  更新  OpenMesWind
+    private void UpdateForOpenMesWind() {
+        //一定時間になったら次のステートへ移行
+        if(m_State.getStateTime >= OPEN_MESWIND_TIME) {
+            m_State.SetNextState(STATE_CLAUSEMESWIND);
+        }
+    }
+    //========================================================= ClauseMesWind =
+    //  初期化  ClauseMesWind
+    private void InitForClauseMesWind() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+    }
+    //  更新  ClauseMesWind
+    private void UpdateForClauseMesWind() {
+        //一定時間になったら次のステートへ移行
+        //  メッセージウィンドウを非表示にする
+        if(m_State.getStateTime >= CLAUSE_MESWIND_TIME) {
+            m_MesWind.gameObject.SetActive(false);
+            m_State.SetNextState(STATE_INPUTDATA);
+        }
+    }
     //========================================================= ClauseWind ====
     //  初期化  ClauseWind
     private void InitForClauseWind() {
@@ -180,11 +227,19 @@ public partial class CardInputWind : MonoBehaviour {
         //一定時間になったら
         //自分を非表示にして、
         //処理が終えたことをシステムに伝える
-        if(m_State.getStateTime >= CLAUSEWIND_TIME) {
+        if(m_State.getStateTime >= CLAUSE_WIND_TIME) {
             //ステート変更＝＞非アクティブ
             m_State.SetNextState(STATE_NOTACTIVE);
             //システムにウィンドウが閉じたことを伝える
             ciSystem.EndCardInputEvent(); 
+        }
+    }
+
+    //全ての子のアクティブ状態を操作===========================================
+    //  全ての子に対しSetActive関数を呼び出す
+    private void ChildSetActive(bool _value) {
+        foreach(Transform ct in transform) {
+            ct.gameObject.SetActive(_value);
         }
     }
 

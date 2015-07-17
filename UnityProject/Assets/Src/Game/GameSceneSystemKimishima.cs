@@ -19,24 +19,6 @@ using	System.Collections;
 //ゲームシーンのシステム_Begin//----------------------------
 public	partial class GameSceneSystem : MonoBehaviour{
 
-	//列挙・テーブル//////////////////////////////////////////
-	//ステート番号_Begin//-----------------------------------
-	private	enum	PartsSelectWindowStateNo{
-		Open,		//開く
-		Neutral,	//通常
-		Close,		//閉じる
-		Hide,		//隠れている
-		Length,		//長さ
-	}//ステート番号_End//------------------------------------
-
-	//パーツ選択ウィンドウのテキストID_Begin//---------------
-	private	enum	PartsSelectText{
-		Job,		//職種
-		DescText,	//説明
-		Length,		//長さ
-	}//パーツ選択ウィンドウのテキストID_End//----------------
-
-	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
 	//変数//////////////////////////////////////////////////
 	private	Vector2	FLOORWINDOW_POS	= new Vector2(-192.0f,-384.0f);
 
@@ -47,24 +29,12 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	Vector2	floorSize;
 
 	//パーツ選択関連
-	private	int		partsID;
-	private	bool	partsSelectWindowOpenFlg;
-	private	Image	partsSelectWindow		= null;
-	private	Vector3	partsSelectWindowSize;
-	private	Text[]	partsSelectText			= null;
-	private	Button	partsSelectButton		= null;
-	private	Image	partsSelectButtonImage	= null;
-	private	int		partsSelectWindowStateNo;
-	private float	partsSelectWindowStateTime;
+	private	int					partsID;
+	private	bool				changeStateFlg2PartsSet	= false;
+	private	PartsSelectClass	partsSelectClass;
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
 	private	void	StartKimishimaSystem(){
-		partsSelectWindowUpdateFunc	= new UnityAction[]{
-			this.UpdatePartsSelectWindowOpen,
-			this.UpdatePartsSelectWindowNeutral,
-			this.UpdatePartsSelectWindowClose,
-			null,
-		};
 		resultUpdateFunc	= new UnityAction[]{
 			this.UpdateResultOpen,
 			this.UpdateResultLiquidation,
@@ -72,8 +42,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		};
 		FallObject.collapseFunc		= this.SetCollapseFlg;
 		floor						= 0;
-		partsSelectWindowOpenFlg	= false;
 		floorSize					= new Vector2(128.0f,128.0f);
+		partsSelectClass			= new PartsSelectClass(this);
+		partsSelectClass.Init();
 		BackFadeInit();
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
@@ -105,32 +76,126 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}//階層テキストを生成_End//-----------------------------
 	
 	//更新//////////////////////////////////////////////////
-	//パーツ選択ステート_Begin//----------------------------
-	private	void	UpdatePartsSelect(){
-		if(!partsSelectWindowOpenFlg){
-			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
-			OpenPartsSelectWindow();
-			partsSelectWindowOpenFlg	= true;
-		}
-	}//パーツ選択ステート_End//-----------------------------
-
 	//俺の更新関数_Begin//----------------------------------
 	private	void	UpdateKimishimaSystem(){
 		BackFadeUpdate();
-		if(partsSelectWindowStateNo < 0 || partsSelectWindowStateNo >= (int)PartsSelectWindowStateNo.Length)
-			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide,true);
 		UpdateFloorWindow();
-		if(partsSelectWindowUpdateFunc[partsSelectWindowStateNo] != null)
-			partsSelectWindowUpdateFunc[partsSelectWindowStateNo]();
-		if(partsSelectWindow != null)	partsSelectWindow.rectTransform.localScale	= partsSelectWindowSize;
-		partsSelectWindowStateTime	+= Time.deltaTime;
+		PartsSelectClass.MessageID				message	= PartsSelectClass.MessageID.Non;
+		if(stateNo == (int)StateNo.PartsSelect)	message	= PartsSelectClass.MessageID.OnPartsSelectState;
+		partsSelectClass.Update(message,ref changeStateFlg2PartsSet,job);
+		if(changeStateFlg2PartsSet)	ChangeState(StateNo.PartsSet);
+		changeStateFlg2PartsSet	= false;
 	}//俺の更新関数_End//-----------------------------------
+
+	//パーツ選択ステート_Begin//----------------------------
+	private	void	UpdatePartsSelect(){
+	}//パーツ選択ステート_End//-----------------------------
 
 	//階層ウィンドウを更新_Begin//--------------------------
 	private	void	UpdateFloorWindow(){
 		if(floorWindow != null)	floorWindow.rectTransform.sizeDelta	= floorSize;
 		if(floorText != null)	floorText.rectTransform.sizeDelta	= floorSize;
 	}//階層ウィンドウを更新_End//---------------------------
+
+	//その他関数////////////////////////////////////////////
+	/// <summary>フロアを上げていく</summary>
+	private	void	AddFloor(){//階層を進める_Begin//-------
+		floor	++;
+		floorText.text	= floor.ToString();
+	}//階層を進める_End//-----------------------------------
+
+}//ゲームシーンのシステム_End//------------------------------
+
+//----------------------------------------------------------
+//パーツセレクト
+//更新日 :	07 / 16 / 2015
+//更新者 :	君島一刀
+//----------------------------------------------------------
+
+//パーツセレクトを管理するクラス_Begin//--------------------
+class 	PartsSelectClass{
+
+	//列挙・テーブル////////////////////////////////////////
+	//ステート番号_Begin//-----------------------------------
+	public	enum	PartsSelectWindowStateNo{
+		Open,		//開く
+		Neutral,	//通常
+		Close,		//閉じる
+		Hide,		//隠れている
+		Length,		//長さ
+	}//ステート番号_End//------------------------------------
+
+	//パーツ選択ウィンドウのテキストID_Begin//---------------
+	private	enum	PartsSelectText{
+		Job,		//職種
+		DescText,	//説明
+		Length,		//長さ
+	}//パーツ選択ウィンドウのテキストID_End//----------------
+
+	//メッセージID_Beign//-----------------------------------
+	public	enum	MessageID : uint{
+		Non					= 0x00000000,
+		OnPartsSelectState	= 0x00000001,	//パーツセレクトステート内の処理
+	}//メッセージID_End//------------------------------------
+
+	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
+	//変数//////////////////////////////////////////////////
+	private	int				partsID;
+	private	bool			partsSelectWindowOpenFlg;
+	private	Image			partsSelectWindow			= null;
+	private	Vector3			partsSelectWindowSize;
+	private	Text[]			partsSelectText				= null;
+	private	Button			partsSelectButton			= null;
+	private	Image			partsSelectButtonImage		= null;
+	private	int				partsSelectWindowStateNo;
+	private float			partsSelectWindowStateTime;
+	private	FadeClass		fadeClass					= null;
+	private	GameSceneSystem	gameSceneSystem;
+	private	GameObject		canvasObject;
+	private	bool			nextFlg;
+
+	//コンストラクタ・デストラクタ///////////////////////////
+	//コンストラクタ_Begin//---------------------------------
+	public	PartsSelectClass(GameSceneSystem gameSceneSystem){
+		this.gameSceneSystem	= gameSceneSystem;
+		canvasObject			= gameSceneSystem.canvasObject;
+		fadeClass				= gameSceneSystem.GetFadeClass();
+	}//コンストラクタ_End//----------------------------------
+
+	//初期化////////////////////////////////////////////////
+	public	void	Init(){//初期化_Begin//-----------------
+		partsSelectWindowUpdateFunc	= new UnityAction[]{
+			this.UpdatePartsSelectWindowOpen,
+			this.UpdatePartsSelectWindowNeutral,
+			this.UpdatePartsSelectWindowClose,
+			null,
+		};
+		partsSelectWindowOpenFlg	= false;
+	}//初期化_End//-----------------------------------------
+
+	//更新//////////////////////////////////////////////////
+	//更新_Begin//------------------------------------------
+	public	void	Update(MessageID message,ref bool changeStateFlg2PartsSet,int job){
+		if(partsSelectWindowStateNo < 0 || partsSelectWindowStateNo >= (int)PartsSelectWindowStateNo.Length){
+			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide,true);
+			return;
+		}
+		if(partsSelectWindowUpdateFunc[partsSelectWindowStateNo] != null)
+			partsSelectWindowUpdateFunc[partsSelectWindowStateNo]();
+		if(partsSelectWindow != null)	partsSelectWindow.rectTransform.localScale	= partsSelectWindowSize;
+		partsSelectWindowStateTime	+= Time.deltaTime;
+		if(((uint)message & (uint)MessageID.OnPartsSelectState) == 0)	return;
+		if(!partsSelectWindowOpenFlg){
+			if(fadeClass == null)	fadeClass	= gameSceneSystem.GetFadeClass();
+			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
+			OpenPartsSelectWindow(job);
+			partsSelectWindowOpenFlg	= true;
+		}
+		if(nextFlg){
+			partsSelectWindowOpenFlg= false;
+			changeStateFlg2PartsSet	= true;
+		}
+	}//更新_End//-------------------------------------------
 
 	//ウィンドウを開く_Beign//------------------------------
 	private	void	UpdatePartsSelectWindowOpen(){
@@ -139,11 +204,11 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectWindowSize.y	= Mathf.Min(n,1.0f);
 		if(n >= 1.0f)	ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Neutral);
 	}//ウィンドウを開く_End//-------------------------------
-
+	
 	//待機_Beign//-----------------------------------------
 	private	void	UpdatePartsSelectWindowNeutral(){
 	}//待機_End//------------------------------------------
-
+	
 	//ウィンドウを閉じる_Beign//-----------------------------
 	private	void	UpdatePartsSelectWindowClose(){
 		float	n	= 1.0f - partsSelectWindowStateTime * 8.0f;
@@ -155,10 +220,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			partsSelectText			= null;
 			partsSelectButton		= null;
 			partsSelectButtonImage	= null;
-			partsSelectWindowOpenFlg= false;
 			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
 			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide);
-			ChangeState(StateNo.PartsSet);
+			nextFlg					= true;
 		}
 	}//ウィンドウを閉じる_End//------------------------------
 
@@ -169,33 +233,26 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Close);
 	}//パーツ選択ウィンドウの決定ボタンが押された_End//-----
 
-	//その他関数////////////////////////////////////////////
-	/// <summary>フロアを上げていく</summary>
-	private	void	AddFloor(){//階層を進める_Begin//-------
-		floor	++;
-		floorText.text	= floor.ToString();
-	}//階層を進める_End//-----------------------------------
-
+	//その他関数/////////////////////////////////////////////
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
-	private	void	OpenPartsSelectWindow(){
+	private	void	OpenPartsSelectWindow(int job){
 		partsID					= -1;
 		partsSelectWindowSize	= new Vector3(2.0f,0.0f,1.0f);
 		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Open);
 		CreatePartsSelectWindow();
-		CreatePartsSelectText();
+		CreatePartsSelectText(job);
 		CreatePartsSelectButton();
-		CreatePartsSelectScrollView();
+		CreatePartsSelectScrollView(job);
 	}//パーツ選択ウィンドウを表示_End//-----------------------
-
+	
 	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
-	private	void	ChangePartsSelectWindowStateNo(
-		PartsSelectWindowStateNo stateNo,bool overrapFlg = false){
+	private	void	ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo stateNo,bool overrapFlg = false){
 		int		value	= (int)stateNo;
 		if(!overrapFlg && value == partsSelectWindowStateNo)	return;
 		partsSelectWindowStateNo	= value;
 		partsSelectWindowStateTime	= 0.0f;
 	}//パーツ選択ウィンドウのステート番号を変更する_End//-------
-
+	
 	//パーツ選択ウィンドウを生成_Beign//---------------------
 	private	void	CreatePartsSelectWindow(){
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
@@ -205,9 +262,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		partsSelectWindow.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
 		partsSelectWindow.color							= new Color(1.0f,1.0f,0.75f,0.5f);
 	}//パーツ選択ウィンドウを生成_End//----------------------
-
+	
 	//パーツウィンドウのテキストを生成_Begin//---------------
-	private	void	CreatePartsSelectText(){
+	private	void	CreatePartsSelectText(int job){
 		GameObject	obj;
 		Vector3[]	tableTextPos	= {new Vector3(-64.0f,240.0f,0.0f),new Vector3(96.0f,240.0f,0.0f),};
 		Vector2[]	tableSizeDelta	= {new Vector2(256.0f,128.0f),new Vector2(256.0f,128.0f),};
@@ -228,7 +285,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			partsSelectText[i].color		= new Color(0.0f,0.5f,0.0f,1.0f);
 		}
 	}//パーツウィンドウのテキストを生成_End//----------------
-
+	
 	//パーツセレクトウィンドウのボタン_Begin//---------------
 	private	void	CreatePartsSelectButton(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",partsSelectWindow.gameObject);
@@ -243,9 +300,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		buttonSystem.color			= Color.white;
 		buttonSystem.fontSize		= 24;
 	}//パーツセレクトウィンドウのボタン_End//----------------
-
+	
 	//スクロールビューを生成_Begin//------------------------
-	private	void	CreatePartsSelectScrollView(){
+	private	void	CreatePartsSelectScrollView(int job){
 		string		prefabName	= "Prefab/Game/PartsSelectScrollView";
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,partsSelectWindow.gameObject);
 		GameObject	contents	= obj.transform.GetChild(0).gameObject;
@@ -257,13 +314,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			for(int j = 0;j < 3;j ++){
 				int		id		= i * 3 + j;
 				if(id >= Database.tablePartsName.GetLength(1))	break;
-				CreatePartsSelectWindowButton(test,id);
+				CreatePartsSelectWindowButton(test,job,id);
 			}
 		}
 	}//スクロールビューを生成_End//-------------------------
-
+	
 	//パーツ選択ウィンドウのボタンを生成_Begin//-------------
-	private	void	CreatePartsSelectWindowButton(GameObject contents,int id){
+	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		obj.transform.SetParent(contents.transform);
 		Button		button		= obj.GetComponent<Button>();
@@ -281,13 +338,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		bs.fontSize				= 24;
 		bs.buttonEnter			= GetButtonID;
 	}//パーツ選択ウィンドウのボタンを生成_End//--------------
-
+	
 	//押されたボタンのIDを受け取る_Beign//------------------
 	private	void	GetButtonID(ButtonSystem buttonSystem){
 		partsID	= buttonSystem.buttonID;
-#if DEBUG_GAMESCENE
+		#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
-#endif
+		#endif
 	}//押されたボタンのIDを受け取る_End//-------------------
 
-}//ゲームシーンのシステム_End//------------------------------
+}//パーツセレクトを管理するクラス_End//---------------------

@@ -8,6 +8,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Text;
 
 //クラス///////////////////////////////////////////////////////////////////////
 public partial class CardInputWind : MonoBehaviour {
@@ -45,6 +46,8 @@ public partial class CardInputWind : MonoBehaviour {
 
     //名前入力完了=============================================================
     //  タイミング：入力が完了したとき
+    //    スペースのみの場合、空にする
+    //    一定以上長さの場合、それ以降を消す
     //    入力されたデータを一時保存する
     //=========================================================================
     public void OnEndNameEidt() {
@@ -58,6 +61,21 @@ public partial class CardInputWind : MonoBehaviour {
             "Text = " + m_Input.text);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+     
+        //スペースのみの場合、空にする
+        bool b = false;
+        foreach(char c in m_Input.text) {
+            b = (c == ' ' || c == '　');
+            if(b) break;
+        }
+        if(b) {
+            m_Input.text = "";
+            return;
+        }
+        //一定以上長さの場合、それ以降を消す
+        
+        //ここに一定以上長さの場合、それ以降を消す処理
+
         //一時保存
         m_DataBff.pleyerName = m_Input.text;
     }
@@ -80,15 +98,15 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-        //　ここに以下の処理を書く
-        //
-        //    データが正しければ、データをCardManagerに渡す
-        //    そうでない場合は、メッセージウィンドウをだす
-        //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
+        if(m_DataBff.pleyerName != "") {
+            //CardManagerにデータを渡す
+            ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
+            m_State.SetNextState(STATE_CLAUSEWIND);
+        }else {
+            Debug.Log("名前を入力してください");
+            //ステート変更　＝＞　メッセージ表示
+            m_State.SetNextState(STATE_OPENMESWIND);
+        }
 
-        ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
-        
-        m_State.SetNextState(STATE_CLAUSEWIND);
     }
 }

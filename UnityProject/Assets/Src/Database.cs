@@ -31,11 +31,13 @@ public partial class Database : SingletonCustom<Database> {
     }
 
     //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public  const int          PLAYER_MAX_COUNT = 15; //参加できる数
+    public  const int          PLAYER_MAX_COUNT     = 15; //参加できる数
+    public  const int          PLAYER_NAME_MAX_BYTE =  8; //名前の長さ制限
     private StractPlayerData[] m_PlayerDatas;         //プレイヤーデータ
     
     public  int                getPlayerCount{ get{ return m_PlayerDatas.Length; } }
     public  StractPlayerData[] getPlayerData { get{ return m_PlayerDatas;        } }
+    
 
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
