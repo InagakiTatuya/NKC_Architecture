@@ -195,7 +195,7 @@ public class CardInputSystem : MonoBehaviour {
     public void OnAppButtonEnter() {
         if(m_StateNo != STATE_USUALLY) return;
 
-        bool error = m_cardMgr.SendDataToDatabese();
+        bool error = m_cardMgr.SendDataToDatabase();
 
         if(error) {
             m_MesWind.OpenWind();

@@ -141,7 +141,7 @@ public class CardManager : MonoBehaviour {
     //  データが不適切な場合、失敗する。
     //  戻り値：データが不適切な場合 Ture を返す。
     //=========================================================================
-    public bool SendDataToDatabese() {
+    public bool SendDataToDatabase() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
