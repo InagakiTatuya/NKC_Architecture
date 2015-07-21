@@ -109,7 +109,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     private void ChangeCardMiniWind( int _PlayerNo, int _JobNo,
                                      float _animeTime = 0.0f) {
         //取り出したデータを適用
-        m_MiniWind.SetImageAndTexts(_PlayerNo, _PlayerNo);
+        m_MiniWind.SetImageAndTexts(_PlayerNo, _JobNo);
     }
 
     //社員証を閉じる============================================================
