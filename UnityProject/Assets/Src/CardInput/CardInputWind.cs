@@ -38,7 +38,10 @@ public partial class CardInputWind : MonoBehaviour {
     //制御する子の参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private RectTransform     m_Back;      //黒背景
     private RectTransform     m_Wind;      //ウィンドウ
-    private RectTransform     m_MesWind;  //メッセージウィンドウ
+
+    //ウィンドウ
+    private MessageWind       m_MesWind;  //メッセージウィンドウ
+    
     //見た目
     private InputField        m_Input;     //名前入力
     private Image             m_ImageHair; //髪型
@@ -54,12 +57,14 @@ public partial class CardInputWind : MonoBehaviour {
         //制御する子の参照-----------------------------------------------------
         m_Back      = transform.FindChild("InputWindBack") as RectTransform;
         m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
-        m_MesWind   = transform.FindChild("MessageWind"  ) as RectTransform;
-
         
+        //ウィンドウ
+        m_MesWind   = transform.FindChild("MessageWind"  )
+                                                .GetComponent<MessageWind>();
+        
+        //見た目
         m_Input     = m_Wind.FindChild("Card/InputField")
                                                 .GetComponent<InputField>();
-
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
                                                 .GetComponent<Image>();
         m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
@@ -137,8 +142,9 @@ public partial class CardInputWind : MonoBehaviour {
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //アクティブ
-        m_Back.gameObject.SetActive(true);
-        m_Wind.gameObject.SetActive(true);
+        m_Back   .gameObject.SetActive(true);
+        m_Wind   .gameObject.SetActive(true);
+        m_MesWind.gameObject.SetActive(true);
 
         //データを適用
         DataApp();
@@ -179,9 +185,6 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
-        //メッセージウィンドウを初期化
-        m_MesWind.gameObject.SetActive(true);
-
     }
     //  更新  OpenMesWind
     private void UpdateForOpenMesWind() {
@@ -206,7 +209,6 @@ public partial class CardInputWind : MonoBehaviour {
         //一定時間になったら次のステートへ移行
         //  メッセージウィンドウを非表示にする
         if(m_State.getStateTime >= CLAUSE_MESWIND_TIME) {
-            m_MesWind.gameObject.SetActive(false);
             m_State.SetNextState(STATE_INPUTDATA);
         }
     }
@@ -264,6 +266,7 @@ public partial class CardInputWind : MonoBehaviour {
     //  編集するカードの管理番号が必須です。
     //  第一引数：カードの管理番号
     //  第二引数：カードに入っているデータ
+    //=========================================================================
     public void OpenCradInputWind(int _CardIndex, StractPlayerData _data) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR

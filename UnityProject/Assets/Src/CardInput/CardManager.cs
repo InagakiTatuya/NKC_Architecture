@@ -135,6 +135,56 @@ public class CardManager : MonoBehaviour {
         m_Card[_index].DataApp();
     }
 
+    //データベースに渡す=======================================================
+    //  カードに格納されているデータを Database のフォーマットにあわせデータを
+    //  作り、Databaseに入れる。
+    //  データが不適切な場合、失敗する。
+    //  戻り値：データが不適切な場合 Ture を返す。
+    //=========================================================================
+    public bool SendDataToDatabase() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " - " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        
+        //プレイヤーがいない場合、メッセージ処理をする
+        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
+            Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+                this.GetType().Name + " - " +
+                System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+                "データに不備がありました");
+            return true;
+        }
+
+        //社員証全てに名前があるかチェックする
+        bool error = false;
+        for(int i=0; i < m_PlayerCount; i++) {
+            error = (m_Card[i].data.pleyerName == "");
+            if(error) {
+                Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+                            this.GetType().Name + " - " +
+                            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+                            "データに不備がありました");
+                return true;
+            }
+        }
+
+
+        //Databaseに渡すデータを作る-------------------------------------------
+        StractPlayerData[] data = new StractPlayerData[m_PlayerCount];
+        for(int i = 0; i < m_PlayerCount; i++) {
+            data[i] = m_Card[i].data;
+        }
+        //Databaseに渡す-------------------------------------------------------
+        Database.obj.SetPlyaerDatas(ref data);
+        
+        return false;
+    }
+    
     //イベント/////////////////////////////////////////////////////////////////
 
     //社員追加ボタン===========================================================
@@ -202,41 +252,6 @@ public class CardManager : MonoBehaviour {
         CardsSetActive(m_PlayerCount);  //アクティブの操作
 
     }
-   
 
-    //完了ボタン===============================================================
-    //  タイミング：ＯＫボタンがタップされた瞬間。
-    //    Databaseのフォーマットにあわせデータを作り、Databaseに入れる。
-    //=========================================================================
-    public void OnAppButtonEnter() {
-        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        #if UNITY_EDITOR 
-        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
-            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
-            "State="+(ciSystem.getState == CardInputSystem.STATE_USUALLY) +
-            " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
-        #endif
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        
-        //ステートが通常時以外は、処理しない
-        if(ciSystem.getState != CardInputSystem.STATE_USUALLY) return;
-        //プレイヤーがいない場合、メッセージ処理をする
-        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
-            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-            //  ここに"社員がいません。"メッセージを出す処理
-            //  または、そのフラグ。
-            //=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#
-            return;
-        }
-
-        //Databaseに渡すデータを作る-------------------------------------------
-        StractPlayerData[] data = new StractPlayerData[m_PlayerCount];
-        for(int i = 0; i < m_PlayerCount; i++) {
-            data[i] = m_Card[i].data;
-        }
-        //Databaseに渡す-------------------------------------------------------
-        Database.obj.SetPlyaerDatas(ref data);
-    }
 
 }
