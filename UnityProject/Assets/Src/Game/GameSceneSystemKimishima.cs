@@ -108,7 +108,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 //----------------------------------------------------------
 //パーツセレクト
-//更新日 :	07 / 16 / 2015
+//更新日 :	07 / 24 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -149,6 +149,7 @@ class 	PartsSelectClass{
 	private	Image			partsSelectButtonImage		= null;
 	private	int				partsSelectWindowStateNo;
 	private float			partsSelectWindowStateTime;
+	private	Image[]			partsSelectContentsImage	= null;
 	private	FadeClass		fadeClass					= null;
 	private	GameSceneSystem	gameSceneSystem;
 	private	GameObject		canvasObject;
@@ -309,6 +310,7 @@ class 	PartsSelectClass{
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,partsSelectWindow.gameObject);
 		GameObject	contents	= obj.transform.GetChild(0).gameObject;
 		int			length		= Database.tablePartsName.GetLength(1) / 3;
+		partsSelectContentsImage= new Image[Database.tablePartsName.GetLength(1)];
 		if((Database.tablePartsName.GetLength(1) % 3) != 0)	length	++;
 		for(int i = 0;i < length;i ++){
 			GameObject	test	= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectWindowButton",canvasObject);
@@ -323,12 +325,12 @@ class 	PartsSelectClass{
 	
 	//パーツ選択ウィンドウのボタンを生成_Begin//-------------
 	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){
-		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
-		Image		image		= obj.GetComponent<Image>();
-		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
-		image.sprite			= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
-		image.rectTransform.localPosition	= imagePos;
-		image.rectTransform.sizeDelta		= new Vector2(128.0f,128.0f);
+		GameObject	obj					= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
+		partsSelectContentsImage[id]	= obj.GetComponent<Image>();
+		Vector3		imagePos			= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
+		partsSelectContentsImage[id].sprite	= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
+		partsSelectContentsImage[id].rectTransform.localPosition	= imagePos;
+		partsSelectContentsImage[id].rectTransform.sizeDelta		= new Vector2(128.0f,128.0f);
 		PointerUpSystem	ps		= obj.GetComponent<PointerUpSystem>();
 		ps.id					= id;
 		ps.scrollViewObject		= contents.transform.parent.parent.gameObject;
@@ -338,9 +340,9 @@ class 	PartsSelectClass{
 	//押されたボタンのIDを受け取る_Beign//------------------
 	private	void	GetButtonID(PointerUpSystem pointerUpSystem){
 		partsID	= pointerUpSystem.id;
-		#if DEBUG_GAMESCENE
+#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
-		#endif
+#endif
 	}//押されたボタンのIDを受け取る_End//-------------------
 
 }//パーツセレクトを管理するクラス_End//---------------------
