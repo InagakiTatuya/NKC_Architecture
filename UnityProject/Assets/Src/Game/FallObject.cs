@@ -34,9 +34,6 @@ public partial class FallObject : MonoBehaviour {
 		state = STATE.FALL;
 		prevState = state;
 		stateTime = 0;
-
-		if (system.beginObject == null) system.beginObject = gameObject;
-		else system.endObject = gameObject;
 	}
 
 	//更新
@@ -143,6 +140,7 @@ public partial class FallObject : MonoBehaviour {
 		}
 	}
 
+	//設置判定
 	void OnCollisionEnter(Collision col)
 	{
 		if (state == STATE.FALL)
