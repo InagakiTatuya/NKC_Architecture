@@ -4,6 +4,15 @@ using System.Collections.Generic;
 
 public partial class GameSceneSystem : MonoBehaviour
 {
+	private GameObject pauseGUI;
+
+	private bool pauseFlg;
+	public bool PauseFlg
+	{
+		get { return pauseFlg; }
+		set { pauseFlg = value; }
+	}
+
 	private List<FallObject> building;
 	public List<FallObject> Building
 	{
@@ -20,6 +29,7 @@ public partial class GameSceneSystem : MonoBehaviour
 
 	void StartTanabe()
 	{
+		pauseGUI = GameObject.Find("PAUSE_GUI");
 		building = new List<FallObject>();
 		execute = false;
 	}
@@ -66,6 +76,7 @@ public partial class GameSceneSystem : MonoBehaviour
 	//建物倒壊
 	private void UpdateGameOver()
 	{
+		pauseGUI.SetActive(false);
 		UpdateGameOverKimishima();
 	}
 
