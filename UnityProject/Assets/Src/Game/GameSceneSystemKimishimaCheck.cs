@@ -20,8 +20,6 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
-	public	GameObject	beginObject	= null;
-	public	GameObject	endObject	= null;
 	public	bool		completeFlg = false;
 	private	bool		collapseFlg	= false;
 

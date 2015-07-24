@@ -207,6 +207,7 @@ class 	PartsSelectClass{
 	
 	//待機_Beign//-----------------------------------------
 	private	void	UpdatePartsSelectWindowNeutral(){
+		partsSelectButton.interactable	= (partsID >= 0);
 	}//待機_End//------------------------------------------
 	
 	//ウィンドウを閉じる_Beign//-----------------------------
@@ -295,6 +296,7 @@ class 	PartsSelectClass{
 		partsSelectButtonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
 		partsSelectButtonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
 		partsSelectButton.onClick.AddListener(OnPartsSelectButtonEnter);
+		partsSelectButton.interactable	= false;
 		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
 		buttonSystem.text			= "決定";
 		buttonSystem.color			= Color.white;
@@ -321,27 +323,21 @@ class 	PartsSelectClass{
 	
 	//パーツ選択ウィンドウのボタンを生成_Begin//-------------
 	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){
-		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
-		obj.transform.SetParent(contents.transform);
-		Button		button		= obj.GetComponent<Button>();
-		button.colors			= Database.colorBlocks[(int)Database.ColorBlockID.White];
+		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
 		Image		image		= obj.GetComponent<Image>();
 		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
 		image.sprite			= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
 		image.rectTransform.localPosition	= imagePos;
 		image.rectTransform.sizeDelta		= new Vector2(128.0f,128.0f);
-		ButtonSystem	bs		= obj.GetComponent<ButtonSystem>();
-		bs.text					= Database.tablePartsName[job,id];
-		bs.textPos				= new Vector3(0.0f,-48.0f,0.0f);
-		bs.buttonID				= id;
-		bs.color				= Color.black;
-		bs.fontSize				= 24;
-		bs.buttonEnter			= GetButtonID;
+		PointerUpSystem	ps		= obj.GetComponent<PointerUpSystem>();
+		ps.id					= id;
+		ps.scrollViewObject		= contents.transform.parent.parent.gameObject;
+		ps.SetCallBackFunc(GetButtonID);
 	}//パーツ選択ウィンドウのボタンを生成_End//--------------
 	
 	//押されたボタンのIDを受け取る_Beign//------------------
-	private	void	GetButtonID(ButtonSystem buttonSystem){
-		partsID	= buttonSystem.buttonID;
+	private	void	GetButtonID(PointerUpSystem pointerUpSystem){
+		partsID	= pointerUpSystem.id;
 		#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
 		#endif

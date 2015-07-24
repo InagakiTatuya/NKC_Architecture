@@ -82,7 +82,7 @@ public partial class Database : SingletonCustom<Database> {
 			colorBlocks[i].normalColor		= nomalColor[i];
 			colorBlocks[i].highlightedColor	= highlightColor[i];
 			colorBlocks[i].pressedColor		= pressedColor[i];
-			colorBlocks[i].disabledColor	= nomalColor[i] - Color.gray;
+			colorBlocks[i].disabledColor	= nomalColor[i] - new Color(0.75f,0.75f,0.75f,0.0f);
 			colorBlocks[i].colorMultiplier	= 1;
 			colorBlocks[i].fadeDuration		= 0.1f;
 		}
