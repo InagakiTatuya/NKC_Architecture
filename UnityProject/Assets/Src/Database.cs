@@ -33,7 +33,7 @@ public partial class Database : SingletonCustom<Database> {
     //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  const int          PLAYER_MAX_COUNT     = 15; //参加できる数
     public  const int          PLAYER_NAME_MAX_BYTE =  8; //名前の長さ制限
-    private StractPlayerData[] m_PlayerDatas;         //プレイヤーデータ
+    private StractPlayerData[] m_PlayerDatas;             //プレイヤーデータ
     
     public  int                getPlayerCount{ get{ return m_PlayerDatas.Length; } }
     public  StractPlayerData[] getPlayerData { get{ return m_PlayerDatas;        } }
@@ -63,14 +63,15 @@ public partial class Database : SingletonCustom<Database> {
         };
         //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         //  デバック用仮データ
-        StractPlayerData[] kariData = new StractPlayerData[ 5 ];
-        kariData[0].pleyerName = "仮名零";
-        kariData[1].pleyerName = "仮名壱";
-        kariData[2].pleyerName = "仮名弐";
-        kariData[3].pleyerName = "仮名参";
-        kariData[4].pleyerName = "仮名私";
-        this.SetPlyaerDatas(ref kariData);
-
+        if(this.getPlayerData == null) {
+            StractPlayerData[] kariData = new StractPlayerData[ 5 ];
+            kariData[0].pleyerName = "一郎";
+            kariData[1].pleyerName = "次郎";
+            kariData[2].pleyerName = "三郎";
+            kariData[3].pleyerName = "四郎";
+            kariData[4].pleyerName = "五郎";
+            this.SetPlyaerDatas(ref kariData);
+        }
 
         Debug.Log("Database.Awake End");
     }

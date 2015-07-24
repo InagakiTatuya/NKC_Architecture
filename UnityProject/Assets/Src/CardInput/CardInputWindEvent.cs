@@ -103,9 +103,9 @@ public partial class CardInputWind : MonoBehaviour {
             ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
             m_State.SetNextState(STATE_CLAUSEWIND);
         }else {
-            Debug.Log("名前を入力してください");
-            //ステート変更　＝＞　メッセージ表示
-            m_State.SetNextState(STATE_OPENMESWIND);
+            Debug.Log("名前が入力されていない");
+            //ウィンドウを出す
+            m_MesWind.OpenWind();
         }
 
     }

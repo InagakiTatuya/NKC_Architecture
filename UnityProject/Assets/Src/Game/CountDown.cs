@@ -19,6 +19,8 @@ public class CountDown : MonoBehaviour {
 
 	void Update()
 	{
+		if (system.PauseFlg) return;
+
 		if (system.stateNo == (int)GameSceneSystem.StateNo.Check)
 		{
 			text.text = "" + viewTimer;

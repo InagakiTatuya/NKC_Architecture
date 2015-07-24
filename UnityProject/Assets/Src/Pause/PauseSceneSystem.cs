@@ -4,6 +4,7 @@ using System.Collections;
 public class PauseSceneSystem : MonoBehaviour
 {
 	private GameSceneSystem system;
+
 	//移動シーン名
 	private string[] sceneName = new string[]
 	{
@@ -15,12 +16,16 @@ public class PauseSceneSystem : MonoBehaviour
 	private void Start()
 	{
 		system = transform.root.GetComponent<GameSceneSystem>();
+		system.PauseFlg = false;
 		gameObject.SetActive(false);
 	}
 
 	//ポーズシーンコール
 	public void CallPauseGUI()
 	{
+		if(!gameObject.activeSelf) system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
+		else system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
+		system.PauseFlg = !system.PauseFlg;
 		gameObject.SetActive(!gameObject.activeSelf);
 	}
 

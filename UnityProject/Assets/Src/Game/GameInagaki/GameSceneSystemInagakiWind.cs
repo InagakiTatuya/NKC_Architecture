@@ -27,6 +27,12 @@ public partial class GameSceneSystem : MonoBehaviour {
         m_CardWind = GameObject.Find("Card_Wind").GetComponent<CardWind>();
         m_NextWind = GameObject.Find("Card_Next").GetComponent<CardWind>();
         m_MiniWind = GameObject.Find("Card_Mini").GetComponent<CardWind>();
+        #if UNITY_EDITOR
+            if(m_CardWind == null) Debug.LogError("Card_Windが取得できなかったよ！おこだよっ！");
+            if(m_NextWind == null) Debug.LogError("Card_Nextが取得できなかったよ！おこだよっ！");
+            if(m_MiniWind == null) Debug.LogError("Card_Miniが取得できなかったよ！おこだよっ！");
+        #endif
+       
     }
 
 
@@ -103,7 +109,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     private void ChangeCardMiniWind( int _PlayerNo, int _JobNo,
                                      float _animeTime = 0.0f) {
         //取り出したデータを適用
-        m_MiniWind.SetImageAndTexts(_PlayerNo, _PlayerNo);
+        m_MiniWind.SetImageAndTexts(_PlayerNo, _JobNo);
     }
 
     //社員証を閉じる============================================================
