@@ -28,18 +28,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private void UpdateCheckKimishima(){
 		if (completeFlg){
 			job	= (job + 1) % 3;
-			if(job == 0){
-				Vector3	cameraPos				= Camera.main.transform.position;
-				cameraPos.y						= endObject.transform.position.y + 30.0f;
-				Camera.main.transform.position	= cameraPos;
-				AddFloor();
-			}
+			if(job == 0)	AddFloor();
 			completeFlg = false;
 			//ChangeState(StateNo.CardView);
 			ChangeState(StateNo.PartsSelect);
-		}
-		if(beginObject != null && endObject != null){
-			if(collapseFlg)	ChangeState(StateNo.GameOver);
 		}
 	}//チェック用の関数_End//-------------------------------
 
