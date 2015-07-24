@@ -12,27 +12,33 @@ using System.Collections;
 public partial class GameSceneSystem : MonoBehaviour {
 
     //GameSystem全体で使う^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private int playerNo = 0; //操作しているのプレイヤー
-    private int job      = 0; //職業
+    private int ply = 0; //操作しているのプレイヤー
+    private int job = 0; //職業
 
     //ステートCardView内のみ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private const int CARDVIEW_STATE_OPEN      = 0; //開く
-    private const int CARDVIEW_STATE_ACTIVE    = 1; //表示中
-    private const int CARDVIEW_STATE_CLAUSE    = 2; //閉じる
+    private const int CARDVIEW_STATE_START  = 0; //はじめ
+    private const int CARDVIEW_STATE_ACTIVE = 1; //表示中
+    private const int CARDVIEW_STATE_END    = 2; //おわり
     
     private const int CARDVIEW_STATE_MAX_NO = 3;
     
     private ClassStateManager m_CardViewState;
 
+    //公開関数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    public int GetPly { get{ return ply; } }
+    public int GetJob { get{ return job; } }
+
     //ゲームシーン初期化=======================================================
 	void AwakeInagaki() {
         CardAwake(); //社員証初期化
+    }
 
+	void StartInagaki () {
         //CardViewステート-----------------------------------------------------
         UnityAction[] InitArr = new UnityAction[CARDVIEW_STATE_MAX_NO] {
-            CardViewStateInitForOpen,   //Open
-            null,                       //Active
-            CardViewStateInitForClause, //Clause
+            CardViewStateInitForStart, //Start
+            null,                      //Active
+            CardViewStateInitForEnd,   //End
             };
         UnityAction[] UpdateArr = new UnityAction[CARDVIEW_STATE_MAX_NO] {
             null,
@@ -42,37 +48,16 @@ public partial class GameSceneSystem : MonoBehaviour {
 
         m_CardViewState = 
             new ClassStateManager(CARDVIEW_STATE_MAX_NO, InitArr, UpdateArr);
+        //---------------------------------------------------------------------
+	    ply = -1; //最初のプレイヤーを０番目にするために-1を入れておく
     }
-
-	void StartInagaki () {
-	
-	}
 	
     //ゲームシーン更新=========================================================
 	void UpdateInagaki () {
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        if(Input.GetKeyDown(KeyCode.Q)) { OpenCardWind(playerNo, job);       }
-	    if(Input.GetKeyDown(KeyCode.W)) { CloseCardWind();                   }
-	    if(Input.GetKeyDown(KeyCode.E)) { OpenNextPleyarWind(playerNo, job); }
-	    if(Input.GetKeyDown(KeyCode.R)) { CloseNextPleyarWind();             }
-	    if(Input.GetKeyDown(KeyCode.T)) { OpenCardMiniWind(playerNo, job);   }
-	    if(Input.GetKeyDown(KeyCode.Y)) { ChangeCardMiniWind(playerNo, job); }
-	    if(Input.GetKeyDown(KeyCode.U)) { CloseCardMiniWind();               }
-	
-	    if(Input.GetKeyDown(KeyCode.UpArrow)) { 
-            playerNo = (playerNo + 1) % Database.obj.getPlayerCount;
-            job = (job + 1) % Database.JOB_NO_MAX;
-            print("ply = " + playerNo + "   job = " + job);
-        }
 
-        if(Input.GetKeyDown(KeyCode.A)) { this.stateNo = (int)StateNo.CardView; }
-        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-
-    
     }
 
     //ステートの処理///////////////////////////////////////////////////////////
-
 	//更新関数=================================================================
 	private	void	UpdateCardView(){
         //ステート更新
@@ -83,40 +68,46 @@ public partial class GameSceneSystem : MonoBehaviour {
     //CardView内のステート処理/////////////////////////////////////////////////
     //  CardView内のステート（m_CardViewState）で使用される関数
     //  関数名が長すぎて申し訳ない。自分しか使わないけど
-    //========================================================== Open =========
-    public void CardViewStateInitForOpen() {
+    //========================================================== Start ========
+    //  Start初期化
+    //プレイヤー番号を加算し、NextWindを開き、MiniWindを更新する。
+    //=========================================================================
+    public void CardViewStateInitForStart() {
         //プレイヤー変更
-        playerNo = (playerNo + 1) % Database.obj.getPlayerCount;
+        ply = (ply + 1) % Database.obj.getPlayerCount;
         
         //NextWindを開く
-        this.OpenNextPleyarWind(playerNo, job);
+        this.OpenNextPleyarWind(ply, job);
         
         //MiniWindを変更する
         if(!m_MiniWind.isActiveAndEnabled) {
-            OpenCardMiniWind(playerNo, job);
+            OpenCardMiniWind(ply, job);
         }else {
-            ChangeCardMiniWind(playerNo, job);
+            ChangeCardMiniWind(ply, job);
         }
 
         //ステート変更＝＞Active
         m_CardViewState.SetNextState(CARDVIEW_STATE_ACTIVE);
+
     }
 
     //========================================================== Active =======
+    //  Active更新
     public void CardViewStateUpdateForActive() {
 
         //タッチされたらステート変更＝＞Clause
         //　＊GetMouseButtonDownを使っているが
         //    たしか、タップにも反応したはず。
         if(Input.GetMouseButtonDown(0)) {
-            m_CardViewState.SetNextState(CARDVIEW_STATE_CLAUSE);
+            m_CardViewState.SetNextState(CARDVIEW_STATE_END);
         }
     }
 
-    //========================================================== Clause =======
-    public void CardViewStateInitForClause() {
+    //========================================================== Ebd ==========
+    //  End初期化
+    public void CardViewStateInitForEnd() {
         CloseNextPleyarWind(); //NextWindを閉じる
-        m_CardViewState.SetNextState(CARDVIEW_STATE_OPEN);//ステート変更＝＞Open
+        m_CardViewState.SetNextState(CARDVIEW_STATE_START);//ステート変更＝＞Open
         stateNo = (int)StateNo.PartsSelect; //GameSceneStateをPartsSelectにする
     }
 
