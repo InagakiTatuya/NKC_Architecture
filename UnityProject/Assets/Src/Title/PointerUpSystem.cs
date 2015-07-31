@@ -29,6 +29,10 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 	private	float				scrollHeight;
 	//ID
 	public	int					id;
+	//色関連
+	private	Image				image			= null;
+	public	Color				defaultColor	= Color.white;
+	public	Color				pressedColor	= Color.white;
 	//コールバック関数
 	public	delegate	void	CallBackFunc(PointerUpSystem pointerUpSystem);
 	private	CallBackFunc		callBackFunc;
@@ -40,12 +44,13 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 
 	//初期化////////////////////////////////////////////////
 	public	void	Start () {//初期化_Begin//--------------
+		image				= GetComponent<Image>();
 		this.gameObject.AddComponent<EventTrigger>();
 		ScrollRect	sr		= scrollViewObject.GetComponent<ScrollRect>();
 		scrollbar			= sr.verticalScrollbar;
 		decelerationRate	= sr.decelerationRate;
-		Image		image	= scrollViewObject.GetComponent<Image>();
-		scrollHeight		= image.rectTransform.sizeDelta.y;
+		Image	sImage		= scrollViewObject.GetComponent<Image>();
+		scrollHeight		= sImage.rectTransform.sizeDelta.y;
 		press				= false;
 	}//初期化_End//-----------------------------------------
 
@@ -53,6 +58,9 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 	public	void	Update(){//更新_Beign//-----------------
 		scrollbar.value		-= velY;
 		velY				*= (1.0f - decelerationRate);
+		if(image == null)	return;
+		if(press)	image.color	= pressedColor;
+		else 		image.color	= defaultColor;
 	}//更新_End//-------------------------------------------
 
 	//その他関数////////////////////////////////////////////
@@ -68,11 +76,13 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 		velY				= (pressPos.y - prevPressPos.y) / viewSize;
 		prevPressPos		= pressPos;
 		moveValue			+= velY;
+		if(Mathf.Abs(moveValue) < 0.1f)		return;
+		press				= false;
 	}
 	public	void	OnPointerUp(PointerEventData eventData){
-		press			= false;
-		if(Mathf.Abs(moveValue) > 0.1f)		return;
+		if(!press)			return;
 		if(callBackFunc != null)	callBackFunc(this);
+		press				= false;
 	}
 	//コールバック関数を設定_Beign//------------------------
 
