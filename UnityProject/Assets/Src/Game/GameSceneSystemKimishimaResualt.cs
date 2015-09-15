@@ -47,7 +47,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//リザルト関連
 	private	Image		resultWindow		= null;
 	private	Vector3		resultWindowSize;
-	private	Text[]		resultText			= null;
+	private	Text		resultText			= null;
 	private	Button[]	resultButton		= null;
 	private	Image[]		resultButtonImage	= null;
 	private	int			resultStateNo;
@@ -75,7 +75,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//リザルトの清算_Begin//--------------------------------
 	private	void	UpdateResultLiquidation(){
 		resultDispFloor	= (int)(floor * Mathf.Min(resultStateTime,1.0f));
-		resultText[(int)ResultTextID.Kaiso].text	= "" + resultDispFloor + " 階層";
+		resultText.text	= resultDispFloor + " 階層";
 		if(resultStateTime >= 1.0f)	ChangeResultState(ResultStateNo.Neutral);
 	}//リザルトの清算_End//---------------------------------
 	
@@ -105,35 +105,26 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	CreateResultWindow(){
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		resultWindow		= obj.GetComponent<Image>();
-		resultWindow.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
+		resultWindow.sprite	= Resources.Load<Sprite>("Texture/Result/window");
 		resultWindow.rectTransform.localPosition	= new Vector3(0.0f,192.0f);
-		resultWindow.rectTransform.sizeDelta		= new Vector2(480.0f,320.0f);
-		resultWindow.color							= new Color(0.0f,1.0f,1.0f,1.0f);
+		resultWindow.rectTransform.sizeDelta		= new Vector2(512.0f,512.0f);
+		resultWindow.color							= Color.white;
 	}//リザルトウィンドウを生成_End//-------------------------
 
 	//リザルトのテキストを生成_Begin//-----------------------
 	private	void	CreateResultText(){
-		GameObject	obj				= null;
-		string[]	tableText		= new string[]{	"建設結果","新記録","" + resultDispFloor + " 階層"};
-		Vector3[]	tableTextPos	= new Vector3[]{new Vector3(0.0f,80.0f),new Vector3(-128.0f,16.0f),new Vector3(0.0f,-48.0f)};
-		Color[]		tableTextColor	= new Color[]{Color.black,Color.red,Color.blue};
-		int[]		tableFontSize	= new int[]{48,48,64};
-		resultText	= new Text[(int)ResultTextID.Length];
-		for(int i = 0;i < resultText.Length;i ++){
-			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",resultWindow.gameObject);
-			resultText[i]				= obj.GetComponent<Text>();
-			resultText[i].rectTransform.localPosition	= tableTextPos[i];
-			resultText[i].rectTransform.sizeDelta		= new Vector2(256.0f,128.0f);
-			resultText[i].text			= tableText[i];
-			resultText[i].fontSize		= tableFontSize[i];
-			resultText[i].color		= tableTextColor[i];
-		}
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",resultWindow.gameObject);
+		resultText				= obj.GetComponent<Text>();
+		resultText.rectTransform.localPosition	= new Vector3(0.0f,-60.0f);
+		resultText.rectTransform.sizeDelta		= new Vector2(256.0f,128.0f);
+		resultText.text		= resultDispFloor + " 階層";
+		resultText.fontSize	= 64;
+		resultText.color		= Color.blue;
 	}//リザルトのテキストを生成_End//------------------------
 
 	//リザルトのボタンを生成_Begin//-------------------------
 	private	void	CreateResultButton(){
 		GameObject	obj				= null;
-		string[]	tableText		= new string[]{	"リトライ","戻る"};
 		Vector3[]	tableButtonPos	= new Vector3[]{new Vector3(0.0f,-64.0f),new Vector3(0.0f,-192.0f)};
 		UnityAction[]	tableFunc	= new UnityAction[]{OnresultButtonRetryEnter,OnresultButtonBackEnter};
 		resultButton		= new Button[(int)ResultButtonNo.Length];
@@ -143,13 +134,12 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			resultButton[i]		= obj.GetComponent<Button>();
 			resultButton[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.White];
 			resultButtonImage[i]	= obj.GetComponent<Image>();
+			resultButtonImage[i].sprite	= Resources.Load<Sprite>("Texture/Result/button" + i);
 			resultButtonImage[i].rectTransform.localPosition	= tableButtonPos[i];
-			resultButtonImage[i].rectTransform.sizeDelta		= new Vector2(256.0f,96.0f);
+			resultButtonImage[i].rectTransform.sizeDelta		= new Vector2(512.0f,128.0f);
 			resultButton[i].onClick.AddListener(tableFunc[i]);
 			ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
-			buttonSystem.text		= tableText[i];
-			buttonSystem.color		= Color.blue;
-			buttonSystem.fontSize	= 48;
+			buttonSystem.text		= null;
 		}
 	}//リザルトのボタンを生成_End//--------------------------
 
