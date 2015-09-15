@@ -20,6 +20,8 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
+	public	SeManager	seManager	= null;
+
 	private	Vector2	FLOORWINDOW_POS	= new Vector2(-192.0f,-384.0f);
 
 	//フロア関連
