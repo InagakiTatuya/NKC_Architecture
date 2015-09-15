@@ -18,22 +18,22 @@ public partial class Database : SingletonCustom<Database> {
 		{
 			"Yuka 00",		"Yuka 01",		"Yuka 02",		"Yuka 03",
 			"Yuka 04",		"Yuka 05",		"Yuka 06",		"Yuka 07",
-			"Yuka 08",		"Yuka 09",
+			"Yuka 08",		"ダンボール",
 		},
 		{
 			"Hashira 00",	"Hashira 01",	"Hashira 02",	"Hashira 03",
 			"Hashira 04",	"Hashira 05",	"Hashira 06",	"Hashira 07",
-			"Hashira 08",	"Hashira 09",
+			"Hashira 08",	"ダンボール",
 		},
 		{
 			"Kabe 00",		"Kabe 01",		"Kabe 02",		"Kabe 03",
 			"Kabe 04",		"Kabe 05",		"Kabe 06",		"Kabe 07",
-			"Kabe 08",		"Kabe 09",
+			"Kabe 08",		"ダンボール",
 		},
 		{
 			"Yane 00",		"Yane 01",		"Yane 02",		"Yane 03",
 			"Yane 04",		"Yane 05",		"Yane 06",		"Yane 07",
-			"Yane 08",		"Yane 09",
+			"Yane 08",		"ダンボール",
 		}
 	};//パーツの名前_End//----------------------------------
 
@@ -44,6 +44,8 @@ public partial class Database : SingletonCustom<Database> {
 		"壁を作るスーパー職人。\nその腕前は超一流で\n見るものを魅了する。",
 		"屋根を作るスーパー職人。\nその腕前は超一流で\n見るものを魅了する。",
 	};//職業の説明文_End//----------------------------------
+
+
 
 	public	enum 	ColorBlockID{//色のID_Beign//-----------
 		White,

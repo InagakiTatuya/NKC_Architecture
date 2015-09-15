@@ -112,27 +112,31 @@ public	partial class GameSceneSystem : MonoBehaviour{
 class 	PartsSelectClass{
 
 	//列挙・テーブル////////////////////////////////////////
-	//ステート番号_Begin//-----------------------------------
+	//ステート番号
 	public	enum	StateNo{
 		Open,		//開く
 		Neutral,	//通常
 		Close,		//閉じる
 		Hide,		//隠れている
 		Length,		//長さ
-	}//ステート番号_End//------------------------------------
-
-	//パーツ選択ウィンドウのテキストID_Begin//---------------
+	}
+	//パーツ選択ウィンドウのテキスト
 	private	enum	PartsSelectText{
 		Job,		//職種
 		DescText,	//説明
 		Length,		//長さ
-	}//パーツ選択ウィンドウのテキストID_End//----------------
-
-	//メッセージID_Beign//-----------------------------------
+	}
+	//メッセージID
 	public	enum	MessageID : uint{
 		Non					= 0x00000000,
 		OnPartsSelectState	= 0x00000001,	//パーツセレクトステート内の処理
-	}//メッセージID_End//------------------------------------
+	}
+	//ボタンのID
+	public	enum	ButtonID{
+		Enter,
+		Yane,
+		Length,
+	}
 
 	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
 	//変数//////////////////////////////////////////////////
@@ -141,7 +145,7 @@ class 	PartsSelectClass{
 	private	Image				windowImage		= null;
 	private	Vector3				windowSize;
 	private	Text[]				text			= null;
-	private	Button				button			= null;
+	private	Button[]			button			= null;
 	private	int					windowStateNo;
 	private float				windowStateTime;
 	private	PointerUpSystem[]	pointerUpSystem	= null;
@@ -201,7 +205,7 @@ class 	PartsSelectClass{
 	//待機_Beign//-----------------------------------------
 	private	void	Neutral(){
 		if(button == null)	return;
-		button.interactable	= (partsID >= 0);
+		button[(int)ButtonID.Enter].interactable	= (partsID >= 0);
 		for(int i = 0;i < pointerUpSystem.Length;i ++){
 			if(partsID == i)	pointerUpSystem[i].defaultColor	= new Color(1.0f,1.0f,0.5f);
 			else 				pointerUpSystem[i].defaultColor	= Color.white;
@@ -225,11 +229,15 @@ class 	PartsSelectClass{
 	}//ウィンドウを閉じる_End//------------------------------
 
 	//ボタン関連////////////////////////////////////////////
-	//パーツ選択ウィンドウの決定ボタンが押された_Beign//----
+	//パーツ選択ウィンドウの決定ボタンが押された
 	public	void	OnPartsSelectButtonEnter(){
 		if(partsID < 0)	return;
 		ChangeState(StateNo.Close);
-	}//パーツ選択ウィンドウの決定ボタンが押された_End//-----
+	}
+	//屋根のボタンが押された
+	public	void	OnYaneButtonEnter(){
+
+	}
 
 	//その他関数/////////////////////////////////////////////
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
@@ -258,7 +266,7 @@ class 	PartsSelectClass{
 		windowImage.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
 		windowImage.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
 		windowImage.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
-		windowImage.color						= new Color(1.0f,1.0f,0.75f,0.5f);
+		windowImage.color						= new Color(0.0f,0.0f,0.0f,0.5f);
 	}//パーツ選択ウィンドウを生成_End//----------------------
 	
 	//パーツウィンドウのテキストを生成_Begin//---------------
@@ -280,24 +288,31 @@ class 	PartsSelectClass{
 			text[i].text		= tableText[i];
 			text[i].alignment	= TextAnchor.MiddleLeft;
 			text[i].fontSize	= tableFontSize[i];
-			text[i].color		= new Color(0.0f,0.5f,0.0f,1.0f);
+			text[i].color		= new Color(0.0f,1.0f,1.0f,1.0f);
+			text[i].material	= Resources.Load<Material>("Material/Game/TextMaterial");
 		}
 	}//パーツウィンドウのテキストを生成_End//----------------
 	
 	//パーツセレクトウィンドウのボタン_Begin//---------------
 	private	void	CreatePartsSelectButton(){
-		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",windowImage.gameObject);
-		button				= obj.GetComponent<Button>();
-		button.colors		= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
-		Image	buttonImage	= obj.GetComponent<Image>();
-		buttonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
-		buttonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
-		button.onClick.AddListener(OnPartsSelectButtonEnter);
-		button.interactable	= false;
-		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
-		buttonSystem.text			= "決定";
-		buttonSystem.color			= Color.white;
-		buttonSystem.fontSize		= 24;
+		button	= new Button[(int)ButtonID.Length];
+		Vector3[]		tablePos	= new Vector3[]{new Vector3(128.0f,-240.0f),new Vector3(-128.0f,-240.0f)};
+		string[]		tebleText	= new string[]{"決定","屋根"};
+		UnityAction[]	tableAction	= new UnityAction[]{OnPartsSelectButtonEnter,OnYaneButtonEnter};
+		for(int i = 0;i < (int)ButtonID.Length;i ++){
+			GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",windowImage.gameObject);
+			button[i]			= obj.GetComponent<Button>();
+			button[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
+			Image	buttonImage	= obj.GetComponent<Image>();
+			buttonImage.rectTransform.localPosition	= tablePos[i];
+			buttonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
+			button[i].onClick.AddListener(tableAction[i]);
+			button[i].interactable	= false;
+			ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
+			buttonSystem.text			= tebleText[i];
+			buttonSystem.color			= Color.white;
+			buttonSystem.fontSize		= 24;
+		}
 	}//パーツセレクトウィンドウのボタン_End//----------------
 	
 	//スクロールビューを生成_Begin//------------------------

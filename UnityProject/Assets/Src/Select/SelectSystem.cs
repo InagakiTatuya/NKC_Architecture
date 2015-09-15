@@ -27,6 +27,10 @@ public	partial	class SelectSystem : MonoBehaviour {
 	public	static	float	timer{
 		get{return	f_timer;}
 	}
+	public	bool	TutorialFlg{//チュートリアルフラグ
+		get{return (selectNo == 0);}
+	}
+
 
 	//初期化////////////////////////////////////////////////
 	public	void	Start () {//初期化_Begin//--------------
