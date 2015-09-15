@@ -6,6 +6,7 @@
 //名前空間/////////////////////////////////////////////////////////////////////
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 
 //クラス///////////////////////////////////////////////////////////////////////
@@ -23,20 +24,13 @@ public class CardInputSystem : MonoBehaviour {
     public const int STATE_CARDINPUT = 3;  //カードのデータを入力
 
 
-    public const int STATE_MAX_CNT   = 4;   //ステートの種類数
+    public const int STATE_NO_MAX   = 4;   //ステートの種類数
 
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private int m_StateNo;      //ステート番号
-    private int m_NextStateNo;  //次のフレームでのステート番号
+    private ClassStateManager m_State;
 
-    private float m_StateTime; //ステート内で使用する
     private const float INSCENE_TIME  = 1.0f; //INSTAET
     private const float OUTSCENE_TIME = 1.0f; //OUTSTATE
-
-    //各ステートの更新関数のポインタ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private delegate void StateFunc();
-    private StateFunc[] m_fnIniteArr;   //初期化用
-    private StateFunc[] m_fnUpdateArr;  //更新用
 
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private MessageWind     m_MesWind;  //メッセージウィンドウ
@@ -45,8 +39,8 @@ public class CardInputSystem : MonoBehaviour {
     private CardInputWind   m_ciWind;
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public  int getState        { get{return m_StateNo;       } }
-    public  int setNextState    { set{ m_NextStateNo = value; } }
+    public  int getState        { get{return m_State.getState;       } }
+    //public  int setNextState    { set{ m_State.SetNextState(value);  } }
 
     public CardManager   getCardMgr       { get{ return m_cardMgr;  } }
     public CardInputWind getCardInputWind { get{ return m_ciWind;   } }
@@ -59,18 +53,21 @@ public class CardInputSystem : MonoBehaviour {
     
     void Start() {
         //ステートの関数ポインタを初期化---------------------------------------
-        m_fnIniteArr = new StateFunc[STATE_MAX_CNT] {
+        UnityAction[] fnInitArr = new UnityAction[STATE_NO_MAX] {
             InitForInScene,
             InitForUsually,
             InitForOutScene,
             InitForCardInput,
         };
-        m_fnUpdateArr = new StateFunc[STATE_MAX_CNT] {
+        UnityAction[] fnUpdateArr = new UnityAction[STATE_NO_MAX] {
             UpdateForInScene,
             UpdateForUsually,
             UpdateForOutScene,
             null,
         };
+
+        m_State = new ClassStateManager(STATE_NO_MAX, fnInitArr, fnUpdateArr);
+
         //参照-----------------------------------------------------------------
         m_MesWind = GameObject.Find("Canvas/MessageWind")
                                                 .GetComponent<MessageWind>();
@@ -82,21 +79,9 @@ public class CardInputSystem : MonoBehaviour {
     }
 
     //更新=====================================================================
-    void Update() {
-
-        //ステートの初期化-----------------------------------------------------
-        if(0 <= m_NextStateNo && m_NextStateNo < STATE_MAX_CNT) {
-            m_StateNo = m_NextStateNo;
-            m_NextStateNo = -1; //Initを一回だけ呼ぶために-1を入れてる
-            if(m_fnIniteArr[m_StateNo] != null) m_fnIniteArr[m_StateNo]();
-            m_StateTime = 0.0f; 
-        }
-        
-        //ステート別のアップデート---------------------------------------------
-        if(m_fnUpdateArr[m_StateNo] != null) { 
-            m_fnUpdateArr[m_StateNo]();
-            m_StateTime += Time.deltaTime;
-        }   
+	void Update () {
+        //ステートの更新
+        m_State.Update(); 
     }
 
     //ステート更新関数=========================================================
@@ -118,8 +103,8 @@ public class CardInputSystem : MonoBehaviour {
     private void UpdateForInScene() {
 
         //一定時間になったら次のステートへ移行
-        if(m_StateTime >= INSCENE_TIME) {
-            m_NextStateNo = STATE_USUALLY;
+        if(m_State.getStateTime >= INSCENE_TIME) {
+            m_State.SetNextState(STATE_USUALLY);
         }
     }
 
@@ -158,7 +143,7 @@ public class CardInputSystem : MonoBehaviour {
     private void UpdateForOutScene() {
 
         //一定時間になったら次のシーンへ移行
-        if(m_StateTime >= INSCENE_TIME) {
+        if(m_State.getStateTime >= INSCENE_TIME) {
             Application.LoadLevel("Game");
         }
     }
@@ -178,13 +163,14 @@ public class CardInputSystem : MonoBehaviour {
     //  何も処理しないためコメントアウト
     //private void UpdateForCardInput() { }
     
-    //CardInput終了
-    //  CardInptuState終了イベント CardInptuWindからよび出される
-    public void EndCardInputEvent() {
-        m_NextStateNo = STATE_USUALLY;
-    }
 
-    //OnButtonイベント=========================================================
+    //イベント/////////////////////////////////////////////////////////////////
+    //CardInput終了============================================================
+    //  CardInptuState終了イベント CardInptuWindからよび出される
+    //=========================================================================
+    public void EndCardInputEvent() {
+        m_State.SetNextState(STATE_USUALLY);
+    }
     
     //完了ボタン===============================================================
     //  タイミング：完了ボタンが押されたとき
@@ -193,7 +179,7 @@ public class CardInputSystem : MonoBehaviour {
     //    成功したらシーン移行する。
     //=========================================================================
     public void OnAppButtonEnter() {
-        if(m_StateNo != STATE_USUALLY) return;
+        if(m_State.getState != STATE_USUALLY) return;
 
         bool error = m_cardMgr.SendDataToDatabase();
 
@@ -202,7 +188,7 @@ public class CardInputSystem : MonoBehaviour {
             return;
         }
 
-        m_NextStateNo = STATE_OUTSCENE;
+        m_State.SetNextState(STATE_OUTSCENE);
     }
 
 }

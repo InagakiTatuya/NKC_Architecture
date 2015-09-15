@@ -35,9 +35,7 @@ public class MessageWind : MonoBehaviour {
     void Awake() {
         //参照の取得-----------------------------------------------------------
         m_Image = transform.FindChild("Image") as RectTransform;
-    }
 
-    void Start() {
         //ステート初期化-------------------------------------------------------
         UnityAction[] InitFancs = new UnityAction[STATE_NO_MAX] {
             InitForNotActive, InitForOpen  , InitForActive  , InitForClause  ,
@@ -46,6 +44,13 @@ public class MessageWind : MonoBehaviour {
             null            , UpdateForOpen, UpdateForActive, UpdateForClause,
         };
         m_State = new ClassStateManager(STATE_NO_MAX, InitFancs, UpdateFancs);
+
+        //初期ステート
+        m_State.SetNextState(STATE_NOTACTIVE);
+    }
+
+    void Start() {
+
 
     }
 
@@ -78,10 +83,7 @@ public class MessageWind : MonoBehaviour {
 
     public void UpdateForActive() {
         
-        //一定時間たったらステート移行　＝＞　閉じる
-        if(m_State.getStateTime >= ACTEVE_TIME) {
-            m_State.SetNextState(STATE_CLAUSE);
-        }
+
     }
     //===================================================== Clause ============
     public void InitForClause() {
@@ -102,5 +104,15 @@ public class MessageWind : MonoBehaviour {
     public void OpenWind() {
         m_State.SetNextState(STATE_OPEN);
     }
+
+
+    //イベント/////////////////////////////////////////////////////////////////
+    //OnButtonEnter============================================================
+    public void OnTouchWindEnter() {
+        if(m_State.getState != STATE_ACTIVE) return;
+        m_State.SetNextState(STATE_CLAUSE);
+    }
+
+
 
 }

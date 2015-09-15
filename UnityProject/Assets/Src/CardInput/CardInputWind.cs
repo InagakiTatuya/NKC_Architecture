@@ -38,6 +38,7 @@ public partial class CardInputWind : MonoBehaviour {
     //制御する子の参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private RectTransform     m_Back;      //黒背景
     private RectTransform     m_Wind;      //ウィンドウ
+    private RectTransform     m_Card;      //社員証
 
     //ウィンドウ
     private MessageWind       m_MesWind;  //メッセージウィンドウ
@@ -48,6 +49,12 @@ public partial class CardInputWind : MonoBehaviour {
     private Image             m_ImageFace; //顔
     private Image             m_ImageBody; //体
 
+    //アニメーション用変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    private Vector3           m_WindStartPos;
+    private Vector3           m_WindEndPos;
+    private Vector3           m_WindVec;        //End-Start
+
+
     //統括しているシステム^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardInputSystem ciSystem;  //このシーンを統括するSystem
     
@@ -57,8 +64,9 @@ public partial class CardInputWind : MonoBehaviour {
         //制御する子の参照-----------------------------------------------------
         m_Back      = transform.FindChild("InputWindBack") as RectTransform;
         m_Wind      = transform.FindChild("Wind"         ) as RectTransform;
+        m_Card      = transform.FindChild("Wind/Card"    ) as RectTransform;
         
-        //ウィンドウ
+        //メッセージウィンドウ
         m_MesWind   = transform.FindChild("MessageWind"  )
                                                 .GetComponent<MessageWind>();
         
@@ -100,8 +108,13 @@ public partial class CardInputWind : MonoBehaviour {
         //システムの参照-------------------------------------------------------
         ciSystem = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME)
                                         .GetComponent<CardInputSystem>();
-        //ステート-------------------------------------------------------------
+        //初期ステート---------------------------------------------------------
         m_State.SetNextState(STATE_NOTACTIVE);
+        
+        //アニメーション初期化-------------------------------------------------
+        m_WindEndPos   = m_Wind.localPosition;
+        m_WindStartPos = new Vector3(m_WindEndPos.x + 544, m_WindEndPos.y, m_WindEndPos.z);
+        m_Wind.localPosition = m_WindStartPos;
     }
 	
     //更新=====================================================================
@@ -146,16 +159,27 @@ public partial class CardInputWind : MonoBehaviour {
         m_Wind   .gameObject.SetActive(true);
         m_MesWind.gameObject.SetActive(true);
 
+        //アニメーション用
+        m_Wind.localPosition = m_WindStartPos;
+        m_WindVec = m_WindEndPos - m_WindStartPos;
         //データを適用
         DataApp();
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
+        Vector3 lpos    = m_Wind.localPosition;
+        lpos = m_WindStartPos + m_WindVec * (1f - Mathf.Pow(10f,-m_State.getStateTime));
 
-        //一定時間になったら次のステートへ移行
-        if(m_State.getStateTime >= OPEN_WIND_TIME) {
+        if(m_State.getStateTime > 1.1f) {
+            lpos.x = 0;
             m_State.SetNextState(STATE_INPUTDATA);
         }
+        m_Wind.localPosition = lpos;
+
+        ////一定時間になったら次のステートへ移行
+        //if(m_State.getStateTime >= OPEN_WIND_TIME) {
+        //    m_State.SetNextState(STATE_INPUTDATA);
+        //}
     }
     
     //========================================================= InputData =====
@@ -188,6 +212,7 @@ public partial class CardInputWind : MonoBehaviour {
     }
     //  更新  OpenMesWind
     private void UpdateForOpenMesWind() {
+
         //一定時間になったら次のステートへ移行
         if(m_State.getStateTime >= OPEN_MESWIND_TIME) {
             m_State.SetNextState(STATE_CLAUSEMESWIND);
