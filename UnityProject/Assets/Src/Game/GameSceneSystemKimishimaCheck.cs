@@ -20,32 +20,64 @@ using	System.Collections;
 public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
-	public	bool		completeFlg = false;
-	private	bool		collapseFlg	= false;
+	private	int		checkFlg	= 0x00000000;
 
 	//更新//////////////////////////////////////////////////
-	//チェック用の関数_Begin//------------------------------
+	//チェック用の関数//------------------------------------
 	private void UpdateCheckKimishima(){
-		if (completeFlg){
-			job	= (job + 1) % 3;
-			if(job == 0)	AddFloor();
-			completeFlg = false;
-			//ChangeState(StateNo.CardView);
-			ChangeState(StateNo.PartsSelect);
-		}
-	}//チェック用の関数_End//-------------------------------
+		if(UpdateCheckKimishimaCollapse())	return;
+		if(UpdateCheckKimishimaComplete())	return;
+	}
 
-	//落下フラグを反映_Beign//------------------------------
+	//ゲームオーバーの判定//--------------------------------
+	private	bool	UpdateCheckKimishimaCollapse(){
+		if(!collapseFlg)	return	false;
+		ChangeState(StateNo.GameOver);
+		return	true;
+	}
+	//次のパーツ選択へのフラグ//----------------------------
+	private	bool	UpdateCheckKimishimaComplete(){
+		if(!completeFlg)	return	false;
+		if(++ job >= 3){
+			job = 0;
+			AddFloor();
+		}
+		completeFlg = false;
+		execute		= true;
+		return	true;
+	}
+
+	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
 		collapseFlg	= true;
-	}//落下フラグを反映_End//-------------------------------
+	}
 
-	//GameOverしたら実行しようね。_Begin//------------------
+	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
 		if(stateTime >= 1.0f){
 			ChangeState(StateNo.Result);
 			return;
 		}
-	}//GameOverしたら実行しようね。_End//-------------------
+	}
+
+	//プロパティ//------------------------------------------
+	public	bool	completeFlg{
+		get{
+			return (checkFlg & 0x00000001) != 0x00000000;
+		}
+		set{
+			checkFlg	&= ~0x00000001;
+			if(value)	checkFlg	|=  0x00000001;
+		}
+	}
+	public	bool	collapseFlg{
+		get{
+			return (checkFlg & 0x00000002) != 0x00000000;
+		}
+		set{
+			checkFlg	&= ~0x00000002;
+			if(value)	checkFlg	|=  0x00000002;
+		}
+	}
 
 }//ゲームシーンのシステム_End//-----------------------------

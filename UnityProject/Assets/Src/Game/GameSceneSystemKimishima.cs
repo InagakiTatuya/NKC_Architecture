@@ -30,7 +30,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択関連
 	private	int					partsID;
-	private	bool				changeStateFlg2PartsSet	= false;
 	private	PartsSelectClass	partsSelectClass;
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
@@ -51,10 +50,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 #if DEBUG_GAMESCENE
 		Database.InitColorBlock();
 #endif
-	//	CloseCardWind();
-	//	CloseCardMiniWind();
-	//	CloseNextPleyarWind();
-	//	ChangeState(StateNo.PartsSelect);
 	}//俺の初期化関数_End//---------------------------------
 
 	//階層ウィンドウを生成_Begin//--------------------------
@@ -82,13 +77,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		UpdateFloorWindow();
 		PartsSelectClass.MessageID				message	= PartsSelectClass.MessageID.Non;
 		if(stateNo == (int)StateNo.PartsSelect)	message	= PartsSelectClass.MessageID.OnPartsSelectState;
-		partsSelectClass.Update(message,ref changeStateFlg2PartsSet,job);
-		if(changeStateFlg2PartsSet)	ChangeState(StateNo.PartsSet);
-		changeStateFlg2PartsSet	= false;
+		partsSelectClass.Update(message,ref execute,job);
 	}//俺の更新関数_End//-----------------------------------
 
 	//パーツ選択ステート_Begin//----------------------------
 	private	void	UpdatePartsSelect(){
+		if(!execute)	return;
+		ChangeState(StateNo.PartsSet);
+		execute	= false;
 	}//パーツ選択ステート_End//-----------------------------
 
 	//階層ウィンドウを更新_Begin//--------------------------
@@ -108,7 +104,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 //----------------------------------------------------------
 //パーツセレクト
-//更新日 :	07 / 16 / 2015
+//更新日 :	07 / 24 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -117,7 +113,7 @@ class 	PartsSelectClass{
 
 	//列挙・テーブル////////////////////////////////////////
 	//ステート番号_Begin//-----------------------------------
-	public	enum	PartsSelectWindowStateNo{
+	public	enum	StateNo{
 		Open,		//開く
 		Neutral,	//通常
 		Close,		//閉じる
@@ -140,19 +136,19 @@ class 	PartsSelectClass{
 
 	private	UnityAction[]	partsSelectWindowUpdateFunc	= null;
 	//変数//////////////////////////////////////////////////
-	private	int				partsID;
-	private	bool			partsSelectWindowOpenFlg;
-	private	Image			partsSelectWindow			= null;
-	private	Vector3			partsSelectWindowSize;
-	private	Text[]			partsSelectText				= null;
-	private	Button			partsSelectButton			= null;
-	private	Image			partsSelectButtonImage		= null;
-	private	int				partsSelectWindowStateNo;
-	private float			partsSelectWindowStateTime;
-	private	FadeClass		fadeClass					= null;
-	private	GameSceneSystem	gameSceneSystem;
-	private	GameObject		canvasObject;
-	private	bool			nextFlg;
+	private	int					partsID;
+	private	bool				windowOpenFlg;
+	private	Image				windowImage		= null;
+	private	Vector3				windowSize;
+	private	Text[]				text			= null;
+	private	Button				button			= null;
+	private	int					windowStateNo;
+	private float				windowStateTime;
+	private	PointerUpSystem[]	pointerUpSystem	= null;
+	private	FadeClass			fadeClass		= null;
+	private	GameSceneSystem		gameSceneSystem;
+	private	GameObject			canvasObject;
+	private	bool				nextFlg;
 
 	//コンストラクタ・デストラクタ///////////////////////////
 	//コンストラクタ_Begin//---------------------------------
@@ -165,64 +161,65 @@ class 	PartsSelectClass{
 	//初期化////////////////////////////////////////////////
 	public	void	Init(){//初期化_Begin//-----------------
 		partsSelectWindowUpdateFunc	= new UnityAction[]{
-			this.UpdatePartsSelectWindowOpen,
-			this.UpdatePartsSelectWindowNeutral,
-			this.UpdatePartsSelectWindowClose,
-			null,
+			this.Open,	this.Neutral,	this.Close,	null,
 		};
-		partsSelectWindowOpenFlg	= false;
+		windowOpenFlg	= false;
 	}//初期化_End//-----------------------------------------
 
 	//更新//////////////////////////////////////////////////
 	//更新_Begin//------------------------------------------
-	public	void	Update(MessageID message,ref bool changeStateFlg2PartsSet,int job){
-		if(partsSelectWindowStateNo < 0 || partsSelectWindowStateNo >= (int)PartsSelectWindowStateNo.Length){
-			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide,true);
+	public	void	Update(MessageID message,ref bool execute,int job){
+		if(windowStateNo < 0 || windowStateNo >= (int)StateNo.Length){
+			ChangeState(StateNo.Hide,true);
 			return;
 		}
-		if(partsSelectWindowUpdateFunc[partsSelectWindowStateNo] != null)
-			partsSelectWindowUpdateFunc[partsSelectWindowStateNo]();
-		if(partsSelectWindow != null)	partsSelectWindow.rectTransform.localScale	= partsSelectWindowSize;
-		partsSelectWindowStateTime	+= Time.deltaTime;
+		if(partsSelectWindowUpdateFunc[windowStateNo] != null)
+			partsSelectWindowUpdateFunc[windowStateNo]();
+		if(windowImage != null)	windowImage.rectTransform.localScale	= windowSize;
+		windowStateTime	+= Time.deltaTime;
 		if(((uint)message & (uint)MessageID.OnPartsSelectState) == 0)	return;
-		if(!partsSelectWindowOpenFlg){
+		if(!windowOpenFlg){
 			if(fadeClass == null)	fadeClass	= gameSceneSystem.GetFadeClass();
 			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
-			OpenPartsSelectWindow(job);
-			partsSelectWindowOpenFlg	= true;
+			OpenWindow(job);
+			windowOpenFlg			= true;
 		}
 		if(nextFlg){
-			partsSelectWindowOpenFlg= false;
-			changeStateFlg2PartsSet	= true;
+			windowOpenFlg	= false;
+			execute			= true;
 		}
 	}//更新_End//-------------------------------------------
 
 	//ウィンドウを開く_Beign//------------------------------
-	private	void	UpdatePartsSelectWindowOpen(){
-		float	n	= partsSelectWindowStateTime * 8.0f;
-		partsSelectWindowSize.x	= Mathf.Max(2.0f - n,1.0f);
-		partsSelectWindowSize.y	= Mathf.Min(n,1.0f);
-		if(n >= 1.0f)	ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Neutral);
+	private	void	Open(){
+		float	n	= windowStateTime * 8.0f;
+		windowSize.x	= Mathf.Max(2.0f - n,1.0f);
+		windowSize.y	= Mathf.Min(n,1.0f);
+		if(n >= 1.0f)	ChangeState(StateNo.Neutral);
 	}//ウィンドウを開く_End//-------------------------------
 	
 	//待機_Beign//-----------------------------------------
-	private	void	UpdatePartsSelectWindowNeutral(){
-		partsSelectButton.interactable	= (partsID >= 0);
+	private	void	Neutral(){
+		if(button == null)	return;
+		button.interactable	= (partsID >= 0);
+		for(int i = 0;i < pointerUpSystem.Length;i ++){
+			if(partsID == i)	pointerUpSystem[i].defaultColor	= new Color(1.0f,1.0f,0.5f);
+			else 				pointerUpSystem[i].defaultColor	= Color.white;
+		}
 	}//待機_End//------------------------------------------
 	
 	//ウィンドウを閉じる_Beign//-----------------------------
-	private	void	UpdatePartsSelectWindowClose(){
-		float	n	= 1.0f - partsSelectWindowStateTime * 8.0f;
-		partsSelectWindowSize.x	= Mathf.Max(2.0f - n,1.0f);
-		partsSelectWindowSize.y	= Mathf.Min(n,1.0f);
+	private	void	Close(){
+		float	n		= 1.0f - windowStateTime * 8.0f;
+		windowSize.x	= Mathf.Max(2.0f - n,1.0f);
+		windowSize.y	= Mathf.Min(n,1.0f);
 		if(n <= 0.0f){
-			GameObject.Destroy(partsSelectWindow.gameObject);
-			partsSelectWindow		= null;
-			partsSelectText			= null;
-			partsSelectButton		= null;
-			partsSelectButtonImage	= null;
+			GameObject.Destroy(windowImage.gameObject);
+			windowImage	= null;
+			text		= null;
+			button		= null;
 			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
-			ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Hide);
+			ChangeState(StateNo.Hide);
 			nextFlg					= true;
 		}
 	}//ウィンドウを閉じる_End//------------------------------
@@ -231,37 +228,37 @@ class 	PartsSelectClass{
 	//パーツ選択ウィンドウの決定ボタンが押された_Beign//----
 	public	void	OnPartsSelectButtonEnter(){
 		if(partsID < 0)	return;
-		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Close);
+		ChangeState(StateNo.Close);
 	}//パーツ選択ウィンドウの決定ボタンが押された_End//-----
 
 	//その他関数/////////////////////////////////////////////
 	/// <summary>パーツ選択ウィンドウを表示</summary>_Begin//-
-	private	void	OpenPartsSelectWindow(int job){
-		partsID					= -1;
-		partsSelectWindowSize	= new Vector3(2.0f,0.0f,1.0f);
-		ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo.Open);
-		CreatePartsSelectWindow();
+	private	void	OpenWindow(int job){
+		partsID		= -1;
+		windowSize	= new Vector3(2.0f,0.0f,1.0f);
+		ChangeState(StateNo.Open);
+		CreateWindow();
 		CreatePartsSelectText(job);
 		CreatePartsSelectButton();
 		CreatePartsSelectScrollView(job);
 	}//パーツ選択ウィンドウを表示_End//-----------------------
 	
 	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
-	private	void	ChangePartsSelectWindowStateNo(PartsSelectWindowStateNo stateNo,bool overrapFlg = false){
+	private	void	ChangeState(StateNo stateNo,bool overrapFlg = false){
 		int		value	= (int)stateNo;
-		if(!overrapFlg && value == partsSelectWindowStateNo)	return;
-		partsSelectWindowStateNo	= value;
-		partsSelectWindowStateTime	= 0.0f;
+		if(!overrapFlg && value == windowStateNo)	return;
+		windowStateNo	= value;
+		windowStateTime	= 0.0f;
 	}//パーツ選択ウィンドウのステート番号を変更する_End//-------
 	
 	//パーツ選択ウィンドウを生成_Beign//---------------------
-	private	void	CreatePartsSelectWindow(){
-		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
-		partsSelectWindow		= obj.GetComponent<Image>();
-		partsSelectWindow.sprite= Resources.Load<Sprite>("Texture/Game/Window");
-		partsSelectWindow.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
-		partsSelectWindow.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
-		partsSelectWindow.color							= new Color(1.0f,1.0f,0.75f,0.5f);
+	private	void	CreateWindow(){
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		windowImage			= obj.GetComponent<Image>();
+		windowImage.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
+		windowImage.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
+		windowImage.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
+		windowImage.color						= new Color(1.0f,1.0f,0.75f,0.5f);
 	}//パーツ選択ウィンドウを生成_End//----------------------
 	
 	//パーツウィンドウのテキストを生成_Begin//---------------
@@ -274,29 +271,29 @@ class 	PartsSelectClass{
 			Database.tableJobDesc[job],
 		};
 		int[]		tableFontSize	= {48,24,};
-		partsSelectText	= new Text[(int)PartsSelectText.Length];
+		text	= new Text[(int)PartsSelectText.Length];
 		for(int i = 0;i < tableText.Length;i ++){
-			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",partsSelectWindow.gameObject);
-			partsSelectText[i]				= obj.GetComponent<Text>();
-			partsSelectText[i].rectTransform.localPosition	= tableTextPos[i];
-			partsSelectText[i].rectTransform.sizeDelta		= tableSizeDelta[i];
-			partsSelectText[i].text			= tableText[i];
-			partsSelectText[i].alignment	= TextAnchor.MiddleLeft;
-			partsSelectText[i].fontSize		= tableFontSize[i];
-			partsSelectText[i].color		= new Color(0.0f,0.5f,0.0f,1.0f);
+			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",windowImage.gameObject);
+			text[i]				= obj.GetComponent<Text>();
+			text[i].rectTransform.localPosition	= tableTextPos[i];
+			text[i].rectTransform.sizeDelta		= tableSizeDelta[i];
+			text[i].text		= tableText[i];
+			text[i].alignment	= TextAnchor.MiddleLeft;
+			text[i].fontSize	= tableFontSize[i];
+			text[i].color		= new Color(0.0f,0.5f,0.0f,1.0f);
 		}
 	}//パーツウィンドウのテキストを生成_End//----------------
 	
 	//パーツセレクトウィンドウのボタン_Begin//---------------
 	private	void	CreatePartsSelectButton(){
-		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",partsSelectWindow.gameObject);
-		partsSelectButton			= obj.GetComponent<Button>();
-		partsSelectButton.colors	= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
-		partsSelectButtonImage		= obj.GetComponent<Image>();
-		partsSelectButtonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
-		partsSelectButtonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
-		partsSelectButton.onClick.AddListener(OnPartsSelectButtonEnter);
-		partsSelectButton.interactable	= false;
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",windowImage.gameObject);
+		button				= obj.GetComponent<Button>();
+		button.colors		= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
+		Image	buttonImage	= obj.GetComponent<Image>();
+		buttonImage.rectTransform.localPosition	= new Vector3(128.0f,-240.0f);
+		buttonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
+		button.onClick.AddListener(OnPartsSelectButtonEnter);
+		button.interactable	= false;
 		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
 		buttonSystem.text			= "決定";
 		buttonSystem.color			= Color.white;
@@ -306,10 +303,11 @@ class 	PartsSelectClass{
 	//スクロールビューを生成_Begin//------------------------
 	private	void	CreatePartsSelectScrollView(int job){
 		string		prefabName	= "Prefab/Game/PartsSelectScrollView";
-		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,partsSelectWindow.gameObject);
+		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,windowImage.gameObject);
 		GameObject	contents	= obj.transform.GetChild(0).gameObject;
 		int			length		= Database.tablePartsName.GetLength(1) / 3;
 		if((Database.tablePartsName.GetLength(1) % 3) != 0)	length	++;
+		pointerUpSystem			= new PointerUpSystem[Database.tablePartsName.GetLength(1)];
 		for(int i = 0;i < length;i ++){
 			GameObject	test	= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectWindowButton",canvasObject);
 			test.transform.SetParent(contents.transform);
@@ -326,21 +324,23 @@ class 	PartsSelectClass{
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
 		Image		image		= obj.GetComponent<Image>();
 		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
-		image.sprite			= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
+		image.sprite= Resources.Load<Sprite>("Texture/Game/PartsSelectButton");
 		image.rectTransform.localPosition	= imagePos;
 		image.rectTransform.sizeDelta		= new Vector2(128.0f,128.0f);
-		PointerUpSystem	ps		= obj.GetComponent<PointerUpSystem>();
-		ps.id					= id;
-		ps.scrollViewObject		= contents.transform.parent.parent.gameObject;
-		ps.SetCallBackFunc(GetButtonID);
+		pointerUpSystem[id]		= obj.GetComponent<PointerUpSystem>();
+		pointerUpSystem[id].id				= id;
+		pointerUpSystem[id].defaultColor	= Color.white;
+		pointerUpSystem[id].pressedColor	= Color.yellow;
+		pointerUpSystem[id].scrollViewObject= contents.transform.parent.parent.gameObject;
+		pointerUpSystem[id].SetCallBackFunc(GetButtonID);
 	}//パーツ選択ウィンドウのボタンを生成_End//--------------
 	
 	//押されたボタンのIDを受け取る_Beign//------------------
 	private	void	GetButtonID(PointerUpSystem pointerUpSystem){
 		partsID	= pointerUpSystem.id;
-		#if DEBUG_GAMESCENE
+#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
-		#endif
+#endif
 	}//押されたボタンのIDを受け取る_End//-------------------
 
 }//パーツセレクトを管理するクラス_End//---------------------

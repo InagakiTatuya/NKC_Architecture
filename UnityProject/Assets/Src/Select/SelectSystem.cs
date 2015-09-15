@@ -22,6 +22,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 
 	//変数//////////////////////////////////////////////////
 	public	GameObject	canvasObject	= null;
+	public	SeManager	seManager		= null;
 	private	static	float	f_timer;
 	public	static	float	timer{
 		get{return	f_timer;}
@@ -63,6 +64,8 @@ public	partial	class SelectSystem : MonoBehaviour {
 		ButtonCanceler();
 		CreateFade();
 		selectNo	= 0;
+		if(seManager == null)	return;
+		seManager.Play(0);
 	}//チュートリアルボタンを押した_End//-------------------
 
 	//ゲーム開始ボタンを押した_Begin//----------------------
@@ -71,6 +74,8 @@ public	partial	class SelectSystem : MonoBehaviour {
 		ButtonCanceler();
 		CreateFade();
 		selectNo	= 1;
+		if(seManager == null)	return;
+		seManager.Play(0);
 	}//ゲーム開始ボタンを押した_End//-----------------------
 
 }//セレクトのシステム_End//---------------------------------
