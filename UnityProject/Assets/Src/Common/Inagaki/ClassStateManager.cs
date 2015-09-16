@@ -24,7 +24,6 @@ class ClassStateManager {
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public int   getState       { get{ return m_StateNo;      } }
-    //public int   setNextState   { set{ m_NextStateNo = value; } }
     public float getStateTime   { get{ return m_StateTime;    } }
     
     //コンストラクタ///////////////////////////////////////////////////////////

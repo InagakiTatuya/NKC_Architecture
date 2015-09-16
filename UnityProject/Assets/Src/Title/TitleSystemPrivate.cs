@@ -65,7 +65,7 @@ public	partial class TitleSystem : MonoBehaviour{
 		buttonSize.x*= 1.25f;
 		buttonSize.y*= 0.8f;
 		fadeColor.a	= n;
-		if(stateTime >= 0.5f)	Application.LoadLevel("Select");
+		if(stateTime >= 1.0f)	Application.LoadLevel("Select");
 	}//次のシーンへ_End//-----------------------------------
 
 	private	void	UpdateButton(){//ボタンを更新_Beign//---

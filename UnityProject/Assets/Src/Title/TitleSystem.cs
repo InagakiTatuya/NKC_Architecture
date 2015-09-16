@@ -22,6 +22,7 @@ public	partial class TitleSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
 	public	GameObject	canvasObject	= null;
+	public	SeManager	seManager		= null;
 	private	static	float	f_timer;
 	public	static	float	timer{
 		get{return	f_timer;}
@@ -60,6 +61,8 @@ public	partial class TitleSystem : MonoBehaviour{
 		ChangeState(StateNo.GoNext);
 		button.enabled	= false;
 		CreateFade();
+		if(seManager == null)	return;
+		seManager.Play(0);
 	}//スタートボタンを押した_End//-------------------------
 
 	//プレファブを生成する_Begin//--------------------------
