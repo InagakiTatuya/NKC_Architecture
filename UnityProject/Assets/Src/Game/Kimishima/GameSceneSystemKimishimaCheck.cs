@@ -42,8 +42,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			job = 0;
 			AddFloor();
 		}
-		completeFlg = false;
-		execute		= true;
 		return	true;
 	}
 

@@ -36,6 +36,7 @@ public class CameraMove : MonoBehaviour {
 	private	Vector3	atBuf;
 	private	Vector3	upBuf;
 
+	public	GameObject	FirstPos;
 	public	float	lookPower	= 0.5f;
 	public	float	atPower		= 0.5f;
 	public	float	upPower		= 0.5f;
@@ -48,7 +49,8 @@ public class CameraMove : MonoBehaviour {
 	//初期化//-----------------------------------------------
 	void Start () {
 		f_look	= transform.position;
-		f_at	= transform.position + transform.forward;
+		if(FirstPos == null)	f_at	= transform.position + transform.forward;
+		else 					f_at	= FirstPos.transform.position;
 		f_up	= Vector3.up;
 		lookBuf	= look;
 		atBuf	= at;
@@ -80,6 +82,12 @@ public class CameraMove : MonoBehaviour {
 		Touch	touch	= Input.touches[0];
 		f_look.y	+= touch.deltaPosition.y * touch.deltaTime;
 		if(f_look.y < 0.0f)	f_look.y	= 0.0f;
+		float	rad		= touch.deltaPosition.x * touch.deltaTime;
+		float	newX,newZ;
+		newX	= f_look.x * Mathf.Cos(rad) - f_look.z * Mathf.Sin(rad);
+		newZ	= f_look.x * Mathf.Sin(rad) + f_look.z * Mathf.Cos(rad);
+		f_look.x	= newX;
+		f_look.z	= newZ;
 	}
 	void	UpdateTouchFingerMulti(int touchCount){//指複数
 		int		flg		= 0;
