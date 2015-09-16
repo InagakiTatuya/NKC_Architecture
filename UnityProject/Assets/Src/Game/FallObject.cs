@@ -3,8 +3,7 @@ using System.Collections;
 
 public partial class FallObject : MonoBehaviour {
 	//ステート
-	enum STATE
-	{
+	enum STATE{
 		FALL,
 		FALLEND,
 		CHECK,
@@ -22,14 +21,13 @@ public partial class FallObject : MonoBehaviour {
 	private Vector3 vel,angVel;
 
 	//初期化
-	void Start()
-	{
+	void Start(){
 		vel = new Vector3();
 		angVel = new Vector3();
 
 		rBody = GetComponent<Rigidbody>();
 		system = transform.root.GetComponent<GameSceneSystem>();
-		system.Building.Add(this);//建築物一覧に登録
+		system.BuildList.Add(this);//建築物一覧に登録
 
 		state = STATE.FALL;
 		prevState = state;
@@ -37,71 +35,69 @@ public partial class FallObject : MonoBehaviour {
 	}
 
 	//更新
-	void Update()
-	{
-		if(system.PauseFlg)
-		{
+	void Update(){
+		if(state == STATE.STOP) return;
+		//呼び出し回数を規定すること
+		if(system.Pause){
 			if(state == STATE.PAUSE) {}
-			else
-			{
-				if(state == STATE.FALL) ObjectSleep(true);
-				else if(state == STATE.CHECK) ObjectSleep();
+			else{
+				if(!rBody.isKinematic){
+					if(state == STATE.FALL)			ObjectSleep(false);
+					else if(state == STATE.CHECK)	ObjectSleep();
+				}
 				prevState = state;
 				state = STATE.PAUSE;
 			}
 			return;
 		}
-		if(state == STATE.PAUSE)
-		{
+		if(state == STATE.PAUSE){
+			if(rBody.isKinematic){
+				if(state == STATE.FALL)			ObjectWakeUp(false);
+				else if(state == STATE.CHECK)	ObjectWakeUp();
+			}
 			state = prevState;
-			if(state == STATE.FALL) ObjectWakeUp(true);
-			else if(state == STATE.CHECK) ObjectWakeUp();
 		}
 
 		//ステート変更時ステート内時間を初期化
-		if (state != prevState)
-		{
+		if (state != prevState){
 			prevState = state;
 			stateTime = 0;
 		}
-		switch (state)
-		{
+		switch (state){
 			case STATE.FALL:
 				break;
 			case STATE.FALLEND:
-				rBody.isKinematic = false;
-				system.Execute = true;//CHECKシーンへ
-				state = STATE.CHECK;
+				//左右への移動と回転を許可
+				rBody.constraints &= RigidbodyConstraints.None;
+				rBody.useGravity = true;
+
+				if(system.GetJob%3 == 2){
+					state = STATE.CHECK;
+					system.Check = true;
+				}else{
+					state = STATE.STOP;
+					system.PartsSet = true;
+				}
 				break;
 			case STATE.CHECK:
-				if (stateTime == 0.0f)
-				{
-					//左右への移動と回転を許可
-					rBody.constraints &= ~(RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezeRotationZ);
-					rBody.useGravity = true;
+				if (stateTime == 0.0f){
 					//物理演算許可
-					ObjectWakeUp();
+					if(!rBody.isKinematic) ObjectWakeUp();
 				}
-
-				if (system.completeFlg)
-				{
+				if (system.completeFlg){
 					state = STATE.STOP;
 					//物理演算不許可
-					ObjectSleep();
+					if(rBody.isKinematic) ObjectSleep();
 				}
-				break;
-			case STATE.STOP:
 				break;
 		}
 		stateTime += Time.deltaTime;
 	}
 
-	private void ObjectWakeUp(bool isAll = true)
-	{
+	private void ObjectWakeUp(bool isAll = true){
 		//建築物の物理計算を許可
-		if(isAll)
-		{
-			system.Building.ForEach(e =>
+		if(isAll){
+			system.BuildList.ForEach(e =>
 			{
 				e.rBody.isKinematic = false;
 				//速度、角速度を戻す
@@ -109,8 +105,7 @@ public partial class FallObject : MonoBehaviour {
 				e.rBody.angularVelocity = e.angVel;
 			});
 		}
-		else
-		{
+		else{
 			rBody.isKinematic = false;
 			//速度、角速度を戻す
 			rBody.velocity = vel;
@@ -118,12 +113,10 @@ public partial class FallObject : MonoBehaviour {
 		}
 	}
 
-	private void ObjectSleep(bool isAll = true)
-	{
-		if(isAll)
-		{
+	private void ObjectSleep(bool isAll = true){
+		if(isAll){
 			//建築物の物理計算を不許可
-			system.Building.ForEach(e =>
+			system.BuildList.ForEach(e =>
 			{
 				//速度、角速度を記録する
 				e.vel = e.rBody.velocity;
@@ -131,20 +124,17 @@ public partial class FallObject : MonoBehaviour {
 				e.rBody.isKinematic = true;
 			});
 		}
-		else
-		{
-			rBody.isKinematic = true;
-			//速度、角速度を戻す
+		else{
+			//速度、角速度を記録する
 			vel = rBody.velocity;
 			angVel = rBody.angularVelocity;
+			rBody.isKinematic = true;
 		}
 	}
 
 	//設置判定
-	void OnCollisionEnter(Collision col)
-	{
-		if (state == STATE.FALL)
-		{
+	void OnCollisionEnter(Collision col){
+		if (state == STATE.FALL){
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
 		}

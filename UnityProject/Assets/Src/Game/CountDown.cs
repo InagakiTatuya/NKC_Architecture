@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class CountDown : MonoBehaviour {
+
 	private GameSceneSystem system;
 	private Text text;
 
@@ -12,38 +13,30 @@ public class CountDown : MonoBehaviour {
 	void Start () {
 		system = transform.root.GetComponent<GameSceneSystem>();
 		text = GetComponent<Text>();
-		text.text = "";
-		time = 0;
-		viewTimer = 3;
+		Reset();
 	}
 
-	void Update()
-	{
-		if (system.PauseFlg) return;
-
-		if (system.stateNo == (int)GameSceneSystem.StateNo.Check)
-		{
+	void Update(){
+		if (system.Pause) return;
+		if (system.stateNo == (int)GameSceneSystem.StateNo.Check){
 			text.text = "" + viewTimer;
 			text.fontSize = (int)(280 * time);
-			if (time >= 1.0f || Input.GetMouseButtonDown(0))
-			{
+			if (time >= 1.0f){
 				viewTimer--;
 				time = 0;
-				if (viewTimer <= 0 || Input.GetMouseButtonDown(0))
-				{
-					text.text = "";
-					time = 0;
-					viewTimer = 3;
+				if (viewTimer <= 0){
+					Reset();
 					system.completeFlg = true;
 				}
 			}
 			time += Time.deltaTime;
 		}
-		else
-		{
-			text.text = "";
-			time = 0;
-			viewTimer = 3;
-		}
+		else Reset();
+	}
+
+	void Reset(){
+		text.text = "";
+		time = 0;
+		viewTimer = 3;
 	}
 }

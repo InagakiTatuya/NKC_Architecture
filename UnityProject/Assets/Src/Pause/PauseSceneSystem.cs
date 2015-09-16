@@ -3,6 +3,7 @@ using System.Collections;
 
 public class PauseSceneSystem : MonoBehaviour
 {
+	[SerializeField]
 	private GameSceneSystem system;
 
 	//移動シーン名
@@ -16,16 +17,20 @@ public class PauseSceneSystem : MonoBehaviour
 	private void Start()
 	{
 		system = transform.root.GetComponent<GameSceneSystem>();
-		system.PauseFlg = false;
+		system.Pause = false;
 		gameObject.SetActive(false);
 	}
 
 	//ポーズシーンコール
 	public void CallPauseGUI()
 	{
-		if(!gameObject.activeSelf) system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
-		else system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
-		system.PauseFlg = !system.PauseFlg;
+		if(!gameObject.activeSelf)
+		{
+			system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeOut);
+			//system.
+		}
+		else						system.GetFadeClass().ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
+		system.Pause = !system.Pause;
 		gameObject.SetActive(!gameObject.activeSelf);
 	}
 

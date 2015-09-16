@@ -2,99 +2,75 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public partial class GameSceneSystem : MonoBehaviour
-{
+public partial class GameSceneSystem : MonoBehaviour{
 	private GameObject pauseGUI;
 
-	private bool pauseFlg;
-	public bool PauseFlg
-	{
-		get { return pauseFlg; }
-		set { pauseFlg = value; }
-	}
+	private bool pause;
+	public bool Pause {get{ return pause; } set{ pause = value; }}
 
-	private List<FallObject> building;
-	public List<FallObject> Building
-	{
-		get { return building; }
-		set { building = value; }
-	}
+	private bool check;
+	public bool Check {get{ return check; } set{ check = value; }}
 
-	private bool execute;
-	public bool Execute
-	{
-		get { return execute; }
-		set { execute = value; }
-	}
+	private bool partsSet;
+	public bool PartsSet{get{ return partsSet; } set{ partsSet = value; }}
 
-	void StartTanabe()
-	{
+	private List<FallObject> buildList;
+	public List<FallObject> BuildList {get{return buildList;} set{buildList = value;}}
+
+	void StartTanabe(){
 		pauseGUI = GameObject.Find("PAUSE_GUI");
-		building = new List<FallObject>();
-		execute = false;
+		buildList = new List<FallObject>();
 	}
 
 	//更新関数
-	void UpdateTanabe()
-	{
+	void UpdateTanabe(){
 
 	}
 
 	//初期化
-	private void UpdateIntro()
-	{
-		if (execute || true)
-		{
+	private void UpdateIntro(){
+		if (true){
 			//ChangeState(StateNo.CardView, false);
 			ChangeState(StateNo.PartsSelect);
-			execute = false;
 		}
 	}
 
 	//パーツ配置
-	private void UpdatePartsSet()
-	{
-		if (execute)
-		{
+	private void UpdatePartsSet(){
+		if(check){
+			check = false;
 			ChangeState(StateNo.Check);
-			execute = false;
+		}
+		if(partsSet){
+			job	= (job + 1) % 3;
+			partsSet = false;
+			ChangeState(StateNo.PartsSelect,true);
 		}
 	}
 
 	//建物倒壊チェック
-	private void UpdateCheck()
-	{
+	private void UpdateCheck(){
 		UpdateCheckKimishima();
-		if (execute)
-		{
-			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSelect);
-			execute = false;
-		}
 	}
 
 	//建物倒壊
-	private void UpdateGameOver()
-	{
+	private void UpdateGameOver(){
 		pauseGUI.SetActive(false);
 		UpdateGameOverKimishima();
 	}
 
 	//ポーズ初期化
-	private void UpdatePauseBegin()
-	{
+	private void UpdatePauseBegin(){
 
 	}
 
 	//ポーズ実行中
-	private void UpdatePause()
-	{
+	private void UpdatePause(){
 
 	}
 
 	//ポーズ終わり
-	private void UpdatePauseEnd()
-	{
+	private void UpdatePauseEnd(){
 
 	}
 }
