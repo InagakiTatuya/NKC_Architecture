@@ -34,6 +34,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int					partsID;
 	private	PartsSelectClass	partsSelectClass;
 
+	private	bool				execute;
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
 	private	void	StartKimishimaSystem(){
