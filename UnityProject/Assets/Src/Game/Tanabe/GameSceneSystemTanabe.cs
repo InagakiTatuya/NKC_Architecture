@@ -44,7 +44,7 @@ public partial class GameSceneSystem : MonoBehaviour{
 		if(partsSet){
 			job	= (job + 1) % 3;
 			partsSet = false;
-			ChangeState(StateNo.PartsSelect,true);
+			ChangeState(StateNo.PartsSelect);
 		}
 	}
 

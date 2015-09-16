@@ -86,6 +86,7 @@ public partial class FallObject : MonoBehaviour {
 				}
 				if (system.completeFlg){
 					state = STATE.STOP;
+					system.PartsSet = true;
 					//物理演算不許可
 					if(rBody.isKinematic) ObjectSleep();
 				}
