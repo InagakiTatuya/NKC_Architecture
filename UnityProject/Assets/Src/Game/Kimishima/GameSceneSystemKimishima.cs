@@ -33,6 +33,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//パーツ選択関連
 	private	int					partsID;
 	private	PartsSelectClass	partsSelectClass;
+
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数_Begin//--------------------------------
 	private	void	StartKimishimaSystem(){
@@ -191,6 +192,7 @@ class 	PartsSelectClass{
 			windowOpenFlg			= true;
 		}
 		if(nextFlg){
+			nextFlg			= false;
 			windowOpenFlg	= false;
 			execute			= true;
 		}
