@@ -26,7 +26,7 @@ public partial class CardInputWind : MonoBehaviour {
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
 
-    private float OPEN_WIND_TIME      = 0.1f; //開く際の演出時間
+    private float OPEN_WIND_TIME      = 0.5f; //開く際の演出時間
     private float CLAUSE_WIND_TIME    = 0.1f; //閉じる際の演出時間
     private float OPEN_MESWIND_TIME   = 0.1f; //メッセージウィンドウを開く演出時間
     private float CLAUSE_MESWIND_TIME = 1.0f; //メッセージウィンドウを閉じる演出時間
@@ -167,35 +167,22 @@ public partial class CardInputWind : MonoBehaviour {
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
+        //とりあえずローカルに書いただけ
+        //非効率なのであとで書き換える
         Vector3 lpos = m_Wind.localPosition;
-        lpos = m_WindNotActPos + m_WindVec * Mathf.Sin(m_State.getStateTime * Mathf.PI * 1.5f + Mathf.PI * 2f);
+        float min = -45f;
+        float max = 90f;
+        float a = (max - min) / 180f * Mathf.PI;
+        float b = min / 180f * Mathf.PI;
+        float t = m_State.getStateTime / OPEN_WIND_TIME;
+        float n = (Mathf.Sin(t * a + b) + 1) * 0.5f;
         
-        if(m_State.getStateTime > 1f) {
+        lpos = m_WindNotActPos + m_WindVec * n;
+        if(m_State.getStateTime > OPEN_WIND_TIME) {
             lpos.x = 0;
             m_State.SetNextState(STATE_INPUTDATA);
         }
         m_Wind.localPosition = lpos;
-
-
-
-        /*
-        //-----------------------------------------------------
-        Vector3 lpos = m_Wind.localPosition;
-        lpos = m_WindNotActPos + m_WindVec * ((Mathf.Pow(11f, m_State.getStateTime) - 1f)/10f);
-        Debug.Log((  Mathf.Pow(2f, m_State.getStateTime) - 1f) );
-
-        if(lpos.x < 0f) {
-            lpos.x = 0;
-            m_State.SetNextState(STATE_INPUTDATA);
-        }
-        m_Wind.localPosition = lpos;
-        //----------------------------------------------------
-        //*/
-
-        ////一定時間になったら次のステートへ移行
-        //if(m_State.getStateTime >= OPEN_WIND_TIME) {
-        //    m_State.SetNextState(STATE_INPUTDATA);
-        //}
     }
     
     //========================================================= InputData =====
