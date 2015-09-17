@@ -12,6 +12,9 @@ public partial class FallObject : MonoBehaviour {
 	};
 	STATE state,prevState;
 
+	private static int objCount;
+	public static int ObjCount{get{ return FallObject.objCount; } set{ FallObject.objCount = value; }}
+
 	private GameSceneSystem system;
 	private Rigidbody rBody;
 	[SerializeField]
@@ -36,7 +39,10 @@ public partial class FallObject : MonoBehaviour {
 
 	//更新
 	void Update(){
-		if(state == STATE.STOP) return;
+		if(state == STATE.STOP){
+			this.enabled = false;
+			return;
+		}
 		//呼び出し回数を規定すること
 		if(system.Pause){
 			if(state == STATE.PAUSE) {}
@@ -51,11 +57,11 @@ public partial class FallObject : MonoBehaviour {
 			return;
 		}
 		if(state == STATE.PAUSE){
+			state = prevState;
 			if(rBody.isKinematic){
 				if(state == STATE.FALL)			ObjectWakeUp(false);
 				else if(state == STATE.CHECK)	ObjectWakeUp();
 			}
-			state = prevState;
 		}
 
 		//ステート変更時ステート内時間を初期化
@@ -69,27 +75,35 @@ public partial class FallObject : MonoBehaviour {
 			case STATE.FALLEND:
 				//左右への移動と回転を許可
 				rBody.constraints &= RigidbodyConstraints.None;
+				rBody.isKinematic = true;
 				rBody.useGravity = true;
 
-				if(system.GetJob%3 == 2){
-					state = STATE.CHECK;
-					system.Check = true;
-				}else{
-					state = STATE.STOP;
-					system.PartsSet = true;
+				if(objCount == 0){
+					vel = Vector3.zero;
+					angVel = Vector3.zero;
+					rBody.velocity = Vector3.zero;
+					rBody.angularVelocity = Vector3.zero;
+					if(system.GetJob == 2){
+						state = STATE.CHECK;
+						system.Check = true;
+					}else{
+						state = STATE.STOP;
+						system.PartsSet = true;
+					}
 				}
 				break;
 			case STATE.CHECK:
 				if (stateTime == 0.0f){
 					//物理演算許可
-					if(!rBody.isKinematic) ObjectWakeUp();
+					if(rBody.isKinematic) ObjectWakeUp();
 				}
 				if (system.completeFlg){
 					state = STATE.STOP;
-					system.PartsSet = true;
+					system.completeFlg = false;
 					//物理演算不許可
-					if(rBody.isKinematic) ObjectSleep();
+					if(!rBody.isKinematic) ObjectSleep();
 				}
+				if(rBody.isKinematic) state = STATE.STOP;
 				break;
 		}
 		stateTime += Time.deltaTime;
@@ -136,6 +150,7 @@ public partial class FallObject : MonoBehaviour {
 	//設置判定
 	void OnCollisionEnter(Collision col){
 		if (state == STATE.FALL){
+			objCount--;
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
 		}

@@ -35,8 +35,7 @@ public class CameraMove : MonoBehaviour {
 	private	Vector3	lookBuf;
 	private	Vector3	atBuf;
 	private	Vector3	upBuf;
-
-	public	GameObject	FirstPos;
+	
 	public	float	lookPower	= 0.5f;
 	public	float	atPower		= 0.5f;
 	public	float	upPower		= 0.5f;
@@ -49,8 +48,7 @@ public class CameraMove : MonoBehaviour {
 	//初期化//-----------------------------------------------
 	void Start () {
 		f_look	= transform.position;
-		if(FirstPos == null)	f_at	= transform.position + transform.forward;
-		else 					f_at	= FirstPos.transform.position;
+		f_at	= new Vector3(60.0f,-50.0f,60.0f);
 		f_up	= Vector3.up;
 		lookBuf	= look;
 		atBuf	= at;
@@ -80,14 +78,16 @@ public class CameraMove : MonoBehaviour {
 	}
 	void	UpdateTouchFingerSingle(){//指一本
 		Touch	touch	= Input.touches[0];
-		f_look.y	+= touch.deltaPosition.y * touch.deltaTime;
-		if(f_look.y < 0.0f)	f_look.y	= 0.0f;
-		float	rad		= touch.deltaPosition.x * touch.deltaTime;
+		f_look.y	+= touch.deltaPosition.y / touch.deltaTime * Time.deltaTime;
+		if(f_look.y < -25.0f)	f_look.y	= -25.0f;
+		float	rad		= touch.deltaPosition.x / touch.deltaTime * Time.deltaTime * -0.05f;
 		float	newX,newZ;
+		f_look.x	-= 60.0f;
+		f_look.z	-= 60.0f;
 		newX	= f_look.x * Mathf.Cos(rad) - f_look.z * Mathf.Sin(rad);
 		newZ	= f_look.x * Mathf.Sin(rad) + f_look.z * Mathf.Cos(rad);
-		f_look.x	= newX;
-		f_look.z	= newZ;
+		f_look.x	= newX + 60.0f;
+		f_look.z	= newZ + 60.0f;
 	}
 	void	UpdateTouchFingerMulti(int touchCount){//指複数
 		int		flg		= 0;
