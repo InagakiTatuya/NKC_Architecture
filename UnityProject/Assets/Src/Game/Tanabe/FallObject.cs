@@ -12,8 +12,8 @@ public partial class FallObject : MonoBehaviour {
 	};
 	STATE state,prevState;
 
-	private static int objCount;
-	public static int ObjCount{get{ return FallObject.objCount; } set{ FallObject.objCount = value; }}
+	private static int childCount;
+	public static int ChildCount{get{ return FallObject.childCount; } set{ FallObject.childCount = value; }}
 
 	private GameSceneSystem system;
 	private Rigidbody rBody;
@@ -78,11 +78,12 @@ public partial class FallObject : MonoBehaviour {
 				rBody.isKinematic = true;
 				rBody.useGravity = true;
 
-				if(objCount == 0){
-					vel = Vector3.zero;
-					angVel = Vector3.zero;
-					rBody.velocity = Vector3.zero;
-					rBody.angularVelocity = Vector3.zero;
+				vel = Vector3.zero;
+				angVel = Vector3.zero;
+				rBody.velocity = Vector3.zero;
+				rBody.angularVelocity = Vector3.zero;
+
+				if(childCount == 0){
 					if(system.GetJob == 2){
 						state = STATE.CHECK;
 						system.Check = true;
@@ -93,22 +94,38 @@ public partial class FallObject : MonoBehaviour {
 				}
 				break;
 			case STATE.CHECK:
+				if(system.stateNo == (int)GameSceneSystem.StateNo.GameOver){
+					ObjectWakeUpFinish();
+					state = STATE.STOP;
+				}
 				if (stateTime == 0.0f){
 					//物理演算許可
 					if(rBody.isKinematic) ObjectWakeUp();
 				}
 				if (system.completeFlg){
-					state = STATE.STOP;
-					system.completeFlg = false;
-					//物理演算不許可
-					if(!rBody.isKinematic) ObjectSleep();
+					if(system.stateNo == (int)GameSceneSystem.StateNo.PartsSelect){
+						state = STATE.STOP;
+						system.completeFlg = false;
+						//物理演算不許可
+						if(!rBody.isKinematic) ObjectSleep();
+					}
 				}
 				if(rBody.isKinematic) state = STATE.STOP;
 				break;
 		}
 		stateTime += Time.deltaTime;
 	}
-
+	
+	private void ObjectWakeUpFinish(){
+		system.BuildList.ForEach(e =>
+		{
+			e.state = STATE.STOP;
+			e.rBody.isKinematic = false;
+			e.rBody.AddForce(transform.up * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.right * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.forward * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+		});
+	}
 	private void ObjectWakeUp(bool isAll = true){
 		//建築物の物理計算を許可
 		if(isAll){
@@ -150,7 +167,7 @@ public partial class FallObject : MonoBehaviour {
 	//設置判定
 	void OnCollisionEnter(Collision col){
 		if (state == STATE.FALL){
-			objCount--;
+			childCount--;
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
 		}

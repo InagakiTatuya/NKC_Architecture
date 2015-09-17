@@ -41,6 +41,7 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 	private	Vector2				prevPressPos;
 	private	float				velY;
 	private	float				moveValue;
+	private	float				timer;
 
 	//初期化////////////////////////////////////////////////
 	public	void	Start () {//初期化_Begin//--------------
@@ -48,19 +49,23 @@ public class PointerUpSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandl
 		this.gameObject.AddComponent<EventTrigger>();
 		ScrollRect	sr		= scrollViewObject.GetComponent<ScrollRect>();
 		scrollbar			= sr.verticalScrollbar;
+		scrollbar.value		= 1.0f;
 		decelerationRate	= sr.decelerationRate;
 		Image	sImage		= scrollViewObject.GetComponent<Image>();
 		scrollHeight		= sImage.rectTransform.sizeDelta.y;
 		press				= false;
+		timer				= 0.0f;
 	}//初期化_End//-----------------------------------------
 
 	//更新//////////////////////////////////////////////////
 	public	void	Update(){//更新_Beign//-----------------
+		if(timer < 0.25f)	scrollbar.value	= 1.0f;
 		scrollbar.value		-= velY;
 		velY				*= (1.0f - decelerationRate);
 		if(image == null)	return;
 		if(press)	image.color	= pressedColor;
 		else 		image.color	= defaultColor;
+		timer	+= Time.deltaTime;
 	}//更新_End//-------------------------------------------
 
 	//その他関数////////////////////////////////////////////

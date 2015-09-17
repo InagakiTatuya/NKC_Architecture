@@ -1,5 +1,6 @@
 ﻿//-----------------------------------------------------------
 //カメラを動かすクラス
+//更新者 :	君島一刀
 //-----------------------------------------------------------
 
 //名前空間//-------------------------------------------------
@@ -40,7 +41,7 @@ public class CameraMove : MonoBehaviour {
 	public	float	atPower		= 0.5f;
 	public	float	upPower		= 0.5f;
 
-	private	bool	f_touchPermit	= true;
+	private	bool	f_touchPermit	= false;
 	public	bool	touchPermit{
 		set{f_touchPermit	= value;}
 	}
