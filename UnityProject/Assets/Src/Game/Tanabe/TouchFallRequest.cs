@@ -5,9 +5,9 @@ using UnityEngine.EventSystems;
 public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
 	private string[] buildName = new string[]{
-		"Prefab/Game/Build/Floor",
-		"Prefab/Game/Build/Pillar",
-		"Prefab/Game/Build/Wall",
+		"Prefab/Game/Build/Brick/Floor",
+		"Prefab/Game/Build/Brick/Pillar",
+		"Prefab/Game/Build/Brick/Wall",
 	};
 
 	private string optionName = "Prefab/Game/TouchDisAbleArea";

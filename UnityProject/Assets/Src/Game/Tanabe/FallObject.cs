@@ -94,6 +94,10 @@ public partial class FallObject : MonoBehaviour {
 				}
 				break;
 			case STATE.CHECK:
+				if(system.stateNo == (int)GameSceneSystem.StateNo.GameOver){
+					ObjectWakeUpFinish();
+					state = STATE.STOP;
+				}
 				if (stateTime == 0.0f){
 					//物理演算許可
 					if(rBody.isKinematic) ObjectWakeUp();
@@ -111,7 +115,17 @@ public partial class FallObject : MonoBehaviour {
 		}
 		stateTime += Time.deltaTime;
 	}
-
+	
+	private void ObjectWakeUpFinish(){
+		system.BuildList.ForEach(e =>
+		{
+			e.state = STATE.STOP;
+			e.rBody.isKinematic = false;
+			e.rBody.AddForce(transform.up * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.right * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.forward * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+		});
+	}
 	private void ObjectWakeUp(bool isAll = true){
 		//建築物の物理計算を許可
 		if(isAll){
