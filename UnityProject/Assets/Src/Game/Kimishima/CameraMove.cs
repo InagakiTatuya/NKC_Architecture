@@ -40,7 +40,7 @@ public class CameraMove : MonoBehaviour {
 	public	float	atPower		= 0.5f;
 	public	float	upPower		= 0.5f;
 
-	private	bool	f_touchPermit	= true;
+	private	bool	f_touchPermit	= false;
 	public	bool	touchPermit{
 		set{f_touchPermit	= value;}
 	}

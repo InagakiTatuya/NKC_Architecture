@@ -83,9 +83,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			SetPos(e);
 
 			downObj = (GameObject)Instantiate(Resources.Load<GameObject>(buildName[buildNo]), pos, Quaternion.identity);
-			FallObject.ObjCount = downObj.transform.childCount;
 			while(downObj.transform.childCount>0){
-				downObj.transform.GetChild(0).GetComponent<FallObject>().enabled = true;
 				downObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
 				downObj.transform.GetChild(0).parent = transform.root;
 				if(downObj.transform.childCount == 0) DestroyObject(downObj);

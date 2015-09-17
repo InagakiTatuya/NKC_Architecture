@@ -21,6 +21,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
 	public	SeManager	seManager	= null;
+	public	CameraMove	cameraMove	= null;
 
 	private	Vector2	FLOORWINDOW_POS	= new Vector2(-192.0f,-384.0f);
 
@@ -32,6 +33,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択関連
 	private	int					partsID;
+	public	int					PartsID{get{return	partsID;}}
 	private	PartsSelectClass	partsSelectClass;
 
 	private	bool				execute;
@@ -86,6 +88,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択ステート_Begin//----------------------------
 	private	void	UpdatePartsSelect(){
+		if(partsSelectClass != null)	partsID	= partsSelectClass.GetPartsID();
 		if(!execute)	return;
 		ChangeState(StateNo.PartsSet);
 		execute	= false;
@@ -172,6 +175,7 @@ class 	PartsSelectClass{
 			this.Open,	this.Neutral,	this.Close,	null,
 		};
 		windowOpenFlg	= false;
+		windowSize		= Vector3.zero;
 	}//初期化_End//-----------------------------------------
 
 	//更新//////////////////////////////////////////////////
@@ -362,5 +366,9 @@ class 	PartsSelectClass{
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
 #endif
 	}//押されたボタンのIDを受け取る_End//-------------------
+
+	public	int		GetPartsID(){
+		return	partsID;
+	}
 
 }//パーツセレクトを管理するクラス_End//---------------------
