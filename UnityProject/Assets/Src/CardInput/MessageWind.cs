@@ -22,7 +22,7 @@ public class MessageWind : MonoBehaviour {
 
     private ClassStateManager m_State;
 
-    private const float OPEN_TIME   = 1.5f; //開く時間
+    private const float OPEN_TIME   = 0.1f; //開く時間
     private const float ACTEVE_TIME = 1.0f; //開いている時間
     private const float CLAUSE_TIME = 0.1f; //閉じる時間
 

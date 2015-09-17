@@ -50,8 +50,8 @@ public partial class CardInputWind : MonoBehaviour {
     private Image             m_ImageBody; //体
 
     //アニメーション用変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private Vector3           m_WindNotActPos;
-    private Vector3           m_WindActPos;
+    private Vector3           m_WindStartPos;
+    private Vector3           m_WindEndPos;
     private Vector3           m_WindVec;        //End-Start
 
 
@@ -112,9 +112,9 @@ public partial class CardInputWind : MonoBehaviour {
         m_State.SetNextState(STATE_NOTACTIVE);
         
         //アニメーション初期化-------------------------------------------------
-        m_WindActPos    = m_Wind.localPosition;
-        m_WindNotActPos = new Vector3(m_WindActPos.x + 544, m_WindActPos.y, m_WindActPos.z);
-        m_Wind.localPosition = m_WindNotActPos;
+        m_WindEndPos   = m_Wind.localPosition;
+        m_WindStartPos = new Vector3(m_WindEndPos.x + 544, m_WindEndPos.y, m_WindEndPos.z);
+        m_Wind.localPosition = m_WindStartPos;
     }
 	
     //更新=====================================================================
@@ -160,37 +160,21 @@ public partial class CardInputWind : MonoBehaviour {
         m_MesWind.gameObject.SetActive(true);
 
         //アニメーション用
-        m_Wind.localPosition = m_WindNotActPos;
-        m_WindVec = m_WindActPos - m_WindNotActPos;
+        m_Wind.localPosition = m_WindStartPos;
+        m_WindVec = m_WindEndPos - m_WindStartPos;
         //データを適用
         DataApp();
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
-        Vector3 lpos = m_Wind.localPosition;
-        lpos = m_WindNotActPos + m_WindVec * Mathf.Sin(m_State.getStateTime * Mathf.PI * 1.5f + Mathf.PI * 2f);
-        
-        if(m_State.getStateTime > 1f) {
+        Vector3 lpos    = m_Wind.localPosition;
+        lpos = m_WindStartPos + m_WindVec * (1f - Mathf.Pow(10f,-m_State.getStateTime));
+
+        if(m_State.getStateTime > 1.1f) {
             lpos.x = 0;
             m_State.SetNextState(STATE_INPUTDATA);
         }
         m_Wind.localPosition = lpos;
-
-
-
-        /*
-        //-----------------------------------------------------
-        Vector3 lpos = m_Wind.localPosition;
-        lpos = m_WindNotActPos + m_WindVec * ((Mathf.Pow(11f, m_State.getStateTime) - 1f)/10f);
-        Debug.Log((  Mathf.Pow(2f, m_State.getStateTime) - 1f) );
-
-        if(lpos.x < 0f) {
-            lpos.x = 0;
-            m_State.SetNextState(STATE_INPUTDATA);
-        }
-        m_Wind.localPosition = lpos;
-        //----------------------------------------------------
-        //*/
 
         ////一定時間になったら次のステートへ移行
         //if(m_State.getStateTime >= OPEN_WIND_TIME) {

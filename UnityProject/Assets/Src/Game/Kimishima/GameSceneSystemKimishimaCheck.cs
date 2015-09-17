@@ -42,9 +42,21 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			job = 0;
 			AddFloor();
 		}
+		UpdateCheckKimishimaCompleteCamera();
 		//ChangeState(StateNo.CardView);
 		ChangeState(StateNo.PartsSelect);
 		return	true;
+	}
+	private	void	UpdateCheckKimishimaCompleteCamera(){
+		if(cameraMove == null)	return;
+		float	maxY	= buildList[0].transform.position.y;
+		for(int i = 1;i < buildList.Count;i ++){
+			float	y	= buildList[i].transform.position.y;
+			if(maxY >= y)	continue;
+			maxY	= y;
+		}
+		cameraMove.look	= new Vector3( 0.0f,maxY + 50, 0.0f);
+		cameraMove.at	= new Vector3(60.0f,maxY,60.0f);
 	}
 
 	//落下フラグを反映//------------------------------------

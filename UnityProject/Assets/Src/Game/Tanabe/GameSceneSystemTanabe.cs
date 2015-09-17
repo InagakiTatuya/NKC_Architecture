@@ -42,7 +42,7 @@ public partial class GameSceneSystem : MonoBehaviour{
 			ChangeState(StateNo.Check);
 		}
 		if(partsSet){
-			if(++job >= 3) job = 0;
+			job	= (job + 1) % 3;
 			partsSet = false;
 			ChangeState(StateNo.PartsSelect);
 		}
