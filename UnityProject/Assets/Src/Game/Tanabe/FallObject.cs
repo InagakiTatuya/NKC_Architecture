@@ -98,10 +98,13 @@ public partial class FallObject : MonoBehaviour {
 					if(rBody.isKinematic) ObjectWakeUp();
 				}
 				if (system.completeFlg){
-					state = STATE.STOP;
-					system.completeFlg = false;
-					//物理演算不許可
-					if(!rBody.isKinematic) ObjectSleep();
+					if(system.stateNo == (int)GameSceneSystem.StateNo.PartsSelect)
+					{
+						state = STATE.STOP;
+						system.completeFlg = false;
+						//物理演算不許可
+						if(!rBody.isKinematic) ObjectSleep();
+					}
 				}
 				if(rBody.isKinematic) state = STATE.STOP;
 				break;
