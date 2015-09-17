@@ -42,6 +42,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			job = 0;
 			AddFloor();
 		}
+		//ChangeState(StateNo.CardView);
+		ChangeState(StateNo.PartsSelect);
 		return	true;
 	}
 
@@ -59,13 +61,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 
 	//プロパティ//------------------------------------------
+#region
 	public	bool	completeFlg{
 		get{
 			return (checkFlg & 0x00000001) != 0x00000000;
 		}
 		set{
 			checkFlg	&= ~0x00000001;
-			if(value)	checkFlg	|=  0x00000001;
+			if(!value)	return;
+			checkFlg	|=  0x00000001;
 		}
 	}
 	public	bool	collapseFlg{
@@ -74,8 +78,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		}
 		set{
 			checkFlg	&= ~0x00000002;
-			if(value)	checkFlg	|=  0x00000002;
+			if(!value)	return;
+			checkFlg	|=  0x00000002;
 		}
 	}
-
+#endregion	//フラグ関連のプロパティ
 }//ゲームシーンのシステム_End//-----------------------------
