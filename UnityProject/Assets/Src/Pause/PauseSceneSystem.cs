@@ -3,7 +3,6 @@ using System.Collections;
 
 public class PauseSceneSystem : MonoBehaviour
 {
-	[SerializeField]
 	private GameSceneSystem system;
 
 	//移動シーン名

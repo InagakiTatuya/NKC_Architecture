@@ -25,6 +25,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	private GameObject[] moveObj;
 	private GameObject targetObj;
 	private GameObject downObj;
+	private Transform childObj;
 
 	//自身のマテリアル
 	private Renderer[] render;
@@ -83,9 +84,13 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			SetPos(e);
 
 			downObj = (GameObject)Instantiate(Resources.Load<GameObject>(buildName[buildNo]), pos, Quaternion.identity);
+			FallObject.ChildCount = downObj.transform.childCount;
 			while(downObj.transform.childCount>0){
-				downObj.transform.GetChild(0).GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
-				downObj.transform.GetChild(0).parent = transform.root;
+				childObj = downObj.transform.GetChild(0);
+				childObj.GetComponent<Collider>().enabled = true;
+				childObj.GetComponent<FallObject>().enabled = true;
+				childObj.GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
+				childObj.parent = transform.root;
 				if(downObj.transform.childCount == 0) DestroyObject(downObj);
 			}
 			gameObject.SetActive(false);
