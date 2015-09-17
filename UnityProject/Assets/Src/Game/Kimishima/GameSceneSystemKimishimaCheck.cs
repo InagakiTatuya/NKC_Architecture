@@ -6,7 +6,7 @@
 
 //プリプロセッサ////////////////////////////////////////////
 #if UNITY_EDITOR
-#define	DEBUG_GAMESCENE
+	#define	DEBUG_GAMESCENE
 #endif
 
 //名前空間//////////////////////////////////////////////////
@@ -38,10 +38,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//次のパーツ選択へのフラグ//----------------------------
 	private	bool	UpdateCheckKimishimaComplete(){
 		if(!completeFlg)	return	false;
-		if(++ job >= 3){
-			job = 0;
-			AddFloor();
-		}
+		job = 0;
+		AddFloor();
 		UpdateCheckKimishimaCompleteCamera();
 		//ChangeState(StateNo.CardView);
 		ChangeState(StateNo.PartsSelect);
@@ -55,10 +53,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			if(maxY >= y)	continue;
 			maxY	= y;
 		}
-		cameraMove.look	= new Vector3( 0.0f,maxY + 50, 0.0f);
-		cameraMove.at	= new Vector3(60.0f,maxY,60.0f);
+		cameraMove.look	= new Vector3( 0.0f,maxY + 100, 0.0f);
+		cameraMove.at	= new Vector3(60.0f,maxY + 50,60.0f);
 	}
-
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
 		collapseFlg	= true;
@@ -73,7 +70,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 
 	//プロパティ//------------------------------------------
-#region
 	public	bool	completeFlg{
 		get{
 			return (checkFlg & 0x00000001) != 0x00000000;
@@ -94,5 +90,4 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			checkFlg	|=  0x00000002;
 		}
 	}
-#endregion	//フラグ関連のプロパティ
 }//ゲームシーンのシステム_End//-----------------------------
