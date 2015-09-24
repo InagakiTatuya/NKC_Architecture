@@ -61,17 +61,6 @@ public partial class Database : SingletonCustom<Database> {
             "壁を作る人",
             "屋根を作る人",
         };
-        //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        //  デバック用仮データ
-        if(this.getPlayerData == null) {
-            StractPlayerData[] kariData = new StractPlayerData[ 5 ];
-            kariData[0].pleyerName = "一郎";
-            kariData[1].pleyerName = "次郎";
-            kariData[2].pleyerName = "三郎";
-            kariData[3].pleyerName = "四郎";
-            kariData[4].pleyerName = "五郎";
-            this.SetPlyaerDatas(ref kariData);
-        }
 
         Debug.Log("Database.Awake End");
     }
@@ -89,18 +78,42 @@ public partial class Database : SingletonCustom<Database> {
     
     //プレイヤーデータを入れる=================================================
     //  CardInputシーンで作られたデータを保存
-    //-------------------------------------------------------------------------
-    public void SetPlyaerDatas(ref StractPlayerData[] _datas) {
+    //=========================================================================
+    public void SetPlyaerDatas(ref StractPlayerData[] aDatas) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
-        m_PlayerDatas = new StractPlayerData[_datas.Length];
-        _datas.CopyTo(this.m_PlayerDatas, 0);
+        m_PlayerDatas = new StractPlayerData[aDatas.Length];
+        aDatas.CopyTo(m_PlayerDatas, 0);
+    }
+
+
+    //プレイヤーデータを読み込む===============================================
+    //  保存されているデータを第一引数にコピーする
+    //  戻り値：保存されていなかったら Ture を返す
+    //=========================================================================
+    public bool LordPlyaerDatas(ref StractPlayerData[] aDatas) {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " :: " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
+            "PlayerDatas = " + m_PlayerDatas +
+            (m_PlayerDatas != null ? (" Length = " + m_PlayerDatas.Length) : ("null")));
+        #endif
+       //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
+        if(m_PlayerDatas == null || m_PlayerDatas.Length == 0) return true;
+
+        aDatas = null;
+        aDatas = new StractPlayerData[m_PlayerDatas.Length];
+        m_PlayerDatas.CopyTo(aDatas, 0);
+        return false;
     }
 
 }

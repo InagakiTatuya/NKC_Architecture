@@ -23,8 +23,7 @@ public class CardInputSystem : MonoBehaviour {
     public const int STATE_OUTSCENE  = 2;  //シーンを出る
     public const int STATE_CARDINPUT = 3;  //カードのデータを入力
 
-
-    public const int STATE_NO_MAX   = 4;   //ステートの種類数
+    public const int STATE_NO_MAX    = 4;   //ステートの種類数
 
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
@@ -40,7 +39,6 @@ public class CardInputSystem : MonoBehaviour {
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  int getState        { get{return m_State.getState;       } }
-    //public  int setNextState    { set{ m_State.SetNextState(value);  } }
 
     public CardManager   getCardMgr       { get{ return m_cardMgr;  } }
     public CardInputWind getCardInputWind { get{ return m_ciWind;   } }
@@ -75,7 +73,6 @@ public class CardInputSystem : MonoBehaviour {
                                                 .GetComponent<CardManager>();
         m_ciWind  = GameObject.Find("Canvas/CardInputWind")
                                                 .GetComponent<CardInputWind>();
-    
     }
 
     //更新=====================================================================
@@ -84,7 +81,7 @@ public class CardInputSystem : MonoBehaviour {
         m_State.Update(); 
     }
 
-    //ステート更新関数=========================================================
+    //ステート関数=============================================================
     
     //========================================================= InScene =======
     //  初期化  InScene
@@ -92,11 +89,13 @@ public class CardInputSystem : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
+        //カードの初期化
+        m_cardMgr.SendLordData();
     }
 
     //  更新  InScene
@@ -114,7 +113,7 @@ public class CardInputSystem : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -133,7 +132,7 @@ public class CardInputSystem : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -153,7 +152,7 @@ public class CardInputSystem : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=

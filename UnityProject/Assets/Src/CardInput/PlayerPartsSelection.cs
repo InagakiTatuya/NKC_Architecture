@@ -102,7 +102,7 @@ public class PlayerPartsSelection : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -131,7 +131,7 @@ public class PlayerPartsSelection : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
             "name = " + _tra.name );
         #endif

@@ -39,6 +39,14 @@ public class CardManager : MonoBehaviour {
     }
 
     void Start() {
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " :: " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
         //システムの参照-------------------------------------------------------
         ciSystem = GameObject.Find(CardInputSystem.GAMEOBJCT_NAME)
                                         .GetComponent<CardInputSystem>();
@@ -88,28 +96,38 @@ public class CardManager : MonoBehaviour {
     //  Card と CardPack のアクティブの設定を行う
     //  非アクティブにする際、データをリセットする
     //=========================================================================
-    private void CardsSetActive(int _Length, bool _Active = true) {
+    private void CardsSetActive(int aLength, bool aActive = true) {
+
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " :: " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name  + "\n" +
+            " Length = " + aLength + " Act = " + aActive);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
         //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
         //  配列の先頭からすべてアクティブにする。
         //  重いようであれば変更する。
         //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
 
-        //配列先頭から_Lengthまでは、_Activeを渡す
+        //配列先頭から aLength までは、aActive を渡す
         int index = 0;
-        for(/**/; index < _Length; index++) {
+        for(/**/; index < aLength; index++) {
             if(index % 3 == 0) {
-                transform.GetChild(index / 3).gameObject.SetActive(_Active);
+                transform.GetChild(index / 3).gameObject.SetActive(aActive);
             }
-            m_Card[index].gameObject.SetActive(_Active);
-            if(_Active == false) m_Card[index].DataReset();
+            m_Card[index].gameObject.SetActive(aActive);
+            if(aActive == false) m_Card[index].DataReset();
         }
         //_Leingth 以下のものは !_Active を渡す
         for(/**/; index < CARD_MAX; index++) {
             if(index % 3 == 0) {
-                transform.GetChild(index / 3).gameObject.SetActive(!_Active);
+                transform.GetChild(index / 3).gameObject.SetActive(!aActive);
             }
-            m_Card[index].gameObject.SetActive(!_Active);
-            if(!_Active == false) m_Card[index].DataReset();
+            m_Card[index].gameObject.SetActive(!aActive);
+            if(!aActive == false) m_Card[index].DataReset();
         }
         
     }
@@ -120,19 +138,19 @@ public class CardManager : MonoBehaviour {
     //  CardInputWindでOKボタンが押されたときに呼ばれる。
     //  受け取ったデータを格納する
     //=========================================================================
-    public void SetCardData(ref int _index, ref StractPlayerData _data) {
+    public void SetCardData(ref int aIndex, ref StractPlayerData aData) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
-            "Index=" + _index + " data=" + _data.ToString());
+            "Index=" + aIndex + " data=" + aData.ToString());
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
         //データを適用---------------------------------------------------------
-        m_Card[_index].data = _data;
-        m_Card[_index].DataApp();
+        m_Card[aIndex].data = aData;
+        m_Card[aIndex].DataApp();
     }
 
     //データベースに渡す=======================================================
@@ -145,7 +163,7 @@ public class CardManager : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
             " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
         #endif
@@ -154,7 +172,7 @@ public class CardManager : MonoBehaviour {
         //プレイヤーがいない場合、メッセージ処理をする
         if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
             Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-                this.GetType().Name + " - " +
+                this.GetType().Name + " :: " +
                 System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
                 "データに不備がありました");
             return true;
@@ -166,7 +184,7 @@ public class CardManager : MonoBehaviour {
             error = (m_Card[i].data.pleyerName == "");
             if(error) {
                 Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-                            this.GetType().Name + " - " +
+                            this.GetType().Name + " :: " +
                             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
                             "データに不備がありました");
                 return true;
@@ -182,6 +200,39 @@ public class CardManager : MonoBehaviour {
         //Databaseに渡す-------------------------------------------------------
         Database.obj.SetPlyaerDatas(ref data);
         
+        return false;
+    }
+    
+
+    //データをデータベースから読み込む=========================================
+    //  データベースに保存されているデータを取得し、カードに適応する。
+    //  戻り値：失敗した場合 Ture を返す
+    //=========================================================================
+    public bool SendLordData() {
+
+        //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+        #if UNITY_EDITOR 
+        Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            this.GetType().Name + " :: " +
+            System.Reflection.MethodBase.GetCurrentMethod().Name);
+        #endif
+        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
+        //データをデータベースから取得
+        StractPlayerData[] data = null;
+        bool noData = Database.obj.LordPlyaerDatas(ref data);
+
+        //データの存在チェック
+        if(noData) return true;
+
+        //データをカードに適応
+        m_PlayerCount = data.Length;            //参加プレイヤー数
+        CardsSetActive(data.Length, true);      //カードのアクティブ
+        
+        for(int i=0; i < data.Length; i++) {
+            SetCardData(ref i, ref data[i]);
+        }
+
         return false;
     }
     
@@ -209,7 +260,7 @@ public class CardManager : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name +
             "\nCardIndex = " + _cardIndex);
         #endif
@@ -228,7 +279,7 @@ public class CardManager : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name +
             "\nCardIndex = " + _cardIndex);
         #endif

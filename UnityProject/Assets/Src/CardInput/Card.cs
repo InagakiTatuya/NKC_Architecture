@@ -51,11 +51,12 @@ public class Card : MonoBehaviour {
         m_ImageHair = transform.FindChild("PhotoBack/PhotoHair").GetComponent<Image>();
         m_ImageFace = transform.FindChild("PhotoBack/PhotoFace").GetComponent<Image>();
         m_Text      = transform.FindChild("Name").GetComponent<Text >();
+        //データ---------------------------------------------------------------
+        this.DataReset();
     }
 
     void Start() {
-        //データ---------------------------------------------------------------
-        this.DataReset();
+
     }
 
     //公開関数/////////////////////////////////////////////////////////////////
