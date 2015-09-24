@@ -13,6 +13,13 @@ using System.Collections.Generic;
 //データベース_Begin//--------------------------------------
 public partial class Database : SingletonCustom<Database> {
 
+	/// <summary>最大フロアを取得できるよやったー（棒）</summary>
+	/// <value>The max floor.</value>
+	public	static	int		MaxFloor{
+		get{	return	PlayerPrefs.GetInt("MaxFloor",0);	}
+		set{	PlayerPrefs.SetInt("MaxFloor",value);		}
+	}
+
 	//パーツの名前_Begin//----------------------------------
 	public	static	readonly	string[,]	tablePartsName	= new string[,]{
 		{

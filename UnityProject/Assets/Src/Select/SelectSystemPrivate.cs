@@ -118,18 +118,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 		for(int i = 0;i < button.Length;i ++)	button[i].enabled	= false;
 	}//ボタンを無効化する_End//-----------------------------
 
-	//ヘッダーの文字を生成_Begin//--------------------------
-	private	void	CreateHeaderText(){
-		GameObject	obj		= Resources.Load<GameObject>("Prefab/Select/Text");
-		GameObject	textObj	= (GameObject)Instantiate(obj);
-		Text		text	= textObj.GetComponent<Text>();
-		text.rectTransform.SetParent(canvasObject.transform,false);
-		text.rectTransform.localPosition	= new Vector3(0.0f,424.0f,0.0f);
-		text.text			= "モード選択";
-		text.fontSize		= 32;
-		text.color			= Color.blue;
-	}//ヘッダーの文字を生成_End//---------------------------
-
 	//フェード関連を初期化_Begin//--------------------------
 	private	void	CreateFade(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Fade",canvasObject);

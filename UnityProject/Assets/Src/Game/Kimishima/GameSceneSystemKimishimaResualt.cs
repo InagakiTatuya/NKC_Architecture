@@ -52,6 +52,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int			resultStateNo;
 	private	float		resultStateTime;
 	private	int			resultDispFloor;
+	private	bool		newRecodeFlg;
 	
 	//初期化////////////////////////////////////////////////
 	
@@ -76,11 +77,20 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	void	UpdateResultLiquidation(){
 		resultDispFloor	= (int)(floor * Mathf.Min(resultStateTime,1.0f));
 		resultText.text	= resultDispFloor + " 階層";
-		if(resultStateTime >= 1.0f)	ChangeResultState(ResultStateNo.Neutral);
+		if(resultStateTime < 1.0f)	return;
+		ChangeResultState(ResultStateNo.Neutral);
+		if(Database.MaxFloor < floor){
+			Database.MaxFloor	= floor;
+			newRecodeFlg		= true;
+		}else{
+			newRecodeFlg		= false;
+		}
 	}//リザルトの清算_End//---------------------------------
 	
 	//リザルトのニュートラル_Begin//------------------------
 	private	void	UpdateResultNeutral(){
+		floorSize.y	= 0.0f;
+		cameraMove.touchPermit	= true;
 	}//リザルトのニュートラル_End//-------------------------
 	
 	//ボタン関連////////////////////////////////////////////
@@ -142,7 +152,5 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			buttonSystem.text		= null;
 		}
 	}//リザルトのボタンを生成_End//--------------------------
-
-
 	
 }//ゲームシーンのシステム_End//------------------------------

@@ -31,7 +31,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 		get{return (selectNo == 0);}
 	}
 
-
 	//初期化////////////////////////////////////////////////
 	public	void	Start () {//初期化_Begin//--------------
 		updateFunc	= new UpdateFunc[]{//更新関数を初期化
@@ -45,7 +44,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 		for(int i = 0;i < tablePrefabName.Length;i ++)
 			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
 		StartCreateButton();
-		CreateHeaderText();
 		ChangeState(StateNo.Neutral);
 		selectNo	= -1;
 		f_timer		= 0.0f;
