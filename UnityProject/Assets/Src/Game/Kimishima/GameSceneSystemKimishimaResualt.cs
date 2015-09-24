@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //ゲームシーンのシステムのリザルト
-//更新日 :	06 / 29 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -65,7 +64,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//リザルトを開く_Begin//--------------------------------
 	private	void	UpdateResultOpen(){
-		resultDispFloor	= 0;
+		cameraMove.touchPermit	= true;
+		resultDispFloor			= 0;
 		CreateResultWindow();
 		CreateResultText();
 		CreateResultButton();

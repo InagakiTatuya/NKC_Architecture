@@ -25,6 +25,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数//------------------------------------
 	private void UpdateCheckKimishima(){
+		floorSize.y = floorSize.y * 0.8f;
+		if(floorSize.y < 1.0f)	floorSize.y	= 0.0f;
 		if(UpdateCheckKimishimaCollapse())	return;
 		if(UpdateCheckKimishimaComplete())	return;
 	}
