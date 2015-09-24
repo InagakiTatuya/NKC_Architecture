@@ -21,7 +21,7 @@ public partial class CardInputWind : MonoBehaviour {
     public const int STATE_CLAUSEMESWIND  = 5;  //メッセージウィンドウを閉じる
     public const int STATE_CLAUSEWIND     = 6;  //ウィンドウを閉じる
 
-    public const int STATE_NO_MAX        = 7;   //ステートの種類数
+    public const int STATE_NO_MAX         = 7;   //ステートの種類数
     
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
@@ -132,7 +132,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -149,7 +149,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -191,7 +191,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -207,7 +207,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -227,7 +227,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -246,7 +246,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -299,7 +299,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
             "Index=" + _CardIndex + " data=" + _data.ToString());
         #endif
@@ -327,7 +327,7 @@ public partial class CardInputWind : MonoBehaviour {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-            this.GetType().Name + " - " +
+            this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
             "ImageType = " + _ImageType + "  ImageID = " + _ImageNo);
         #endif

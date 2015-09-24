@@ -3,7 +3,6 @@
 //  作者：稲垣達也
 //#####################################
 
-
 public struct StractPlayerData {
     public string pleyerName;
     public int    imageHairNo;
