@@ -88,6 +88,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択ステート
 	private	void	UpdatePartsSelect(){
+		floorSize.y	= Mathf.Min((floorSize.y == 0.0f)?1.0f:floorSize.y * 1.2f,128.0f);
 		if(partsSelectClass != null)	partsID	= partsSelectClass.GetPartsID();
 		if(!execute)	return;
 		ChangeState(StateNo.PartsSet);
