@@ -43,12 +43,12 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、瞬間的に表示されるが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void OpenCardWind( int _PlayerNo, int _JobNo,
-                               float _animeTime = 0.0f
+    private void OpenCardWind( int aPlayerNo, int aJobNo,
+                               float aAnimeTime = 0.0f
                              ) {
         //取り出したデータを適用
-        m_CardWind.SetImageAndTexts(_PlayerNo, _JobNo, 
-            Database.obj.JOB_TEXT[_JobNo]);
+        m_CardWind.SetImageAndTexts(aPlayerNo, aJobNo, 
+            Database.obj.JOB_TEXT[aJobNo]);
         //アクティブの設定
         m_CardWind.gameObject.SetActive(true);
     }
@@ -58,7 +58,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、非アクティブにしているだけだが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void CloseCardWind(float _animeTime = 0.0f) {
+    private void CloseCardWind(float aAnimeTime = 0.0f) {
         //アクティブの設定
         m_CardWind.gameObject.SetActive(false);
     }
@@ -69,11 +69,11 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、瞬間的に表示されるが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void OpenNextPleyarWind( int _PlayerNo, int _JobNo,
-                                     float _animeTime = 0.0f
+    private void OpenNextPleyarWind( int aPlayerNo, int aJobNo,
+                                     float aAnimeTime = 0.0f
                                     ) {
         //取り出したデータを適用
-        m_NextWind.SetImageAndTexts(_PlayerNo, _JobNo);
+        m_NextWind.SetImageAndTexts(aPlayerNo, aJobNo);
         //アクティブの設定
         m_NextWind.gameObject.SetActive(true);
     }
