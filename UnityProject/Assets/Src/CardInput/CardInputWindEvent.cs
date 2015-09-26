@@ -13,6 +13,10 @@ using System.Text;
 //クラス///////////////////////////////////////////////////////////////////////
 public partial class CardInputWind : MonoBehaviour {
 
+    //定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    const int NAME_MAX_LENGTH = 5;     //名前の長さ制限（文字数）
+
+    //イベント関数/////////////////////////////////////////////////////////////
     //社員追加ボタン===========================================================
     //  タイミング：社員追加ボタンがタップされた瞬間。
     //    ウィンドウをアクティブにし、初期化する
@@ -66,15 +70,17 @@ public partial class CardInputWind : MonoBehaviour {
         bool b = false;
         foreach(char c in m_Input.text) {
             b = (c == ' ' || c == '　');
-            if(b) break;
+            if(!b) break;
         }
         if(b) {
             m_Input.text = "";
             return;
         }
+
         //一定以上長さの場合、それ以降を消す
-        
-        //ここに一定以上長さの場合、それ以降を消す処理
+        if(m_Input.text.Length > NAME_MAX_LENGTH) {
+            m_Input.text = m_Input.text.Remove(NAME_MAX_LENGTH);
+        }
 
         //一時保存
         m_DataBff.pleyerName = m_Input.text;

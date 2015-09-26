@@ -52,8 +52,7 @@ public partial class CardInputWind : MonoBehaviour {
     //アニメーション用変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private Vector3           m_WindNotActPos;
     private Vector3           m_WindActPos;
-    private Vector3           m_WindVec;        //End-Start
-
+    private Vector3           m_WindVec;
 
     //統括しているシステム^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardInputSystem ciSystem;  //このシーンを統括するSystem
