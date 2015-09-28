@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //セレクトのシステム
-//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -27,7 +26,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 	public	static	float	timer{
 		get{return	f_timer;}
 	}
-	public	bool	TutorialFlg{//チュートリアルフラグ
+	public	static	bool	TutorialFlg{//チュートリアルフラグ
 		get{return (selectNo == 0);}
 	}
 
@@ -53,7 +52,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 	public	void	Update () {//更新_Begin//---------------
 		if(stateNo < 0 || stateNo >= (int)StateNo.Length)	ChangeState(StateNo.Neutral);
 		if(updateFunc[stateNo] != null)						updateFunc[stateNo]();
-		UpdateButton();
 		UpdateFade();
 		f_timer		+= Time.deltaTime;
 		stateTime	+= Time.deltaTime;

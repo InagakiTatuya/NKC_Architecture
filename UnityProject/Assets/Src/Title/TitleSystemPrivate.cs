@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -26,9 +25,6 @@ public	partial class TitleSystem : MonoBehaviour{
 	private	int			stateNo;
 	private	float		stateTime;
 	private	Button		button		= null;
-	private	Image		buttonImage	= null;
-	private	Vector2		buttonSize;
-	private	ColorBlock	buttonColor;
 	private	Image		fade		= null;
 	private	Color		fadeColor;
 
@@ -37,20 +33,14 @@ public	partial class TitleSystem : MonoBehaviour{
 	private	void	StartCreateButton(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		button			= obj.GetComponent<Button>();
-		buttonColor.normalColor		= new Color(1.0f,1.0f,1.0f,1.0f);
-		buttonColor.highlightedColor= new Color(1.0f,1.0f,1.0f,1.0f);
-		buttonColor.pressedColor	= new Color(0.5f,0.5f,0.5f,1.0f);
-		buttonColor.disabledColor	= new Color(0.25f,0.25f,0.25f,1.0f);
-		buttonColor.colorMultiplier	= 1;
-		buttonColor.fadeDuration	= 0.1f;
-		button.colors				= buttonColor;
-		buttonImage					= obj.GetComponent<Image>();
-		buttonImage.sprite			= Resources.Load<Sprite>("Texture/Title/start");
-		buttonImage.rectTransform.localPosition	= new Vector3(0.0f,-256.0f,0.0f);
-		buttonSize					= new Vector2(320.0f,80.0f);
-		button.onClick.AddListener(this.OnStartButtonEnter);
+		button.colors	= Database.colorBlocks[(int)Database.ColorBlockID.White];
+		Image	image	= obj.GetComponent<Image>();
+		image.sprite	= Resources.Load<Sprite>("Texture/Title/start");
+		image.rectTransform.localPosition	= new Vector3(0.0f,-192.0f,0.0f);
 		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
-		buttonSystem.text			= " ";
+		buttonSystem.text			= null;
+		buttonSystem.buttonSize		= new Vector2(512.0f,128.0f);
+		buttonSystem.buttonEnter	= OnStartButtonEnter;
 	}//ボタンを初期化_End//---------------------------------
 
 	//更新//////////////////////////////////////////////////
@@ -62,17 +52,9 @@ public	partial class TitleSystem : MonoBehaviour{
 	
 	private	void	UpdateGoNext(){//次のシーンへ_Begin//---
 		float	n	= Mathf.Min(stateTime * 4.0f,1.0f);
-		buttonSize.x*= 1.25f;
-		buttonSize.y*= 0.8f;
 		fadeColor.a	= n;
 		if(stateTime >= 1.0f)	Application.LoadLevel("Select");
 	}//次のシーンへ_End//-----------------------------------
-
-	private	void	UpdateButton(){//ボタンを更新_Beign//---
-		if(button == null)		return;
-		if(buttonImage == null)	return;
-		buttonImage.rectTransform.sizeDelta	= buttonSize;
-	}//ボタンを更新_End//-----------------------------------
 
 	private	void	UpdateFade(){//フェードを更新_Begin//---
 		if(fade == null)	return;
@@ -87,6 +69,15 @@ public	partial class TitleSystem : MonoBehaviour{
 		stateNo		= buf;
 		stateTime	= 0.0f;
 	}//ステート遷移_End//-----------------------------------
+
+	//スタートボタンを押した_Begin//------------------------
+	private	void	OnStartButtonEnter(ButtonSystem bs){
+		ChangeState(StateNo.GoNext);
+		button.enabled	= false;
+		CreateFade();
+		if(seManager == null)	return;
+		seManager.Play(0);
+	}//スタートボタンを押した_End//-------------------------
 
 	//フェード関連を初期化_Begin//--------------------------
 	private	void	CreateFade(){

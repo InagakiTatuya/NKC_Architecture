@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //データベース
-//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -13,11 +12,27 @@ using System.Collections.Generic;
 //データベース_Begin//--------------------------------------
 public partial class Database : SingletonCustom<Database> {
 
+	public	static	string	TutorialDataName	= "MaxFloorTutorial";
+	public	static	string	MainDataName		= "MaxFloorMain";
+
 	/// <summary>最大フロアを取得できるよやったー（棒）</summary>
 	/// <value>The max floor.</value>
 	public	static	int		MaxFloor{
-		get{	return	PlayerPrefs.GetInt("MaxFloor",0);	}
-		set{	PlayerPrefs.SetInt("MaxFloor",value);		}
+		get{
+			if(SelectSystem.TutorialFlg)	return	PlayerPrefs.GetInt(TutorialDataName,0);
+			else							return	PlayerPrefs.GetInt(MainDataName,0);
+		}
+		set{
+			if(SelectSystem.TutorialFlg)	PlayerPrefs.SetInt(TutorialDataName,value);
+			else							PlayerPrefs.SetInt(MainDataName,value);
+		}
+	}
+
+	/// <summary>最大のフロアを取得できる</summary>
+	/// <returns>The max floor.</returns>
+	/// <param name="name">Name.</param>
+	public	static	int		GetMaxFloor(string name){
+		return	PlayerPrefs.GetInt(name,0);
 	}
 
 	//パーツの名前_Begin//----------------------------------

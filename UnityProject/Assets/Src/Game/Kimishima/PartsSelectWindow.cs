@@ -206,13 +206,13 @@ class 	PartsSelectClass{
 			button[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
 			Image	buttonImage	= obj.GetComponent<Image>();
 			buttonImage.rectTransform.localPosition	= tablePos[i];
-			buttonImage.rectTransform.sizeDelta		= new Vector2(128.0f,64.0f);
 			button[i].onClick.AddListener(tableAction[i]);
 			button[i].interactable	= false;
 			ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
 			buttonSystem.text			= tebleText[i];
 			buttonSystem.color			= Color.white;
 			buttonSystem.fontSize		= 24;
+			buttonSystem.buttonSize		= new Vector2(128.0f,64.0f);
 		}
 	}//パーツセレクトウィンドウのボタン_End//----------------
 	

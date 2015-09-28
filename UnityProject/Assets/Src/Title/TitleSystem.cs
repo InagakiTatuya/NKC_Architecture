@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //タイトルのシステム
-//更新日 :	06 / 13 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -30,6 +29,7 @@ public	partial class TitleSystem : MonoBehaviour{
 
 	//初期化////////////////////////////////////////////////
 	public	void	Start(){//初期化_Begin//----------------
+		Database.InitColorBlock();
 		updateFunc	= new UpdateFunc[]{//更新関数を初期化
 			UpdateNeutral,
 			UpdateGoNext,
@@ -49,21 +49,12 @@ public	partial class TitleSystem : MonoBehaviour{
 	public	void	Update(){//更新_Beign//-----------------
 		if(stateNo < 0 || stateNo >= (int)StateNo.Length)	ChangeState(StateNo.Neutral);
 		if(updateFunc[stateNo] != null)						updateFunc[stateNo]();
-		UpdateButton();
 		UpdateFade();
 		f_timer		+= Time.deltaTime;
 		stateTime	+= Time.deltaTime;
 	}//更新_End//-------------------------------------------
 
 	//その他関数////////////////////////////////////////////
-	//スタートボタンを押した_Begin//------------------------
-	public	void	OnStartButtonEnter(){
-		ChangeState(StateNo.GoNext);
-		button.enabled	= false;
-		CreateFade();
-		if(seManager == null)	return;
-		seManager.Play(0);
-	}//スタートボタンを押した_End//-------------------------
 
 	//プレファブを生成する_Begin//--------------------------
 	public	static	GameObject	CreateObjectInCanvas(string fileName,GameObject parent){

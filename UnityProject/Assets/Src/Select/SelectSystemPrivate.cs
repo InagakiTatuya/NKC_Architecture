@@ -1,6 +1,5 @@
 ﻿//----------------------------------------------------------
 //セレクトのシステム
-//更新日 :	07 / 02 / 2015
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
@@ -32,10 +31,9 @@ public	partial	class SelectSystem : MonoBehaviour {
 	//変数//////////////////////////////////////////////////
 	private	int			stateNo;
 	private	float		stateTime;
-	private	int			selectNo;
+	private	static	int	selectNo;
 	private	Button[]	button		= null;
 	private	Image[]		buttonImage	= null;
-	private	Vector2[]	buttonSize	= null;
 	private	Image		fade		= null;
 	private	Color		fadeColor;
 
@@ -57,7 +55,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 		};
 		button		= new Button[tableOnButtonEnterFunc.Length];
 		buttonImage	= new Image[button.Length];
-		buttonSize	= new Vector2[button.Length];
 		Database.InitColorBlock();
 		for(int i = 0;i < button.Length;i ++){
 			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
@@ -66,12 +63,17 @@ public	partial	class SelectSystem : MonoBehaviour {
 			buttonImage[i]			= obj.GetComponent<Image>();
 			buttonImage[i].sprite	= Resources.Load<Sprite>(spriteName[i]);
 			buttonImage[i].rectTransform.localPosition	= tableButtonPos[i];
-			buttonSize[i]			= new Vector2(512.0f,256.0f);
 			button[i].onClick.AddListener(tableOnButtonEnterFunc[i]);
 			ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
 			buttonSystem.text		= " ";
 			buttonSystem.color		= Color.white;
 			buttonSystem.fontSize	= 24;
+			buttonSystem.buttonSize	= new Vector2(512.0f,256.0f);
+		}
+		for(int i = 0;i < button.Length;i ++){
+			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Select/recode",canvasObject);
+			Image		image		= obj.GetComponent<Image>();
+			image.rectTransform.localPosition	= tableButtonPos[i] + new Vector3(-48.0f,96.0f,0.0f);
 		}
 	}//ボタンを初期化_End//---------------------------------
 	
@@ -84,21 +86,12 @@ public	partial	class SelectSystem : MonoBehaviour {
 	
 	private	void	UpdateGoNext(){//次のシーンへ_Begin//---
 		float	n	= Mathf.Min(stateTime * 4.0f,1.0f);
-		buttonSize[selectNo].x	*= 1.25f;
-		buttonSize[selectNo].y	*= 0.8f;
 		fadeColor.a	= n;
 		if(stateTime < 0.5f)	return;
 		Database.obj.StageId	= selectNo;
 		Application.LoadLevel("CardInput");
 	}//次のシーンへ_End//-----------------------------------
 
-	private	void	UpdateButton(){//ボタンを更新_Beign//---
-		if(button == null)		return;
-		if(buttonImage == null)	return;
-		for(int i = 0;i < buttonImage.Length;i ++)
-			buttonImage[i].rectTransform.sizeDelta	= buttonSize[i];
-	}//ボタンを更新_End//-----------------------------------
-	
 	private	void	UpdateFade(){//フェードを更新_Begin//---
 		if(fade == null)	return;
 		fade.color		= fadeColor;

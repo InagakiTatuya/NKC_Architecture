@@ -45,6 +45,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			this.UpdateResultOpen,
 			this.UpdateResultLiquidation,
 			this.UpdateResultNeutral,
+			this.UpdateResultNextScene,
 		};
 		FallObject.collapseFunc		= this.SetCollapseFlg;
 		floor						= 0;
