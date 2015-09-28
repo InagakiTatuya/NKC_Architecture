@@ -145,6 +145,7 @@ class 	PartsSelectClass{
 		}
 	}
 	private	void	YaneWait(){//ウィンドウを出すための待機//
+		windowSize		= Vector3.zero;
 		if(windowStateTime < 0.25f)	return;
 		windowOpenFlg	= false;
 		ChangeState(StateNo.Open);
@@ -172,28 +173,25 @@ class 	PartsSelectClass{
 		CreatePartsSelectText(job);
 		CreatePartsSelectButton();
 		CreatePartsSelectScrollView(job);
-	}//パーツ選択ウィンドウを表示_End//-----------------------
-	
-	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
-	public	void	ChangeState(StateNo stateNo,bool overrapFlg = false){
+	}
+
+	public	void	ChangeState(StateNo stateNo,bool overrapFlg = false){//パーツ選択ウィンドウのステート番号を変更する
 		int		value	= (int)stateNo;
 		if(!overrapFlg && value == windowStateNo)	return;
 		windowStateNo	= value;
 		windowStateTime	= 0.0f;
-	}//パーツ選択ウィンドウのステート番号を変更する_End//-------
-	
-	//パーツ選択ウィンドウを生成_Beign//---------------------
-	private	void	CreateWindow(){
+	}
+
+	private	void	CreateWindow(){//パーツ選択ウィンドウを生成
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
 		windowImage			= obj.GetComponent<Image>();
 		windowImage.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
 		windowImage.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
 		windowImage.rectTransform.sizeDelta		= new Vector2(480.0f,640.0f);
 		windowImage.color						= new Color(0.0f,0.0f,0.0f,0.5f);
-	}//パーツ選択ウィンドウを生成_End//----------------------
-	
-	//パーツウィンドウのテキストを生成_Begin//---------------
-	private	void	CreatePartsSelectText(int job){
+	}
+
+	private	void	CreatePartsSelectText(int job){//パーツウィンドウのテキストを生成
 		GameObject	obj;
 		Vector3[]	tableTextPos	= {new Vector3(-64.0f,240.0f,0.0f),new Vector3(96.0f,240.0f,0.0f),};
 		Vector2[]	tableSizeDelta	= {new Vector2(256.0f,128.0f),new Vector2(256.0f,128.0f),};
@@ -214,10 +212,9 @@ class 	PartsSelectClass{
 			text[i].color		= new Color(0.0f,1.0f,1.0f,1.0f);
 			text[i].material	= Resources.Load<Material>("Material/Game/TextMaterial");
 		}
-	}//パーツウィンドウのテキストを生成_End//----------------
-	
-	//パーツセレクトウィンドウのボタン_Begin//---------------
-	private	void	CreatePartsSelectButton(){
+	}
+
+	private	void	CreatePartsSelectButton(){//パーツセレクトウィンドウのボタン
 		button	= new Button[(int)ButtonID.Length];
 		Vector3[]		tablePos	= new Vector3[]{new Vector3(128.0f,-240.0f),new Vector3(-128.0f,-240.0f)};
 		string[]		tebleText	= new string[]{"決定","屋根"};
@@ -236,10 +233,9 @@ class 	PartsSelectClass{
 			buttonSystem.fontSize		= 24;
 			buttonSystem.buttonSize		= new Vector2(128.0f,64.0f);
 		}
-	}//パーツセレクトウィンドウのボタン_End//----------------
-	
-	//スクロールビューを生成_Begin//------------------------
-	private	void	CreatePartsSelectScrollView(int job){
+	}
+
+	private	void	CreatePartsSelectScrollView(int job){//スクロールビューを生成
 		string		prefabName	= "Prefab/Game/PartsSelectScrollView";
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,windowImage.gameObject);
 		GameObject	contents	= obj.transform.GetChild(0).gameObject;
@@ -255,10 +251,9 @@ class 	PartsSelectClass{
 				CreatePartsSelectWindowButton(test,job,id);
 			}
 		}
-	}//スクロールビューを生成_End//-------------------------
-	
-	//パーツ選択ウィンドウのボタンを生成_Begin//-------------
-	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){
+	}
+
+	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){//パーツ選択ウィンドウのボタンを生成
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
 		Image		image		= obj.GetComponent<Image>();
 		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
@@ -271,15 +266,14 @@ class 	PartsSelectClass{
 		pointerUpSystem[id].pressedColor	= Color.yellow;
 		pointerUpSystem[id].scrollViewObject= contents.transform.parent.parent.gameObject;
 		pointerUpSystem[id].SetCallBackFunc(GetButtonID);
-	}//パーツ選択ウィンドウのボタンを生成_End//--------------
-	
-	//押されたボタンのIDを受け取る_Beign//------------------
-	private	void	GetButtonID(PointerUpSystem pointerUpSystem){
+	}
+
+	private	void	GetButtonID(PointerUpSystem pointerUpSystem){//押されたボタンのIDを受け取る
 		partsID	= pointerUpSystem.id;
 		#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
 		#endif
-	}//押されたボタンのIDを受け取る_End//-------------------
+	}
 	
 	public	int		GetPartsID(){
 		return	partsID;
