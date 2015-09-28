@@ -44,7 +44,7 @@ public partial class CardInputWind : MonoBehaviour {
     private MessageWind       m_MesWind;  //メッセージウィンドウ
     
     //見た目
-    private InputField        m_Input;     //名前入力
+    private MobileInputField  m_Input;     //名前入力
     private Image             m_ImageHair; //髪型
     private Image             m_ImageFace; //顔
     private Image             m_ImageBody; //体
@@ -69,9 +69,11 @@ public partial class CardInputWind : MonoBehaviour {
         m_MesWind   = transform.FindChild("MessageWind"  )
                                                 .GetComponent<MessageWind>();
         
-        //見た目
+        //名前入力
         m_Input     = m_Wind.FindChild("Card/InputField")
-                                                .GetComponent<InputField>();
+                                        .GetComponent<MobileInputField>();
+        
+        //見た目
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
                                                 .GetComponent<Image>();
         m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
@@ -110,6 +112,9 @@ public partial class CardInputWind : MonoBehaviour {
         //初期ステート---------------------------------------------------------
         m_State.SetNextState(STATE_NOTACTIVE);
         
+        //イベント初期化-------------------------------------------------------
+        EventsInit();
+
         //アニメーション初期化-------------------------------------------------
         m_WindActPos    = m_Wind.localPosition;
         m_WindNotActPos = new Vector3(m_WindActPos.x + 544, m_WindActPos.y, m_WindActPos.z);
@@ -357,4 +362,11 @@ public partial class CardInputWind : MonoBehaviour {
     //イベント/////////////////////////////////////////////////////////////////
     //  CradInptuWindEvent.cs に定義
 
+
+    //void OnGUI() {
+    //    GUI.TextField(new Rect(0, Screen.height - 100, Screen.width / 3, 100),
+    //        "name = " + m_DataBff.pleyerName + "\nHair = " + m_DataBff.imageHairNo +
+    //        "\nFace = " + m_DataBff.imageFaceNo + "\nBody = " + m_DataBff.imageBodyNo 
+    //        );
+    //}
 }

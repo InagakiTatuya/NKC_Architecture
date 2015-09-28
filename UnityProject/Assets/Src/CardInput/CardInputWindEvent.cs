@@ -16,6 +16,19 @@ public partial class CardInputWind : MonoBehaviour {
     //定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     const int NAME_MAX_LENGTH = 5;     //名前の長さ制限（文字数）
 
+    //イベント関数用初期化/////////////////////////////////////////////////////
+    private void EventsInit() {
+        //名前入力
+        m_Input.onValueChange  = OnChangeValueName;
+        m_Input.endEdit        = OnEndNameEidt;
+        m_Input.characterLimit = NAME_MAX_LENGTH;
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - -
+        //＊それ以外イベント関数はInspecter上で設定してある
+        // - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+    }
+
     //イベント関数/////////////////////////////////////////////////////////////
     //社員追加ボタン===========================================================
     //  タイミング：社員追加ボタンがタップされた瞬間。
@@ -35,7 +48,7 @@ public partial class CardInputWind : MonoBehaviour {
     //  タイミング：新たに入力がされたとき
     //    演出用
     //=========================================================================
-    public void OnChangeValueName() {
+    public void OnChangeValueName(string aStr) {
         //ステートがデータ入力状態以外は、処理しない
         if(m_State.getState != STATE_INPUTDATA) return;
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -51,10 +64,9 @@ public partial class CardInputWind : MonoBehaviour {
     //名前入力完了=============================================================
     //  タイミング：入力が完了したとき
     //    スペースのみの場合、空にする
-    //    一定以上長さの場合、それ以降を消す
     //    入力されたデータを一時保存する
     //=========================================================================
-    public void OnEndNameEidt() {
+    public void OnEndNameEidt(string aStr) {
         //ステートがデータ入力状態以外は、処理しない
         if(m_State.getState != STATE_INPUTDATA) return;
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -75,11 +87,6 @@ public partial class CardInputWind : MonoBehaviour {
         if(b) {
             m_Input.text = "";
             return;
-        }
-
-        //一定以上長さの場合、それ以降を消す
-        if(m_Input.text.Length > NAME_MAX_LENGTH) {
-            m_Input.text = m_Input.text.Remove(NAME_MAX_LENGTH);
         }
 
         //一時保存
@@ -106,7 +113,7 @@ public partial class CardInputWind : MonoBehaviour {
 
         if(m_DataBff.pleyerName != "") {
             //CardManagerにデータを渡す
-            ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
+            ciSystem.getCardMgr.SetCardData(m_IndexBff, m_DataBff);
             m_State.SetNextState(STATE_CLAUSEWIND);
         }else {
             Debug.Log("名前が入力されていない");
