@@ -16,6 +16,18 @@ public partial class CardInputWind : MonoBehaviour {
     //定数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     const int NAME_MAX_LENGTH = 5;     //名前の長さ制限（文字数）
 
+    //イベント関数用初期化/////////////////////////////////////////////////////
+    private void InitForEvents() {
+        //名前入力
+        m_Input.onValueChange = OnChangeValueName;
+        m_Input.endEdit       = OnEndNameEidt;
+
+        // - - - - - - - - - - - - - - - - - - - - - - - - - -
+        //＊それ以外イベント関数はInspecter上で設定してある
+        // - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
+    }
+
     //イベント関数/////////////////////////////////////////////////////////////
     //社員追加ボタン===========================================================
     //  タイミング：社員追加ボタンがタップされた瞬間。
@@ -35,7 +47,7 @@ public partial class CardInputWind : MonoBehaviour {
     //  タイミング：新たに入力がされたとき
     //    演出用
     //=========================================================================
-    public void OnChangeValueName() {
+    public void OnChangeValueName(string aStr) {
         //ステートがデータ入力状態以外は、処理しない
         if(m_State.getState != STATE_INPUTDATA) return;
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -54,7 +66,7 @@ public partial class CardInputWind : MonoBehaviour {
     //    一定以上長さの場合、それ以降を消す
     //    入力されたデータを一時保存する
     //=========================================================================
-    public void OnEndNameEidt() {
+    public void OnEndNameEidt(string aStr) {
         //ステートがデータ入力状態以外は、処理しない
         if(m_State.getState != STATE_INPUTDATA) return;
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
