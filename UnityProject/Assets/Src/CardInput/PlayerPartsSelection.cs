@@ -124,7 +124,7 @@ public class PlayerPartsSelection : MonoBehaviour {
     //タブをタッチ=============================================================
     //  タッチされたらタブを変更するステートに移行
     //=========================================================================
-    public void OnTabButtonEnter(Transform _tra) {
+    public void OnTabButtonEnter(Transform aTra) {
         //ステートがINPUT以外は、処理しない
         if(m_State.getState != STATE_INPUT) return;
 
@@ -133,23 +133,23 @@ public class PlayerPartsSelection : MonoBehaviour {
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + " \n" +
-            "name = " + _tra.name );
+            "name = " + aTra.name );
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
         m_State.SetNextState(STATE_CHANGE_TAB);
-        m_toListTab = _tra;
+        m_toListTab = aTra;
     }
 
     //パーツを選択=============================================================
     //  CardInputWindにデータを渡す
     //=========================================================================
-    public void OnPartsButtonEnter(int _ImageType, int _ImageNo) {
+    public void OnPartsButtonEnter(int aImageType, int aImageNo) {
         //ステートがINPUT以外は、処理しない
         if(m_State.getState != STATE_INPUT) return;
 
         //ウィンドウにデータを渡す
-        ciWind.SetPartsData(_ImageType, _ImageNo);
+        ciWind.SetPartsData(aImageType, aImageNo);
 
     }
 

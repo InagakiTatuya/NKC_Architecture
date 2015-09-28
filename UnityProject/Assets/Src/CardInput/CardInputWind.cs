@@ -26,7 +26,7 @@ public partial class CardInputWind : MonoBehaviour {
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
 
-    private float OPEN_WIND_TIME      = 0.5f; //開く際の演出時間
+    private float OPEN_WIND_TIME      = 0.4f; //開く際の演出時間
     private float CLAUSE_WIND_TIME    = 0.1f; //閉じる際の演出時間
     private float OPEN_MESWIND_TIME   = 0.1f; //メッセージウィンドウを開く演出時間
     private float CLAUSE_MESWIND_TIME = 1.0f; //メッセージウィンドウを閉じる演出時間
@@ -52,8 +52,7 @@ public partial class CardInputWind : MonoBehaviour {
     //アニメーション用変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private Vector3           m_WindNotActPos;
     private Vector3           m_WindActPos;
-    private Vector3           m_WindVec;        //End-Start
-
+    private Vector3           m_WindVec;
 
     //統括しているシステム^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private CardInputSystem ciSystem;  //このシーンを統括するSystem
@@ -167,15 +166,16 @@ public partial class CardInputWind : MonoBehaviour {
     }
     //  更新  OpenWind
     private void UpdateForOpenWind() {
-        //とりあえずローカルに書いただけ
-        //非効率なのであとで書き換える
+        
+        //アニメーション-----------------------------------
+        const float MIN = -45f;
+        const float MAX = 90f;
+        const float A = (MAX - MIN) / 180f * Mathf.PI;
+        const float B = MIN / 180f * Mathf.PI;
+
         Vector3 lpos = m_Wind.localPosition;
-        float min = -45f;
-        float max = 90f;
-        float a = (max - min) / 180f * Mathf.PI;
-        float b = min / 180f * Mathf.PI;
         float t = m_State.getStateTime / OPEN_WIND_TIME;
-        float n = (Mathf.Sin(t * a + b) + 1) * 0.5f;
+        float n = (Mathf.Sin(t * A + B) + 1) * 0.5f;
         
         lpos = m_WindNotActPos + m_WindVec * n;
         if(m_State.getStateTime > OPEN_WIND_TIME) {
@@ -183,6 +183,7 @@ public partial class CardInputWind : MonoBehaviour {
             m_State.SetNextState(STATE_INPUTDATA);
         }
         m_Wind.localPosition = lpos;
+
     }
     
     //========================================================= InputData =====
