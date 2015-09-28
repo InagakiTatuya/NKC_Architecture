@@ -8,42 +8,52 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Ice/Floor",
 			"Prefab/Game/Build/Ice/Pillar",
 			"Prefab/Game/Build/Ice/Wall",
+			"Prefab/Game/Build/Ice/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
 			"Prefab/Game/Build/Brick/Wall",
+			"Prefab/Game/Build/Brick/Roof",
 		},
 	};
 

@@ -41,10 +41,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	bool	UpdateCheckKimishimaComplete(){
 		if(!completeFlg)	return	false;
 		job = 0;
-		AddFloor();
-		UpdateCheckKimishimaCompleteCamera();
-		//ChangeState(StateNo.CardView);
-		ChangeState(StateNo.PartsSelect);
+		if(roofSetFlag){
+			roofSetFlag = false;
+			ChangeState(StateNo.Result);
+		}else{
+			AddFloor();
+			UpdateCheckKimishimaCompleteCamera();
+			//ChangeState(StateNo.CardView);
+			ChangeState(StateNo.PartsSelect);
+		}
 		return	true;
 	}
 	private	void	UpdateCheckKimishimaCompleteCamera(){

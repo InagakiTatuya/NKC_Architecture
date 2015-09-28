@@ -10,6 +10,9 @@ public partial class GameSceneSystem : MonoBehaviour{
 
 	private bool check;
 	public bool Check {get{ return check; } set{ check = value; }}
+	
+	private bool roofSetFlag;
+	public bool RoofSetFlag {get{ return roofSetFlag; } set{ roofSetFlag = value; }}
 
 	private bool partsSet;
 	public bool PartsSet{get{ return partsSet; } set{ partsSet = value; }}

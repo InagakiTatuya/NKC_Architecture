@@ -84,7 +84,7 @@ public partial class FallObject : MonoBehaviour {
 				rBody.angularVelocity = Vector3.zero;
 
 				if(childCount == 0){
-					if(system.GetJob == 2){
+					if(system.GetJob == 2 || system.GetJob == 3){
 						state = STATE.CHECK;
 						system.Check = true;
 					}else{
@@ -103,7 +103,7 @@ public partial class FallObject : MonoBehaviour {
 					if(rBody.isKinematic) ObjectWakeUp();
 				}
 				if (system.completeFlg){
-					if(system.stateNo == (int)GameSceneSystem.StateNo.PartsSelect){
+					if(system.stateNo == (int)GameSceneSystem.StateNo.PartsSelect || system.stateNo == (int)GameSceneSystem.StateNo.Result){
 						state = STATE.STOP;
 						system.completeFlg = false;
 						//物理演算不許可
@@ -170,6 +170,7 @@ public partial class FallObject : MonoBehaviour {
 			childCount--;
 			state = STATE.FALLEND;
 			rBody.isKinematic = true;
+			if(system.GetJob == 3) system.RoofSetFlag = true;
 		}
 	}
 }
