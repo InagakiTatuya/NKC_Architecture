@@ -17,10 +17,11 @@ public partial class CardInputWind : MonoBehaviour {
     const int NAME_MAX_LENGTH = 5;     //名前の長さ制限（文字数）
 
     //イベント関数用初期化/////////////////////////////////////////////////////
-    private void InitForEvents() {
+    private void EventsInit() {
         //名前入力
-        m_Input.onValueChange = OnChangeValueName;
-        m_Input.endEdit       = OnEndNameEidt;
+        m_Input.onValueChange  = OnChangeValueName;
+        m_Input.endEdit        = OnEndNameEidt;
+        m_Input.characterLimit = NAME_MAX_LENGTH;
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - -
         //＊それ以外イベント関数はInspecter上で設定してある
@@ -63,7 +64,6 @@ public partial class CardInputWind : MonoBehaviour {
     //名前入力完了=============================================================
     //  タイミング：入力が完了したとき
     //    スペースのみの場合、空にする
-    //    一定以上長さの場合、それ以降を消す
     //    入力されたデータを一時保存する
     //=========================================================================
     public void OnEndNameEidt(string aStr) {
@@ -87,11 +87,6 @@ public partial class CardInputWind : MonoBehaviour {
         if(b) {
             m_Input.text = "";
             return;
-        }
-
-        //一定以上長さの場合、それ以降を消す
-        if(m_Input.text.Length > NAME_MAX_LENGTH) {
-            m_Input.text = m_Input.text.Remove(NAME_MAX_LENGTH);
         }
 
         //一時保存

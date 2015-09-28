@@ -112,6 +112,9 @@ public partial class CardInputWind : MonoBehaviour {
         //初期ステート---------------------------------------------------------
         m_State.SetNextState(STATE_NOTACTIVE);
         
+        //イベント初期化-------------------------------------------------------
+        EventsInit();
+
         //アニメーション初期化-------------------------------------------------
         m_WindActPos    = m_Wind.localPosition;
         m_WindNotActPos = new Vector3(m_WindActPos.x + 544, m_WindActPos.y, m_WindActPos.z);
@@ -359,4 +362,11 @@ public partial class CardInputWind : MonoBehaviour {
     //イベント/////////////////////////////////////////////////////////////////
     //  CradInptuWindEvent.cs に定義
 
+
+    //void OnGUI() {
+    //    GUI.TextField(new Rect(0, Screen.height - 100, Screen.width / 3, 100),
+    //        "name = " + m_DataBff.pleyerName + "\nHair = " + m_DataBff.imageHairNo +
+    //        "\nFace = " + m_DataBff.imageFaceNo + "\nBody = " + m_DataBff.imageBodyNo 
+    //        );
+    //}
 }
