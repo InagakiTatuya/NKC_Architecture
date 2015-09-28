@@ -108,12 +108,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		if(resultStateTime >= 0.5f)	ChangeResultState(ResultStateNo.SS);
 	}
 	private	void	UpdateResultSS(){
-		Texture2D	tex = new Texture2D(Screen.width,Screen.height,TextureFormat.ARGB32,false);
-		tex.ReadPixels(new Rect(0,0,Screen.width,Screen.height),0,0);
-		tex.Apply();
-		byte[]	bytes	= tex.EncodeToPNG();
-		Destroy(tex);
-		File.WriteAllBytes("建塔師のScreenショット.png",bytes);
+		int id	= 0;
+		while(true){
+			string	name	= "建塔師のScreenショット" + id + ".png";
+			id	++;
+			if(File.Exists(name))	continue;
+			Application.CaptureScreenshot(name);
+			break;
+		}
 		ChangeResultState(ResultStateNo.SSEnd);
 	}
 	private	void	UpdateResultSSEnd(){
