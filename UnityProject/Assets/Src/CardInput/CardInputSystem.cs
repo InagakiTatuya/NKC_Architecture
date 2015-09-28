@@ -96,6 +96,12 @@ public class CardInputSystem : MonoBehaviour {
         
         //カードの初期化
         m_cardMgr.SendLordData();
+
+        //\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-デバッグ用
+        StractPlayerData d = new StractPlayerData();
+        d.pleyerName = "テストマン";
+        m_cardMgr.SetCardData(0, d);
+        //\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\
     }
 
     //  更新  InScene

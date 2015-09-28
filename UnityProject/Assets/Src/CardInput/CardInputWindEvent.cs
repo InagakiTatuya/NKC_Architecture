@@ -118,7 +118,7 @@ public partial class CardInputWind : MonoBehaviour {
 
         if(m_DataBff.pleyerName != "") {
             //CardManagerにデータを渡す
-            ciSystem.getCardMgr.SetCardData(ref m_IndexBff, ref m_DataBff);
+            ciSystem.getCardMgr.SetCardData(m_IndexBff, m_DataBff);
             m_State.SetNextState(STATE_CLAUSEWIND);
         }else {
             Debug.Log("名前が入力されていない");

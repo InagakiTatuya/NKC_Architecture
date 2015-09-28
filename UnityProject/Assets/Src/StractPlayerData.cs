@@ -16,15 +16,15 @@ public struct StractPlayerData {
         imageBodyNo = 0;
     }
 
-    public void SetImageData(int _ImageType, int _no) {
+    public void SetImageData(int aImageType, int aNo) {
         
-        switch(_ImageType) {
+        switch(aImageType) {
             case Database.PLAYER_PARTS_BODY:
-                imageBodyNo = _no; break;
+                imageBodyNo = aNo; break;
             case Database.PLAYER_PARTS_FACE:
-                imageFaceNo = _no; break;
+                imageFaceNo = aNo; break;
             case Database.PLAYER_PARTS_HAIR:
-                imageHairNo = _no; break;
+                imageHairNo = aNo; break;
         }
 
     }
