@@ -7,7 +7,7 @@ public class PartsSetManager : MonoBehaviour{
 
 	void Start(){
 		system = transform.root.GetComponent<GameSceneSystem>();
-		touchAbleArea = GameObject.Find("BACK_GAMEGUI").transform.GetChild(1).gameObject;
+		touchAbleArea = GameObject.Find("BACK_GAMEGUI").transform.GetChild(0).gameObject;
 		touchAbleArea.SetActive(false);
 	}
 

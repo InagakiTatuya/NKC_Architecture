@@ -1,0 +1,157 @@
+fileFormatVersion: 2
+guid: e5c07ac77390ff249aeb311ed544bd1e
+timeCreated: 1443411378
+licenseType: Free
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: bill_002
+    100004: bill_003
+    100006: bill_004
+    100008: bill_005
+    100010: bill_006
+    100012: bill_007
+    100014: bill_008
+    100016: bill_009
+    100018: bill_010
+    100020: bill_011
+    100022: bill_012
+    100024: bill_013
+    100026: bill_014
+    100028: bill_015
+    100030: bill_016
+    100032: bill_1
+    100034: Plane001
+    400000: //RootNode
+    400002: bill_002
+    400004: bill_003
+    400006: bill_004
+    400008: bill_005
+    400010: bill_006
+    400012: bill_007
+    400014: bill_008
+    400016: bill_009
+    400018: bill_010
+    400020: bill_011
+    400022: bill_012
+    400024: bill_013
+    400026: bill_014
+    400028: bill_015
+    400030: bill_016
+    400032: bill_1
+    400034: Plane001
+    2300000: bill_002
+    2300002: bill_003
+    2300004: bill_004
+    2300006: bill_005
+    2300008: bill_006
+    2300010: bill_007
+    2300012: bill_008
+    2300014: bill_009
+    2300016: bill_010
+    2300018: bill_011
+    2300020: bill_012
+    2300022: bill_013
+    2300024: bill_014
+    2300026: bill_015
+    2300028: bill_016
+    2300030: bill_1
+    2300032: Plane001
+    3300000: bill_002
+    3300002: bill_003
+    3300004: bill_004
+    3300006: bill_005
+    3300008: bill_006
+    3300010: bill_007
+    3300012: bill_008
+    3300014: bill_009
+    3300016: bill_010
+    3300018: bill_011
+    3300020: bill_012
+    3300022: bill_013
+    3300024: bill_014
+    3300026: bill_015
+    3300028: bill_016
+    3300030: bill_1
+    3300032: Plane001
+    4300000: Plane001
+    4300002: bill_004
+    4300004: bill_1
+    4300006: bill_002
+    4300008: bill_003
+    4300010: bill_005
+    4300012: bill_006
+    4300014: bill_007
+    4300016: bill_008
+    4300018: bill_009
+    4300020: bill_010
+    4300022: bill_011
+    4300024: bill_012
+    4300026: bill_013
+    4300028: bill_014
+    4300030: bill_015
+    4300032: bill_016
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

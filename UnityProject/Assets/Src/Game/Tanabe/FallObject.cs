@@ -121,9 +121,9 @@ public partial class FallObject : MonoBehaviour {
 		{
 			e.state = STATE.STOP;
 			e.rBody.isKinematic = false;
-			e.rBody.AddForce(transform.up * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
-			e.rBody.AddForce(transform.right * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
-			e.rBody.AddForce(transform.forward * Random.Range(-1.0f,1.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.up * Random.Range(-10.0f,10.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.right * Random.Range(-10.0f,10.0f), ForceMode.Impulse);
+			e.rBody.AddForce(transform.forward * Random.Range(-10.0f,10.0f), ForceMode.Impulse);
 		});
 	}
 	private void ObjectWakeUp(bool isAll = true){
