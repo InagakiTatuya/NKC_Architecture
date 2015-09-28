@@ -138,7 +138,7 @@ public class CardManager : MonoBehaviour {
     //  CardInputWindでOKボタンが押されたときに呼ばれる。
     //  受け取ったデータを格納する
     //=========================================================================
-    public void SetCardData(ref int aIndex, ref StractPlayerData aData) {
+    public void SetCardData(int aIndex, StractPlayerData aData) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
@@ -230,7 +230,7 @@ public class CardManager : MonoBehaviour {
         CardsSetActive(data.Length, true);      //カードのアクティブ
         
         for(int i=0; i < data.Length; i++) {
-            SetCardData(ref i, ref data[i]);
+            SetCardData(i, data[i]);
         }
 
         return false;

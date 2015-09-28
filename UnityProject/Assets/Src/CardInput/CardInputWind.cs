@@ -44,7 +44,7 @@ public partial class CardInputWind : MonoBehaviour {
     private MessageWind       m_MesWind;  //メッセージウィンドウ
     
     //見た目
-    private InputField        m_Input;     //名前入力
+    private MobileInputField  m_Input;     //名前入力
     private Image             m_ImageHair; //髪型
     private Image             m_ImageFace; //顔
     private Image             m_ImageBody; //体
@@ -69,9 +69,11 @@ public partial class CardInputWind : MonoBehaviour {
         m_MesWind   = transform.FindChild("MessageWind"  )
                                                 .GetComponent<MessageWind>();
         
-        //見た目
+        //名前入力
         m_Input     = m_Wind.FindChild("Card/InputField")
-                                                .GetComponent<InputField>();
+                                        .GetComponent<MobileInputField>();
+        
+        //見た目
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
                                                 .GetComponent<Image>();
         m_ImageFace = m_Wind.FindChild("Card/PhotoBack/PhotoFace")
