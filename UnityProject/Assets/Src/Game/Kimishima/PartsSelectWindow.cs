@@ -21,7 +21,7 @@ class 	PartsSelectClass{
 	
 	//列挙・テーブル///////////////////////////////////////
 	//ステート番号
-	public	enum	StateNo{Open,Neutral,Close,Hide,Length}
+	public	enum	StateNo{Open,Neutral,Close,Hide,YaneChange,YaneWait,Length}
 	//パーツ選択ウィンドウのテキスト
 	private	enum	PartsSelectText{Job,DescText,Length}
 	//メッセージID
@@ -40,6 +40,7 @@ class 	PartsSelectClass{
 	private	Vector3				windowSize;
 	private	Text[]				text			= null;
 	private	Button[]			button			= null;
+	public	int					stateNo{get{return	windowStateNo;}}
 	private	int					windowStateNo;
 	private float				windowStateTime;
 	private	PointerUpSystem[]	pointerUpSystem	= null;
@@ -47,6 +48,7 @@ class 	PartsSelectClass{
 	private	GameSceneSystem		gameSceneSystem;
 	private	GameObject			canvasObject;
 	private	bool				nextFlg;
+	public	bool				yaneFlg;
 	
 	//コンストラクタ・デストラクタ//////////////////////////
 	//コンストラクタ
@@ -59,7 +61,7 @@ class 	PartsSelectClass{
 	//初期化////////////////////////////////////////////////
 	public	void	Init(){//初期化_Begin//-----------------
 		partsSelectWindowUpdateFunc	= new UnityAction[]{
-			this.Open,	this.Neutral,	this.Close,	null,
+			this.Open,	this.Neutral,	this.Close,	null,	this.YaneChange,	this.YaneWait,
 		};
 		windowOpenFlg	= false;
 		windowSize		= Vector3.zero;
@@ -125,10 +127,29 @@ class 	PartsSelectClass{
 			button		= null;
 			fadeClass.ChangeBackFadeState(FadeClass.BackFadeStateNo.FadeIn);
 			ChangeState(StateNo.Hide);
-			nextFlg					= true;
+			nextFlg		= true;
+			yaneFlg		= false;
 		}
 	}//ウィンドウを閉じる_End//------------------------------
-	
+
+	private	void	YaneChange(){//屋根ウィンドウ出す//------
+		float	n		= 1.0f - windowStateTime * 8.0f;
+		windowSize.x	= Mathf.Max(2.0f - n,1.0f);
+		windowSize.y	= Mathf.Min(n,1.0f);
+		if(n <= 0.0f){
+			GameObject.Destroy(windowImage.gameObject);
+			windowImage	= null;
+			text		= null;
+			button		= null;
+			ChangeState(StateNo.YaneWait);
+		}
+	}
+	private	void	YaneWait(){//ウィンドウを出すための待機//
+		if(windowStateTime < 0.25f)	return;
+		windowOpenFlg	= false;
+		ChangeState(StateNo.Open);
+	}
+
 	//ボタン関連////////////////////////////////////////////
 	//パーツ選択ウィンドウの決定ボタンが押された
 	public	void	OnPartsSelectButtonEnter(){
@@ -137,7 +158,8 @@ class 	PartsSelectClass{
 	}
 	//屋根のボタンが押された
 	public	void	OnYaneButtonEnter(){
-		
+		yaneFlg	= true;
+		ChangeState(StateNo.YaneChange);
 	}
 	
 	//その他関数/////////////////////////////////////////////
@@ -153,7 +175,7 @@ class 	PartsSelectClass{
 	}//パーツ選択ウィンドウを表示_End//-----------------------
 	
 	//パーツ選択ウィンドウのステート番号を変更する_Begin//------
-	private	void	ChangeState(StateNo stateNo,bool overrapFlg = false){
+	public	void	ChangeState(StateNo stateNo,bool overrapFlg = false){
 		int		value	= (int)stateNo;
 		if(!overrapFlg && value == windowStateNo)	return;
 		windowStateNo	= value;
@@ -207,7 +229,7 @@ class 	PartsSelectClass{
 			Image	buttonImage	= obj.GetComponent<Image>();
 			buttonImage.rectTransform.localPosition	= tablePos[i];
 			button[i].onClick.AddListener(tableAction[i]);
-			button[i].interactable	= false;
+			button[i].interactable		= (i == 0)?false:true;
 			ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
 			buttonSystem.text			= tebleText[i];
 			buttonSystem.color			= Color.white;

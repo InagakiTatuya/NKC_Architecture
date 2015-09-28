@@ -35,6 +35,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int					partsID;
 	public	int					PartsID{get{return	partsID;}}
 	private	PartsSelectClass	partsSelectClass;
+	private	int					jobBuf;
 
 	private	bool				execute;
 
@@ -89,6 +90,12 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択ステート
 	private	void	UpdatePartsSelect(){
+		if(stateTime < 0.05f)	jobBuf	= job;
+		if(partsSelectClass.yaneFlg){
+			if(job == (int)Database.JobID.Yane)	job	= jobBuf;
+			else 								job	= (int)Database.JobID.Yane;
+			partsSelectClass.yaneFlg	= false;
+		}
 		floorSize.y	= Mathf.Min((floorSize.y == 0.0f)?1.0f:floorSize.y * 1.2f,128.0f);
 		if(partsSelectClass != null)	partsID	= partsSelectClass.GetPartsID();
 		if(!execute)	return;
