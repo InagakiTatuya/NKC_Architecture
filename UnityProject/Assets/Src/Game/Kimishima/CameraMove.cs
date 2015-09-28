@@ -85,8 +85,8 @@ public class CameraMove : MonoBehaviour {
 		float	newX,newZ;
 		f_look.x	-= 60.0f;
 		f_look.z	-= 60.0f;
-		newX	= f_look.x * Mathf.Cos(rad) - f_look.z * Mathf.Sin(rad);
-		newZ	= f_look.x * Mathf.Sin(rad) + f_look.z * Mathf.Cos(rad);
+		newX		= f_look.x * Mathf.Cos(rad) - f_look.z * Mathf.Sin(rad);
+		newZ		= f_look.x * Mathf.Sin(rad) + f_look.z * Mathf.Cos(rad);
 		f_look.x	= newX + 60.0f;
 		f_look.z	= newZ + 60.0f;
 	}
