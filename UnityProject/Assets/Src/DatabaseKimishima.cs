@@ -11,6 +11,14 @@ using System.Collections.Generic;
 
 //データベース_Begin//--------------------------------------
 public partial class Database : SingletonCustom<Database> {
+	
+	public	enum JobID{//ジョブ番号//-----------------------
+		Yuka,
+		Hashira,
+		Kabe,
+		Yane,
+		Length
+	}
 
 	public	static	string	TutorialDataName	= "MaxFloorTutorial";
 	public	static	string	MainDataName		= "MaxFloorMain";
