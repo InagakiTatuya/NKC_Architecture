@@ -79,9 +79,12 @@ public class CameraMove : MonoBehaviour {
 	}
 	void	UpdateTouchFingerSingle(){//指一本
 		Touch	touch	= Input.touches[0];
-		f_look.y	+= touch.deltaPosition.y / touch.deltaTime * Time.deltaTime;
+		float	touchDeltaTime	= touch.deltaTime;
+		if(touchDeltaTime == 0.0f)	return;
+		float	n	= Time.deltaTime / touchDeltaTime;
+		f_look.y	+= touch.deltaPosition.y * n;
 		if(f_look.y < -25.0f)	f_look.y	= -25.0f;
-		float	rad		= touch.deltaPosition.x / touch.deltaTime * Time.deltaTime * -0.05f;
+		float	rad		= touch.deltaPosition.x * n * -0.05f;
 		float	newX,newZ;
 		f_look.x	-= 60.0f;
 		f_look.z	-= 60.0f;
