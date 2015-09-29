@@ -74,6 +74,7 @@ public class CameraMove : MonoBehaviour {
 	void	UpdateTouch(){
 		if(!f_touchPermit)	return;
 		int	touchCount	= Input.touchCount;
+		if(touchCount <= 0)	return;
 		if(touchCount == 1)	UpdateTouchFingerSingle();
 		if(touchCount > 1)	UpdateTouchFingerMulti(touchCount);
 	}
@@ -100,6 +101,8 @@ public class CameraMove : MonoBehaviour {
 			for(int j = i + 1;j < touchCount;j ++){
 				Touch	iTouch	= Input.touches[i];
 				Touch	jTouch	= Input.touches[j];
+				if(iTouch.deltaTime == 0.0f)	return;
+				if(jTouch.deltaTime == 0.0f)	return;
 				int		ix		= (iTouch.deltaPosition.x < 0.0f)?-1:((iTouch.deltaPosition.x > 0.0f)?1:0);
 				int		jx		= (jTouch.deltaPosition.x < 0.0f)?-1:((jTouch.deltaPosition.x > 0.0f)?1:0);
 				int		iy		= (iTouch.deltaPosition.y < 0.0f)?-1:((iTouch.deltaPosition.y > 0.0f)?1:0);
