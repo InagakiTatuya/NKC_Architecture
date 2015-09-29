@@ -27,13 +27,13 @@ class ClassStateManager {
     public float getStateTime   { get{ return m_StateTime;    } }
     
     //コンストラクタ///////////////////////////////////////////////////////////
-    public ClassStateManager(int _StateMax,
-        UnityAction[] _InitFuncArr, UnityAction[] _UdataFuncArr) {
+    public ClassStateManager(int aStateMax,
+        UnityAction[] aInitFuncArr, UnityAction[] aUdataFuncArr) {
         
-        m_STATE_NO_MAX = _StateMax;
+        m_STATE_NO_MAX = aStateMax;
         //ステートの関数ポインタを初期化---------------------------------------
-        m_fnIniteArr  = _InitFuncArr;
-        m_fnUpdateArr = _UdataFuncArr;
+        m_fnIniteArr  = aInitFuncArr;
+        m_fnUpdateArr = aUdataFuncArr;
     }
     //公開関数/////////////////////////////////////////////////////////////////
     //更新=====================================================================
@@ -44,8 +44,8 @@ class ClassStateManager {
             //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
             #if UNITY_EDITOR
             Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-                this.GetType().Name + " \n" +
-                "StateChange: oldNo = " + m_StateNo+ ", newNo = "+m_NextStateNo + 
+                this.GetType().Name +" == 0x" + this.GetHashCode().ToString("X") + " \n" +
+                "StateChange: oldNo = " + m_StateNo + ", newNo = " + m_NextStateNo +
                 ", OldStateTime = " + m_StateTime );
             #endif
             //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -66,8 +66,8 @@ class ClassStateManager {
     //ステート移行=============================================================
     //  ステートを移行する予約をする。
     //  実際のステート移行は、Updateで行われる。
-    public void SetNextState(int _state) {
-        m_NextStateNo = _state;
+    public void SetNextState(int aState) {
+        m_NextStateNo = aState;
     }
     
 }

@@ -18,7 +18,6 @@ public partial class GameSceneSystem : MonoBehaviour {
     private CardWind m_NextWind; //次のプレイヤー
     private CardWind m_MiniWind; //右下の社員証
 
-
     //非公開関数///////////////////////////////////////////////////////////////
 
     //初期化===================================================================
@@ -36,6 +35,8 @@ public partial class GameSceneSystem : MonoBehaviour {
     }
 
 
+
+
     //社員証=================================================================■
     //社員証を表示=============================================================
     //  社員証を表示する。
@@ -43,14 +44,14 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、瞬間的に表示されるが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void OpenCardWind( int aPlayerNo, int aJobNo,
+    private void OpenCardWind(int aPlayerNo, int aJobNo,
                                float aAnimeTime = 0.0f
                              ) {
         //取り出したデータを適用
-        m_CardWind.SetImageAndTexts(aPlayerNo, aJobNo, 
-            Database.obj.JOB_TEXT[aJobNo]);
+        m_CardWind.SetImageAndTexts(
+            aPlayerNo, aJobNo, Database.obj.JOB_TEXT[aJobNo]);
         //アクティブの設定
-        m_CardWind.gameObject.SetActive(true);
+        m_CardWind.ChangeState(CardWind.STATE_OPEN);
     }
 
     //社員証を非表示===========================================================
@@ -59,8 +60,7 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
     private void CloseCardWind(float aAnimeTime = 0.0f) {
-        //アクティブの設定
-        m_CardWind.gameObject.SetActive(false);
+        m_CardWind.ChangeState(CardWind.STATE_CLOSE);
     }
 
     //次のプレイヤーです=====================================================■
@@ -69,13 +69,13 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、瞬間的に表示されるが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void OpenNextPleyarWind( int aPlayerNo, int aJobNo,
+    private void OpenNextPleyarWind(int aPlayerNo, int aJobNo,
                                      float aAnimeTime = 0.0f
                                     ) {
         //取り出したデータを適用
         m_NextWind.SetImageAndTexts(aPlayerNo, aJobNo);
-        //アクティブの設定
-        m_NextWind.gameObject.SetActive(true);
+        //開く
+        m_NextWind.ChangeState(CardWind.STATE_OPEN);
     }
 
     //”丸々さんの番です”を非表示=============================================
@@ -83,9 +83,8 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    現在、非アクティブにしているだけだが、
     //    演出の強化のため変更の可能性あり。
     //-------------------------------------------------------------------------
-    private void CloseNextPleyarWind(float _animeTime = 0.0f) {
-        //アクティブの設定
-        m_NextWind.gameObject.SetActive(false);
+    private void CloseNextPleyarWind(float aAnimeTime = 0.0f) {
+        m_NextWind.ChangeState(CardWind.STATE_CLOSE);
 
     }
 
@@ -94,22 +93,21 @@ public partial class GameSceneSystem : MonoBehaviour {
     //  右下の社員証を表示する。
     //    演出強化のため大幅に変更する可能性あり。
     //-------------------------------------------------------------------------
-    private void OpenCardMiniWind( int _PlayerNo, int _JobNo,
-                                   float _animeTime = 0.0f) {
+    private void OpenCardMiniWind(int aPlayerNo, int aJobNo,
+                                   float aAnimeTime = 0.0f) {
         //取り出したデータを適用
-        m_MiniWind.SetImageAndTexts(_PlayerNo, _JobNo);
-        //アクティブの設定
-        m_MiniWind.gameObject.SetActive(true);
+        m_MiniWind.SetImageAndTexts(aPlayerNo, aJobNo);
+        m_MiniWind.ChangeState(CardWind.STATE_OPEN_CYBER);
     }
 
     //社員証を変更==============================================================
     //  右下の社員証を変更する。
     //    演出強化のため大幅に変更する可能性あり。
     //-------------------------------------------------------------------------
-    private void ChangeCardMiniWind( int _PlayerNo, int _JobNo,
-                                     float _animeTime = 0.0f) {
+    private void ChangeCardMiniWind(int aPlayerNo, int aJobNo,
+                                     float aAnimeTime = 0.0f) {
         //取り出したデータを適用
-        m_MiniWind.SetImageAndTexts(_PlayerNo, _JobNo);
+        m_MiniWind.SetImageAndTexts(aPlayerNo, aJobNo);
     }
 
     //社員証を閉じる============================================================
@@ -117,7 +115,6 @@ public partial class GameSceneSystem : MonoBehaviour {
     //    演出強化のため大幅に変更する可能性あり。
     //-------------------------------------------------------------------------
     private void CloseCardMiniWind() {
-        //アクティブの設定
-        m_MiniWind.gameObject.SetActive(false);
+        m_MiniWind.ChangeState(CardWind.STATE_CLOSE_CYBER);
     }
 }
