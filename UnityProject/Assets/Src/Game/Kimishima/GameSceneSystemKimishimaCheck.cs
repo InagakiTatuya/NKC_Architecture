@@ -60,8 +60,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			if(maxY >= y)	continue;
 			maxY	= y;
 		}
-		cameraMove.look	= new Vector3( 0.0f,maxY + 85, 0.0f);
-		cameraMove.at	= new Vector3(60.0f,maxY + 35,60.0f);
+		cameraMove.look	= new Vector3( 0.0f,maxY + 30, 0.0f);
+		cameraMove.at	= new Vector3(60.0f,maxY + 00,60.0f);
 	}
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
