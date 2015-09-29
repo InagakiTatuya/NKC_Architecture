@@ -84,6 +84,7 @@ public partial class FallObject : MonoBehaviour {
 				rBody.angularVelocity = Vector3.zero;
 
 				if(childCount == 0){
+					system.seManager.Play(1);
 					if(system.GetJob == 2 || system.GetJob == 3){
 						state = STATE.CHECK;
 						system.Check = true;
