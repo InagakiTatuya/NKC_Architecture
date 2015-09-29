@@ -144,6 +144,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	public void OnPointerUp(PointerEventData e){
 		//Debug.Log(targetObj +":"+ e.pointerEnter);
 		if (gameObject == e.pointerEnter){
+			system.seManager.Play(0);
 			SetPos(e);
 
 			downObj = (GameObject)Instantiate(Resources.Load<GameObject>(buildName[partsID,buildNo]), pos, Quaternion.identity);

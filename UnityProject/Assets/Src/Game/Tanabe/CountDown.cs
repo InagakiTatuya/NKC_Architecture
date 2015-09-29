@@ -22,6 +22,7 @@ public class CountDown : MonoBehaviour {
 			text.text = "" + viewTimer;
 			text.fontSize = (int)(280 * time);
 			if (time >= 1.0f){
+				system.seManager.Play(2);
 				viewTimer--;
 				time = 0;
 				if (viewTimer <= 0){

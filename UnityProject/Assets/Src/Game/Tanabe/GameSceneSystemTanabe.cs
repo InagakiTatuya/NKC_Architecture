@@ -27,7 +27,9 @@ public partial class GameSceneSystem : MonoBehaviour{
 
 	//更新関数
 	void UpdateTanabe(){
-
+		if(pauseGUI.activeSelf){
+			if(stateNo == (int)StateNo.GameOver || stateNo == (int)StateNo.Result) pauseGUI.SetActive(false);
+		}
 	}
 
 	//初期化
@@ -58,7 +60,6 @@ public partial class GameSceneSystem : MonoBehaviour{
 
 	//建物倒壊
 	private void UpdateGameOver(){
-		pauseGUI.SetActive(false);
 		UpdateGameOverKimishima();
 	}
 
