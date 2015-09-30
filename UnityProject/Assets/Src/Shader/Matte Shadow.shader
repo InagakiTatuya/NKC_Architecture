@@ -14,12 +14,13 @@ Properties {
  
 SubShader {
  
+	ZWrite Off
+
     Tags {"Queue"="AlphaTest" "IgnoreProjector"="True" "RenderType"="TransparentCutout"}
  
     LOD 200
  
     Blend Zero SrcColor
- 
    
  
 CGPROGRAM
@@ -43,14 +44,8 @@ struct Input {
  
  
 inline fixed4 LightingShadowOnly (SurfaceOutput s, fixed3 lightDir, fixed atten)
- 
 {
- 
-   
- 
     fixed4 c;
- 
-   
  
     c.rgb = s.Albedo*atten;
  
@@ -59,10 +54,6 @@ inline fixed4 LightingShadowOnly (SurfaceOutput s, fixed3 lightDir, fixed atten)
     return c;
  
 }
- 
- 
- 
- 
  
 void surf (Input IN, inout SurfaceOutput o) {
  
@@ -80,6 +71,6 @@ ENDCG
  
  
  
-Fallback "Transparent/Cutout/VertexLit"
+Fallback "Diffuse"
  
 }
