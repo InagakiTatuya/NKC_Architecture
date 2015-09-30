@@ -28,8 +28,8 @@ public class CardInputSystem : MonoBehaviour {
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
 
-    private const float INSCENE_TIME  = 1.0f; //INSTAET
-    private const float OUTSCENE_TIME = 1.0f; //OUTSTATE
+    private const float INSCENE_TIME  = 0.4f; //INSTAET
+    private const float OUTSCENE_TIME = 0.4f; //OUTSTATE
 
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private MessageWind     m_MesWind;  //メッセージウィンドウ
@@ -96,12 +96,6 @@ public class CardInputSystem : MonoBehaviour {
         
         //カードの初期化
         m_cardMgr.SendLordData();
-
-        //\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-デバッグ用
-        StractPlayerData d = new StractPlayerData();
-        d.pleyerName = "テストマン";
-        m_cardMgr.SetCardData(0, d);
-        //\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\
     }
 
     //  更新  InScene

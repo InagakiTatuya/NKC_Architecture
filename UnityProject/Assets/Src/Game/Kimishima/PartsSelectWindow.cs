@@ -171,7 +171,7 @@ class 	PartsSelectClass{
 		ChangeState(StateNo.Open);
 		CreateWindow();
 		CreatePartsSelectText(job);
-		CreatePartsSelectButton();
+		CreatePartsSelectButton(job);
 		CreatePartsSelectScrollView(job);
 	}
 
@@ -214,10 +214,13 @@ class 	PartsSelectClass{
 		}
 	}
 
-	private	void	CreatePartsSelectButton(){//パーツセレクトウィンドウのボタン
+	private	void	CreatePartsSelectButton(int job){//パーツセレクトウィンドウのボタン
 		button	= new Button[(int)ButtonID.Length];
 		Vector3[]		tablePos	= new Vector3[]{new Vector3(128.0f,-240.0f),new Vector3(-128.0f,-240.0f)};
-		string[]		tebleText	= new string[]{"決定","屋根"};
+		string[]		tebleText	= new string[2];
+		string[]		tablejob	= new string[]{"屋根","屋根","屋根","戻る"};
+		tebleText[0]	= "決定";
+		tebleText[1]	= tablejob[job];
 		UnityAction[]	tableAction	= new UnityAction[]{OnPartsSelectButtonEnter,OnYaneButtonEnter};
 		for(int i = 0;i < (int)ButtonID.Length;i ++){
 			GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",windowImage.gameObject);

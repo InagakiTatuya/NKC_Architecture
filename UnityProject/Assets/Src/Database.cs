@@ -62,6 +62,19 @@ public partial class Database : SingletonCustom<Database> {
             "屋根を作る人",
         };
 
+        //プレイヤー情報^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+#if UNITY_EDITOR
+        //  デバック用仮データ
+        if(m_PlayerDatas == null) {
+            StractPlayerData[] kariData = new StractPlayerData[ 5 ];
+            kariData[0].pleyerName = "永遠のゼロ";
+            kariData[1].pleyerName = "一太郎";
+            kariData[2].pleyerName = "永遠の二番手";
+            kariData[3].pleyerName = "三郎";
+            kariData[4].pleyerName = "四郎";
+            this.SetPlyaerDatas(ref kariData);
+        }
+#endif
         Debug.Log("Database.Awake End");
     }
 
