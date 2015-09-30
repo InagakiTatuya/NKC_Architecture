@@ -54,14 +54,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 	private	void	UpdateCheckKimishimaCompleteCamera(){
 		if(cameraMove == null)	return;
-		float	maxY	= buildList[0].transform.position.y;
+		float	max		= buildList[0].gameObject.transform.position.y;
 		for(int i = 1;i < buildList.Count;i ++){
-			float	y	= buildList[i].transform.position.y;
-			if(maxY >= y)	continue;
-			maxY	= y;
+			float	y	= buildList[i].gameObject.transform.position.y;
+			if(max >= y)	continue;
+			max			= y;
 		}
-		cameraMove.look	= new Vector3( 0.0f,maxY + 30, 0.0f);
-		cameraMove.at	= new Vector3(60.0f,maxY + 00,60.0f);
+		cameraMove.look	= new Vector3( 0.0f,max + 30, 0.0f);
+		cameraMove.at	= new Vector3(60.0f,max +  0,60.0f);
 	}
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
