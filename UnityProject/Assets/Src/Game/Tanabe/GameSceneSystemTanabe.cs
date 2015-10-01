@@ -34,10 +34,7 @@ public partial class GameSceneSystem : MonoBehaviour{
 
 	//初期化
 	private void UpdateIntro(){
-		if (true){
-			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSelect);
-		}
+		ChangeState(StateNo.CardView);
 	}
 
 	//パーツ配置
@@ -49,7 +46,7 @@ public partial class GameSceneSystem : MonoBehaviour{
 		if(partsSet){
 			job++;
 			partsSet = false;
-			ChangeState(StateNo.PartsSelect);
+			ChangeState(StateNo.CardView);
 		}
 	}
 
