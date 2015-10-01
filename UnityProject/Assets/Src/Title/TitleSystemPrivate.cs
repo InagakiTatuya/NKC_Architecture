@@ -34,11 +34,12 @@ public	partial class TitleSystem : MonoBehaviour{
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 		button			= obj.GetComponent<Button>();
 		button.colors	= Database.colorBlocks[(int)Database.ColorBlockID.White];
-		Image	image	= obj.GetComponent<Image>();
-		image.sprite	= Resources.Load<Sprite>("Texture/Title/start");
-		image.rectTransform.localPosition	= new Vector3(0.0f,-192.0f,0.0f);
 		ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
-		buttonSystem.text			= null;
+		Sprite[]	spt	= Resources.LoadAll<Sprite>("Texture/Title/start");
+		buttonSystem.sprite.normalSprite	= spt[0];
+		buttonSystem.sprite.pushSprite		= spt[1];
+		buttonSystem.text.init();
+		buttonSystem.buttonPos		= new Vector2(0.0f,-192.0f);
 		buttonSystem.buttonSize		= new Vector2(512.0f,128.0f);
 		buttonSystem.buttonEnter	= OnStartButtonEnter;
 	}//ボタンを初期化_End//---------------------------------

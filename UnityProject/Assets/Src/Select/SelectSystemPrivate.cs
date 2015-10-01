@@ -60,20 +60,19 @@ public	partial	class SelectSystem : MonoBehaviour {
 			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			button[i]				= obj.GetComponent<Button>();
 			button[i].colors		= Database.colorBlocks[(int)Database.ColorBlockID.White];
-			buttonImage[i]			= obj.GetComponent<Image>();
-			buttonImage[i].sprite	= Resources.Load<Sprite>(spriteName[i]);
-			buttonImage[i].rectTransform.localPosition	= tableButtonPos[i];
 			button[i].onClick.AddListener(tableOnButtonEnterFunc[i]);
 			ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
-			buttonSystem.text		= " ";
-			buttonSystem.color		= Color.white;
-			buttonSystem.fontSize	= 24;
+			buttonSystem.buttonPos	= tableButtonPos[i];
 			buttonSystem.buttonSize	= new Vector2(512.0f,256.0f);
+			Sprite[]	sprite		= Resources.LoadAll<Sprite>(spriteName[i]);
+			buttonSystem.sprite.normalSprite	= sprite[0];
+			buttonSystem.sprite.pushSprite		= sprite[1];
+			buttonSystem.text.init();
 		}
 		for(int i = 0;i < button.Length;i ++){
 			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Select/recode",canvasObject);
 			Image		image		= obj.GetComponent<Image>();
-			image.rectTransform.localPosition	= tableButtonPos[i] + new Vector3(-48.0f,96.0f,0.0f);
+			image.rectTransform.localPosition	= tableButtonPos[i] + new Vector3(-72.0f,48.0f,0.0f);
 		}
 	}//ボタンを初期化_End//---------------------------------
 	
