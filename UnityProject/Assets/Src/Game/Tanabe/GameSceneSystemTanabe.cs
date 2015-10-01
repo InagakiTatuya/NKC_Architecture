@@ -35,8 +35,8 @@ public partial class GameSceneSystem : MonoBehaviour{
 	//初期化
 	private void UpdateIntro(){
 		if (true){
-			//ChangeState(StateNo.CardView, false);
-			ChangeState(StateNo.PartsSelect);
+			ChangeState(StateNo.CardView);
+			//ChangeState(StateNo.PartsSelect);
 		}
 	}
 

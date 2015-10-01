@@ -47,8 +47,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		}else{
 			AddFloor();
 			UpdateCheckKimishimaCompleteCamera();
-			//ChangeState(StateNo.CardView);
-			ChangeState(StateNo.PartsSelect);
+			ChangeState(StateNo.CardView);
+			//ChangeState(StateNo.PartsSelect);
 		}
 		return	true;
 	}
