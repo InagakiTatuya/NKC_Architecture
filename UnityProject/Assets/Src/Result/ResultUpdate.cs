@@ -124,10 +124,10 @@ public	partial	class ResultSystem : MonoBehaviour {
 
 	//ボタンを更新_Begin//----------------------------------
 	private	void	UpdateButtonImage(){
-		if(button == null)		return;
+	/*	if(button == null)		return;
 		if(buttonImage == null)	return;
 		for(int i = 0;i < buttonImage.Length;i ++)
-			buttonImage[i].rectTransform.sizeDelta	= buttonSize[i];
+			buttonImage[i].rectTransform.sizeDelta	= buttonSize[i];*/
 	}//ボタンを更新_End//-----------------------------------
 
 	private	void	UpdateFade(){//フェードを更新_Begin//---

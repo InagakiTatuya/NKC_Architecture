@@ -226,14 +226,13 @@ class 	PartsSelectClass{
 			GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",windowImage.gameObject);
 			button[i]			= obj.GetComponent<Button>();
 			button[i].colors	= Database.colorBlocks[(int)Database.ColorBlockID.Blue];
-			Image	buttonImage	= obj.GetComponent<Image>();
-			buttonImage.rectTransform.localPosition	= tablePos[i];
 			button[i].onClick.AddListener(tableAction[i]);
 			button[i].interactable		= (i == 0)?false:true;
 			ButtonSystem	buttonSystem= obj.GetComponent<ButtonSystem>();
-			buttonSystem.text			= tebleText[i];
-			buttonSystem.color			= Color.white;
-			buttonSystem.fontSize		= 24;
+			buttonSystem.text.text			= tebleText[i];
+			buttonSystem.text.color			= Color.white;
+			buttonSystem.text.fontSize		= 24;
+			buttonSystem.buttonPos		= tablePos[i];
 			buttonSystem.buttonSize		= new Vector2(128.0f,64.0f);
 		}
 	}

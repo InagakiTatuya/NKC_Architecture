@@ -46,7 +46,7 @@ public	partial	class ResultSystem : MonoBehaviour {
 	private	Vector3[]		runcGidePos	= null;
 	private	Text[]			runcText	= null;
 	private	Button[]		button		= null;
-	private	Image[]			buttonImage	= null;
+	//private	Image[]			buttonImage	= null;
 	private	Vector2[]		buttonSize	= null;
 	private	ColorBlock		buttonColor;
 	private	Image			fade		= null;
@@ -142,18 +142,13 @@ public	partial	class ResultSystem : MonoBehaviour {
 			this.OnSelectButtonEnter,
 			this.OnCardInputButtonEnter,
 		};
-		string[]	tableButtonText	= new string[]{
-			"リトライ",
-			"セレクトへ",
-			"社員証入力へ",
-		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
 			new Vector3(0.0f, 128.0f,0.0f),
 			new Vector3(0.0f,   0.0f,0.0f),
 			new Vector3(0.0f,-128.0f,0.0f),
 		};
 		button		= new Button[tableOnButtonEnterFunc.Length];
-		buttonImage	= new Image[button.Length];
+		//buttonImage	= new Image[button.Length];
 		buttonSize	= new Vector2[button.Length];
 		buttonColor.normalColor		= new Color(0.5f,0.5f,1.0f,1.0f);
 		buttonColor.highlightedColor= new Color(0.5f,0.5f,1.0f,1.0f);
@@ -165,14 +160,12 @@ public	partial	class ResultSystem : MonoBehaviour {
 			GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			button[i]		= obj.GetComponent<Button>();
 			button[i].colors= buttonColor;
-			buttonImage[i]	= obj.GetComponent<Image>();
-			buttonImage[i].rectTransform.localPosition	= tableButtonPos[i];
 			buttonSize[i]	= Vector2.zero;
 			button[i].onClick.AddListener(tableOnButtonEnterFunc[i]);
 			ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
-			buttonSystem.text		= tableButtonText[i];
-			buttonSystem.color		= Color.white;
-			buttonSystem.fontSize	= 24;
+			buttonSystem.text.color		= Color.white;
+			buttonSystem.text.fontSize	= 24;
+			buttonSystem.buttonPos		= tableButtonPos[i];
 		}
 	}//ボタンを生成_End//-----------------------------------
 

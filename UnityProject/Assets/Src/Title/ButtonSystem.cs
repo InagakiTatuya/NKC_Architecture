@@ -21,15 +21,33 @@ public class ButtonSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandler,
 
 //パブリックフィールド//------------------------------------
 
+	//構造体////////////////////////////////////////////////
+	public	struct SpriteGroup{
+		public	Sprite		normalSprite;	//通常時のスプライト
+		public	Sprite		pushSprite;		//押下時のスプライト
+	}
+	public	struct TextData{//テキストオブジェクト
+		public	void	init(){//コンストラクタ
+			text		= null;
+			pos			= Vector3.zero;
+			fontSize	= 32;
+			color		= Color.white;
+		}
+		public	string		text;
+		public	Vector3		pos;
+		public	int			fontSize;
+		public	Color		color;
+	}
+
 	//変数//////////////////////////////////////////////////
 	public	delegate	void	ButtonEnter(ButtonSystem buttonSystem);
 	public	ButtonEnter	buttonEnter	= null;
-	public	string		text		= "debug";
-	public	Vector3		textPos		= Vector3.zero;
+
+	public	SpriteGroup	sprite		= new SpriteGroup();
+	public	TextData	text		= new TextData();
 	public	int			buttonID	= -1;
-	public	int			fontSize	= 32;
+	public	Vector2		buttonPos	= new Vector2(0.0f,0.0f);
 	public	Vector2		buttonSize	= new Vector2(256.0f,64.0f);
-	public	Color		color		= Color.white;
 
 	private	Vector2		size;
 	private	Text		textObject	= null;
@@ -44,14 +62,21 @@ public class ButtonSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandler,
 	public	bool		up{get{bool buf = f_up;f_up = false;return buf;}}
 
 	//初期化////////////////////////////////////////////////
-	public	void	Start () {//初期化_Begin//--------------
-		buttonImage		= GetComponent<Image>();
+	public	void	Start () {//初期化
+		StartImage();
 		StartCreateText();
+		StartButton();
+		size			= buttonSize;
+	}
+	private	void	StartImage(){//イメージの初期化
+		buttonImage			= GetComponent<Image>();
+		if(sprite.normalSprite == null)	return;
+		buttonImage.sprite	= sprite.normalSprite;
+	}
+	private	void	StartButton(){//ボタンを初期化
 		Button	button	= GetComponent<Button>();
 		button.onClick.AddListener(OnButtonEnter);
-
-		size			= buttonSize;
-	}//初期化_End//-----------------------------------------
+	}
 
 	//更新//////////////////////////////////////////////////
 	public	void	Update(){//更新_Beign//-----------------
@@ -59,19 +84,20 @@ public class ButtonSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandler,
 		if(buttonImage != null)	buttonImage.rectTransform.sizeDelta		= size;
 		if(f_press)	size	= size * 0.5f + buttonSize * 0.4f;
 		else 		size	= size * 0.5f + buttonSize * 0.5f;
+		buttonImage.rectTransform.localPosition	= buttonPos;
 	}//更新_End//-------------------------------------------
 
 	//初期化////////////////////////////////////////////////
 	//ボタンの文字を生成_Begin//----------------------------
 	private	void	StartCreateText(){
-		if(text == null)	return;
+		if(text.text == null)	return;
 		GameObject	obj			= Instantiate(Resources.Load<GameObject>("Prefab/Select/Text"));
 					textObject	= obj.GetComponent<Text>();
 		obj.transform.SetParent(this.gameObject.transform);
-		textObject.text							= text;
-		textObject.fontSize						= fontSize;
-		textObject.color						= color;
-		textObject.rectTransform.localPosition	= textPos;
+		textObject.text							= text.text;
+		textObject.fontSize						= text.fontSize;
+		textObject.color						= text.color;
+		textObject.rectTransform.localPosition	= text.pos;
 		textObject.rectTransform.localScale		= Vector3.one;
 	}//ボタンの文字を生成_End//-----------------------------
 
@@ -81,6 +107,9 @@ public class ButtonSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandler,
 		f_press	= true;
 		f_down	= true;
 		f_up	= false;
+		if(buttonImage == null)			return;
+		if(sprite.pushSprite == null)	return;
+		buttonImage.sprite	= sprite.pushSprite;
 	}
 	public	void	OnDrag(PointerEventData eventData){
 	}
@@ -88,6 +117,9 @@ public class ButtonSystem : MonoBehaviour,IPointerUpHandler,IPointerDownHandler,
 		f_press	= false;
 		f_down	= false;
 		f_up	= true;
+		if(buttonImage == null)			return;
+		if(sprite.normalSprite == null)	return;
+		buttonImage.sprite	= sprite.normalSprite;
 	}
 	//コールバック関数を設定_Beign//------------------------
 

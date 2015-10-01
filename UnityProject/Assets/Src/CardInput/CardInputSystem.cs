@@ -81,10 +81,9 @@ public class CardInputSystem : MonoBehaviour {
         m_State.Update(); 
     }
 
-    //ステート関数=============================================================
+    //ステート関数/////////////////////////////////////////////////////////////
     
     //========================================================= InScene =======
-    //  初期化  InScene
     private void InitForInScene() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -98,7 +97,6 @@ public class CardInputSystem : MonoBehaviour {
         m_cardMgr.SendLordData();
     }
 
-    //  更新  InScene
     private void UpdateForInScene() {
 
         //一定時間になったら次のステートへ移行
@@ -108,7 +106,6 @@ public class CardInputSystem : MonoBehaviour {
     }
 
     //========================================================= Usually =======
-    //  初期化  Usually
     private void InitForUsually() { 
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -120,14 +117,12 @@ public class CardInputSystem : MonoBehaviour {
         
     }
 
-    //  更新  Usually
     private void UpdateForUsually() {
 
     }
 
 
     //========================================================= OutScene ======
-    //  初期化  OutScene
     private void InitForOutScene() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -138,7 +133,6 @@ public class CardInputSystem : MonoBehaviour {
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
     }
-    //  更新  OutScene
     private void UpdateForOutScene() {
 
         //一定時間になったら次のシーンへ移行
@@ -147,7 +141,6 @@ public class CardInputSystem : MonoBehaviour {
         }
     }
     //========================================================= CardInput ======
-    //  初期化  OutScene
     private void InitForCardInput() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -158,7 +151,6 @@ public class CardInputSystem : MonoBehaviour {
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
     }
-    //  更新  OutScene
     //  何も処理しないためコメントアウト
     //private void UpdateForCardInput() { }
     

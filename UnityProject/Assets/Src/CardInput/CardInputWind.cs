@@ -123,14 +123,33 @@ public partial class CardInputWind : MonoBehaviour {
 	
     //更新=====================================================================
 	void Update () {
-        //ステートの更新-------------------------------------------------------
-        m_State.Update();
-        
+        m_State.Update(); //ステートの更新
 	}
+
+    //全ての子のアクティブ状態を操作===========================================
+    //  全ての子に対しSetActive関数を呼び出す
+    private void ChildSetActive(bool _value) {
+        foreach(Transform ct in transform) {
+            ct.gameObject.SetActive(_value);
+        }
+    }
+
+    //データを画像とテキストに適用=============================================
+    private void DataApp() {
+        //----------------------------------------------------------- Name
+        m_Input.text = m_DataBff.pleyerName;
+
+        //----------------------------------------------------------- sprite
+        m_ImageBody.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_BODY, m_DataBff.imageBodyNo];
+        m_ImageFace.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, m_DataBff.imageFaceNo];
+        m_ImageHair.sprite = Database.obj.
+            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, m_DataBff.imageHairNo];
+    }
 
     //ステート更新関数/////////////////////////////////////////////////////////
     //========================================================= NotActive =====
-    //  初期化  NotActive
     //    非表示にする
     private void InitForNotActive() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
@@ -146,7 +165,6 @@ public partial class CardInputWind : MonoBehaviour {
     }
     
     //========================================================= OpenWind ======
-    //  初期化  OpenWind
     //　　アクティブにし、アニメーションを行い
     //　　アニメーションが終了後ステート移行する
     private void InitForOpenWind() {
@@ -169,7 +187,7 @@ public partial class CardInputWind : MonoBehaviour {
         //データを適用
         DataApp();
     }
-    //  更新  OpenWind
+
     private void UpdateForOpenWind() {
         
         //アニメーション-----------------------------------
@@ -192,7 +210,6 @@ public partial class CardInputWind : MonoBehaviour {
     }
     
     //========================================================= InputData =====
-    //  初期化  InputData
     private void InitForInputData() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -202,13 +219,11 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
     }
-    //  更新  InputData
     private void UpdateForInputData() {
     
     }
 
     //========================================================= OpenMesWind ===
-    //  初期化  OpenMesWind
     private void InitForOpenMesWind() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -219,7 +234,6 @@ public partial class CardInputWind : MonoBehaviour {
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
     }
-    //  更新  OpenMesWind
     private void UpdateForOpenMesWind() {
 
         //一定時間になったら次のステートへ移行
@@ -228,7 +242,6 @@ public partial class CardInputWind : MonoBehaviour {
         }
     }
     //========================================================= ClauseMesWind =
-    //  初期化  ClauseMesWind
     private void InitForClauseMesWind() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -238,7 +251,6 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
     }
-    //  更新  ClauseMesWind
     private void UpdateForClauseMesWind() {
         //一定時間になったら次のステートへ移行
         //  メッセージウィンドウを非表示にする
@@ -247,7 +259,6 @@ public partial class CardInputWind : MonoBehaviour {
         }
     }
     //========================================================= ClauseWind ====
-    //  初期化  ClauseWind
     private void InitForClauseWind() {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR 
@@ -257,7 +268,6 @@ public partial class CardInputWind : MonoBehaviour {
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
     }
-    //  更新  ClauseWind
     private void UpdateForClauseWind() {
 
         //一定時間になったら
@@ -269,28 +279,6 @@ public partial class CardInputWind : MonoBehaviour {
             //システムにウィンドウが閉じたことを伝える
             ciSystem.EndCardInputEvent(); 
         }
-    }
-
-    //全ての子のアクティブ状態を操作===========================================
-    //  全ての子に対しSetActive関数を呼び出す
-    private void ChildSetActive(bool _value) {
-        foreach(Transform ct in transform) {
-            ct.gameObject.SetActive(_value);
-        }
-    }
-
-    //データを画像とテキストに適用=============================================
-    private void DataApp() {
-        //----------------------------------------------------------- Name
-        m_Input.text = m_DataBff.pleyerName;
-
-        //----------------------------------------------------------- sprite
-        m_ImageBody.sprite = Database.obj.
-            PLAYER_SPRITE[Database.PLAYER_PARTS_BODY, m_DataBff.imageBodyNo];
-        m_ImageFace.sprite = Database.obj.
-            PLAYER_SPRITE[Database.PLAYER_PARTS_FACE, m_DataBff.imageFaceNo];
-        m_ImageHair.sprite = Database.obj.
-            PLAYER_SPRITE[Database.PLAYER_PARTS_HAIR, m_DataBff.imageHairNo];
     }
 
     //公開関数/////////////////////////////////////////////////////////////////
