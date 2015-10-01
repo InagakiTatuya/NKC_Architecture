@@ -21,7 +21,12 @@ public class MobileInputField : MonoBehaviour {
 
     public string   text { 
         get { return m_Text.text;  }
-        set { m_Text.text = value; }
+        set {
+            m_Text.text = value;
+            if(m_Placeholder != null){
+                m_Placeholder.enabled = (value.Length <= 0);
+            }
+        }//End set
     }
     public int      characterLimit{
         get { return m_CharacterLimit;  } 
@@ -75,7 +80,8 @@ public class MobileInputField : MonoBehaviour {
             m_Keyboard.text = ""; //キーボードのテキストを破棄
         }
 
-	}
+    }
+
     //ボタンイベント///////////////////////////////////////////////////////////
     //入力エリアをタッチ=======================================================
     public void OnButtonEnter() {
@@ -92,7 +98,7 @@ public class MobileInputField : MonoBehaviour {
             m_Keyboard.text = m_Text.text;
 
         }else{
-            m_Text.text = "建築太郎";
+            m_Text.text = "テストマン";
             if(endEdit != null) endEdit(m_Text.text);
         }
     
