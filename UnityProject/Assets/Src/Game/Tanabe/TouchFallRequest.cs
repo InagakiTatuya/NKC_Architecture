@@ -89,26 +89,15 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			for(int j=0;j<moveObj.GetLength(1);j++){
 				moveObj[i,j] = Instantiate(Resources.Load<GameObject>(buildName[i,j]));
 				moveObj[i,j].transform.parent = transform.root;
-
-				for(int k=0;k<moveObj[i,j].transform.childCount;k++){
-					childObj = moveObj[i,j].transform.GetChild(k);
-					render = childObj.GetComponent<Renderer>();
-					if(render != null){
-						color = render.material.color;
-						color.a = 0.5f;
-						render.material.color = color;
-					}
-					for(int l=0;l<childObj.childCount;l++){
-						if(childObj.GetChild(l).tag == "Shadow") continue;
-						render = childObj.GetChild(l).GetComponent<Renderer>();
+				if(moveObj[i,j].transform.tag != "Ice"){
+					for(int k=0;k<moveObj[i,j].transform.childCount;k++){
+						childObj = moveObj[i,j].transform.GetChild(k);
+						render = childObj.GetComponent<Renderer>();
 						if(render != null){
 							color = render.material.color;
 							color.a = 0.5f;
 							render.material.color = color;
 						}
-					}
-					if(childObj.GetComponent<Collider>()!=null){
-						childObj.GetComponent<Collider>().enabled = false;
 					}
 				}
 
