@@ -64,38 +64,40 @@ public class Card : MonoBehaviour {
     //  第一引数：CardManagerで管理されている番号
     //  第二引数：全体をタッチされたとき呼ばれる関数
     //  第三引数：削除ボタンをタッチされたとき呼ばれる関数
-    public void Init(int              _IndexNo,
-                     UnityAction<int> _onButtonEnter,
-                     UnityAction<int> _onRemoveButtonEnter
+    public void Init(int              aIndexNo,
+                     UnityAction<int> aOnButtonEnter,
+                     UnityAction<int> aOnRemoveButtonEnter
                     ) {
         //CardManagerの管理番号------------------------------------------------
-        this.INDEXNO = _IndexNo;
+        this.INDEXNO = aIndexNo;
 
         //イベント設定---------------------------------------------------------
         //onButton-------------------------------------------------------------
         Button.ButtonClickedEvent eve = GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
-        eve.AddListener(delegate { _onButtonEnter(INDEXNO); });
+        eve.AddListener(delegate { aOnButtonEnter(INDEXNO); });
         
         //onButton(Remove)-----------------------------------------------------
         eve = transform.FindChild("Remove").GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
-        eve.AddListener(delegate { _onRemoveButtonEnter(INDEXNO); });
+        eve.AddListener(delegate { aOnRemoveButtonEnter(INDEXNO); });
 
+        //データ---------------------------------------------------------------
+        DataReset();
     }
 
     //データを初期化===========================================================
     public void DataReset() {
-        this.m_Data.Init();
+        this.m_Data.Init("社員" + (INDEXNO + 1), 0, 0, 0);
         this.DataApp();
     }
 
     //必要な値をコピー=========================================================
-    public void DataCopyTo(ref Card _Card) {
-        _Card.data             = this.data;
-        _Card.imageHair.sprite = this.imageHair.sprite;
-        _Card.imageFace.sprite = this.imageFace.sprite;
-        _Card.Text.text        = this.Text.text;
+    public void DataCopyTo(ref Card aCard) {
+        aCard.data             = this.data;
+        aCard.imageHair.sprite = this.imageHair.sprite;
+        aCard.imageFace.sprite = this.imageFace.sprite;
+        aCard.Text.text        = this.Text.text;
     }
 
     //適用=====================================================================
