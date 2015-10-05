@@ -16,7 +16,7 @@ public struct StractPlayerData {
         imageBodyNo = 0;
     }
 
-    public void SetData(string aName, int aHairNo, int aFaceNo, int aBodyNo) {
+    public void Init(string aName, int aHairNo, int aFaceNo, int aBodyNo) {
         pleyerName = aName;
         imageHairNo = aHairNo;
         imageFaceNo = aFaceNo;

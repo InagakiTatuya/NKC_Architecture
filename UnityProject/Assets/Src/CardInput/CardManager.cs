@@ -165,12 +165,13 @@ public class CardManager : MonoBehaviour {
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
-            " PlyCount="+(m_PlayerCount < Database.PLAYER_MAX_COUNT) );
+            " PlyCount=" + m_PlayerCount + " / " +
+            (m_PlayerCount < Database.PLAYER_MAX_COUNT + 1));
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //プレイヤーがいない場合、メッセージ処理をする
-        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT) {
+        if(m_PlayerCount >= Database.PLAYER_MAX_COUNT + 1) {
             Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
                 this.GetType().Name + " :: " +
                 System.Reflection.MethodBase.GetCurrentMethod().Name + "\n" +
@@ -256,32 +257,32 @@ public class CardManager : MonoBehaviour {
     //  タイミング：写真がタップされた瞬間。
     //    社員証入力ウィンドウを呼び出し、タッチされたカードのデータを渡す
     //=========================================================================
-    public void OnFhotoEnter(int _cardIndex) {
+    public void OnFhotoEnter(int aCardIndex) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name +
-            "\nCardIndex = " + _cardIndex);
+            "\nCardIndex = " + aCardIndex);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
         //写真選択ウィンドウを出す---------------------------------------------
         ciSystem.getCardInputWind.
-            OpenCradInputWind(_cardIndex, m_Card[_cardIndex].data);
+            OpenCradInputWind(aCardIndex, m_Card[aCardIndex].data);
     }
 
     //社員証の削除ボタン=======================================================
     //  タイミング：社員証削除ボタンがタップされた瞬間。
     //    プレイヤーデータを削除し、参加者数を減らす。
     //=========================================================================
-    public void OnPlayerRemoveButtonEnter(int _cardIndex) {
+    public void OnPlayerRemoveButtonEnter(int aCardIndex) {
         //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         #if UNITY_EDITOR
         Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name +
-            "\nCardIndex = " + _cardIndex);
+            "\nCardIndex = " + aCardIndex);
         #endif
         //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
         
@@ -295,7 +296,7 @@ public class CardManager : MonoBehaviour {
         }
         
         //データをコピー
-        for(int i = _cardIndex + 1; i < m_PlayerCount; i++) {
+        for(int i = aCardIndex + 1; i < m_PlayerCount; i++) {
             m_Card[i].DataCopyTo(ref m_Card[i - 1]);
         }
 

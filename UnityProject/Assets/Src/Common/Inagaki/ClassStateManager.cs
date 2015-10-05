@@ -42,12 +42,12 @@ class ClassStateManager {
         //ステートの初期化-----------------------------------------------------
         if(0 <= m_NextStateNo && m_NextStateNo < m_STATE_NO_MAX) {
             //デバック用=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-            #if UNITY_EDITOR
-            Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
-                this.GetType().Name +" == 0x" + this.GetHashCode().ToString("X") + " \n" +
-                "StateChange: oldNo = " + m_StateNo + ", newNo = " + m_NextStateNo +
-                ", OldStateTime = " + m_StateTime );
-            #endif
+            //#if UNITY_EDITOR
+            //Debug.Log(" Time:" + Time.time.ToString("0.00") + " - " +
+            //    this.GetType().Name +" == 0x" + this.GetHashCode().ToString("X") + " \n" +
+            //    "StateChange: oldNo = " + m_StateNo + ", newNo = " + m_NextStateNo +
+            //    ", OldStateTime = " + m_StateTime );
+            //#endif
             //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
             
             m_StateNo     = m_NextStateNo;

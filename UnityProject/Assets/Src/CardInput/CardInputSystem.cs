@@ -36,6 +36,7 @@ public class CardInputSystem : MonoBehaviour {
 
     private CardManager     m_cardMgr;
     private CardInputWind   m_ciWind;
+    private CanvasFade      m_Fade;
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  int getState        { get{return m_State.getState;       } }
@@ -73,6 +74,8 @@ public class CardInputSystem : MonoBehaviour {
                                                 .GetComponent<CardManager>();
         m_ciWind  = GameObject.Find("Canvas/CardInputWind")
                                                 .GetComponent<CardInputWind>();
+        m_Fade    = GameObject.Find("Canvas/CanvasFade")
+                                                .GetComponent<CanvasFade>();
     }
 
     //更新=====================================================================
@@ -95,6 +98,9 @@ public class CardInputSystem : MonoBehaviour {
         
         //カードの初期化
         m_cardMgr.SendLordData();
+        
+        //フェード
+        m_Fade.In(INSCENE_TIME);
     }
 
     private void UpdateForInScene() {
@@ -131,7 +137,8 @@ public class CardInputSystem : MonoBehaviour {
             System.Reflection.MethodBase.GetCurrentMethod().Name);
         #endif
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
-        
+
+        m_Fade.Out(OUTSCENE_TIME);
     }
     private void UpdateForOutScene() {
 
