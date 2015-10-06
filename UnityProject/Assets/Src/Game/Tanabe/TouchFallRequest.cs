@@ -143,11 +143,11 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			while(downObj.transform.childCount>0){
 				childObj = downObj.transform.GetChild(0);
 				if(childObj.tag == "Shadow"){//影は子として数えない
-					FallObject.ChildCount=0;
+					FallObject.ChildCount = 0;
 					break;
 				}
-				childObj.GetComponent<Collider>().enabled = true;
-				childObj.GetComponent<FallObject>().enabled = true;
+				childObj.GetComponent<Collider>().enabled	= true;
+				childObj.GetComponent<FallObject>().enabled	= true;
 				childObj.GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
 				childObj.parent = transform.root.GetChild(7);
 				//分解が完了したら削除

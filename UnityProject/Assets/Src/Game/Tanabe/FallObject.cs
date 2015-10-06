@@ -44,8 +44,13 @@ public partial class FallObject : MonoBehaviour {
 	}
 
 	void Update(){
-		if(state == STATE.STOP){//処理の必要がないのでクラスを停止
-			this.enabled = false;
+		if(exitFlag){
+			if(system.stateNo == (int)GameSceneSystem.StateNo.Check){
+				collapseConfirmTimer += Time.deltaTime;
+				if(collapseConfirmTime<collapseConfirmTimer) collapseFunc();
+			}
+		}
+		if(state == STATE.STOP){//処理の必要がないので停止
 			return;
 		}
 		if(system.Pause){
@@ -85,7 +90,7 @@ public partial class FallObject : MonoBehaviour {
 			case STATE.FALLEND:
 				//左右への移動と回転を許可
 				rBody.constraints	&= RigidbodyConstraints.None;
-				rBody.constraints	|= RigidbodyConstraints.FreezeRotationX;
+				//rBody.constraints	|= RigidbodyConstraints.FreezeRotationX;
 				rBody.isKinematic	= true;
 				rBody.useGravity	= true;
 
@@ -143,13 +148,16 @@ public partial class FallObject : MonoBehaviour {
 	//物理計算を許可
 	private void ObjectWakeUp(bool isAll = true, bool shake = false){
 		if(isAll){
-			system.BuildList.ForEach(e =>
-			{
+			int i = 0;
+			//建物の自然な揺れを再現するため、低層の物理演算を無効化
+			if(system.GetFloor() >= 2)	i = (system.GetFloor() - 1) * 9;
+			for(;i<system.BuildList.Count;i++){
+				FallObject e = system.BuildList[i];
 				e.rBody.isKinematic		= false;
 				//速度、角速度を戻す
 				e.rBody.velocity		= e.recordVel;
 				e.rBody.angularVelocity	= e.recordAngVel;
-			});
+			}
 		}
 		else{
 			rBody.isKinematic		= false;
@@ -163,6 +171,8 @@ public partial class FallObject : MonoBehaviour {
 	private void ObjectSleep(bool isAll = true){
 		if(isAll){
 			int i = 0;
+			//建物の自然な揺れを再現するため、低層の物理演算を無効化
+			if(system.GetFloor() >= 3)	i = (system.GetFloor() - 2) * 9;
 			for(;i<system.BuildList.Count;i++){
 				FallObject e = system.BuildList[i];
 				//速度、角速度を記録する
@@ -180,6 +190,10 @@ public partial class FallObject : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
+		if(exitFlag){
+			collapseConfirmTimer	= 0;
+			exitFlag				= false;
+		}
 		if (state == STATE.FALL){//バウンド準備
 			rBody.AddForce(Vector3.up * boundSpeed, ForceMode.VelocityChange);
 			rBody.useGravity	= true;
