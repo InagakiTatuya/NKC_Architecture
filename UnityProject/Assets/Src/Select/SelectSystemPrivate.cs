@@ -25,6 +25,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 	private	enum	ButtonNo : int{//ボタン番号_Beign//-----
 		TutorialButton,
 		MainGameButton,
+		Banner,
 		Length,
 	}//ボタン番号_End//-------------------------------------
 
@@ -44,36 +45,43 @@ public	partial	class SelectSystem : MonoBehaviour {
 		tableOnButtonEnterFunc	= new UnityAction[]{
 			this.OnTutorialButtonEnter,
 			this.OnMainGameButtonEnter,
+			this.OnBannerButtonEnter,
 		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
-			new Vector3(0.0f, 128.0f,0.0f),
-			new Vector3(0.0f,-128.0f,0.0f),
+			new Vector3(0.0f, 256.0f,0.0f),
+			new Vector3(0.0f,   0.0f,0.0f),
+			new Vector3(0.0f,-288.0f,0.0f),
+		};
+		Vector3[]	tableButtonSize	= new Vector3[]{
+			new Vector2(512.0f,256.0f),
+			new Vector2(512.0f,256.0f),
+			new Vector2(420.0f,315.0f)
 		};
 		string[]	spriteName		= new string[]{
 			"Texture/Select/tutorial",
-			"Texture/Select/gamestart"
+			"Texture/Select/gamestart",
+			"Texture/Select/banner"
 		};
+		GameObject	obj;
 		button		= new Button[tableOnButtonEnterFunc.Length];
 		buttonImage	= new Image[button.Length];
 		Database.InitColorBlock();
 		for(int i = 0;i < button.Length;i ++){
-			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
+			obj						= TitleSystem.CreateObjectInCanvas("Prefab/Title/Button",canvasObject);
 			button[i]				= obj.GetComponent<Button>();
 			button[i].colors		= Database.colorBlocks[(int)Database.ColorBlockID.White];
 			button[i].onClick.AddListener(tableOnButtonEnterFunc[i]);
 			ButtonSystem	buttonSystem	= obj.GetComponent<ButtonSystem>();
 			buttonSystem.buttonPos	= tableButtonPos[i];
-			buttonSystem.buttonSize	= new Vector2(512.0f,256.0f);
+			buttonSystem.buttonSize	= tableButtonSize[i];
 			Sprite[]	sprite		= Resources.LoadAll<Sprite>(spriteName[i]);
 			buttonSystem.sprite.normalSprite	= sprite[0];
 			buttonSystem.sprite.pushSprite		= sprite[1];
 			buttonSystem.text.init();
 		}
-		for(int i = 0;i < button.Length;i ++){
-			GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Select/recode",canvasObject);
-			Image		image		= obj.GetComponent<Image>();
-			image.rectTransform.localPosition	= tableButtonPos[i] + new Vector3(-72.0f,48.0f,0.0f);
-		}
+		obj				= TitleSystem.CreateObjectInCanvas("Prefab/Select/recode",canvasObject);
+		Image	image	= obj.GetComponent<Image>();
+		image.rectTransform.localPosition	= tableButtonPos[1] + new Vector3(-72.0f,48.0f,0.0f);
 	}//ボタンを初期化_End//---------------------------------
 	
 	//更新//////////////////////////////////////////////////
