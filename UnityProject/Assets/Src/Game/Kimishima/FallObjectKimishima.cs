@@ -18,11 +18,19 @@ using System.Collections;
 //落下オブジェクト_Begin//----------------------------------
 public partial class FallObject : MonoBehaviour {
 
-	public static	UnityAction	collapseFunc	= null;
+	public	static	UnityAction	collapseFunc	= null;
+	private	bool	exitFlag;
+
+	//初期化関数//------------------------------------------
+	void	StartKimishimaFallObject(){
+		exitFlag	=	false;
+	}//初期化関数_End//-------------------------------------
 
 	//コリジョンが離れたとき_Begin//------------------------
 	void	OnCollisionExit(){
-		if(collapseFunc != null)	collapseFunc();
+		if(system.stateNo != (int)GameSceneSystem.StateNo.Check) return;
+		if(!exitFlag)	exitFlag = true;
+		return;
 #if	DEBUG_GAMESCENE
 		Debug.Log(gameObject.name + " が倒壊!!");
 #endif

@@ -3,6 +3,11 @@ using System.Collections;
 using UnityEngine.EventSystems;
 
 public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler{
+	//設置物(上から)
+	//床
+	//柱
+	//壁
+	//屋根
 	private string[,] buildName = new string[,]{
 		{
 			"Prefab/Game/Build/Brick/Floor",
@@ -57,7 +62,6 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 		},
 	};
 
-	//private string optionName = "Prefab/Game/TouchDisAbleArea";
 
 	[SerializeField]
 	private float fallSpeed = 50.0f;
@@ -65,17 +69,13 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	private int partsID;
 
 	private Vector3 pos;
-
-	//システム
 	private GameSceneSystem system;
 
 	//生成する建造物
 	private GameObject[,] moveObj;
-	private GameObject targetObj;
 	private GameObject downObj;
 	private Transform childObj;
 
-	//自身のマテリアル
 	private Renderer render;
 	private Color color;
 
@@ -87,9 +87,10 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 		moveObj = new GameObject[buildName.GetLength(0),buildName.GetLength(1)];
 		for(int i=0;i<moveObj.GetLength(0);i++){
 			for(int j=0;j<moveObj.GetLength(1);j++){
+				//プレビュー用
 				moveObj[i,j] = Instantiate(Resources.Load<GameObject>(buildName[i,j]));
-				moveObj[i,j].transform.parent = transform.root;
-				if(moveObj[i,j].transform.tag != "Ice"){
+				moveObj[i,j].transform.parent = transform.root.GetChild(8);
+				if(moveObj[i,j].transform.tag != "Ice"){//既に透過されているので必要なし
 					for(int k=0;k<moveObj[i,j].transform.childCount;k++){
 						childObj = moveObj[i,j].transform.GetChild(k);
 						render = childObj.GetComponent<Renderer>();
@@ -100,9 +101,6 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 						}
 					}
 				}
-
-				//GameObject optionObj = Instantiate(Resources.Load<GameObject>(optionName));
-				//optionObj.transform.parent = moveObj[i].transform;
 
 				moveObj[i,j].SetActive(false);
 			}
@@ -115,6 +113,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 		partsID = system.PartsID;
 
 		SetPos(e);
+		//選択されたオブジェクトのプレビューを許可
 		moveObj[partsID,buildNo].SetActive(true);
 	}
 
@@ -132,22 +131,26 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	//UIオブジェクトが放されたら
 	public void OnPointerUp(PointerEventData e){
 		//Debug.Log(targetObj +":"+ e.pointerEnter);
+		//オブジェクト設置範囲内で離された
 		if (gameObject == e.pointerEnter){
 			system.seManager.Play(0);
 			SetPos(e);
 
+			//設置用オブジェクト生成
 			downObj = (GameObject)Instantiate(Resources.Load<GameObject>(buildName[partsID,buildNo]), pos, Quaternion.identity);
+			//設置数を記録
 			FallObject.ChildCount = downObj.transform.childCount;
 			while(downObj.transform.childCount>0){
 				childObj = downObj.transform.GetChild(0);
-				if(childObj.tag == "Shadow"){
+				if(childObj.tag == "Shadow"){//影は子として数えない
 					FallObject.ChildCount=0;
 					break;
 				}
 				childObj.GetComponent<Collider>().enabled = true;
 				childObj.GetComponent<FallObject>().enabled = true;
 				childObj.GetComponent<Rigidbody>().AddForce(-transform.up * fallSpeed, ForceMode.Impulse);
-				childObj.parent = transform.root;
+				childObj.parent = transform.root.GetChild(7);
+				//分解が完了したら削除
 				if(downObj.transform.childCount == 0) DestroyObject(downObj);
 			}
 			gameObject.SetActive(false);
