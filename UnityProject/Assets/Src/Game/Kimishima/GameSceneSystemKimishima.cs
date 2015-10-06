@@ -59,6 +59,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		floorSize					= new Vector2(128.0f,128.0f);
 		partsSelectClass			= new PartsSelectClass(this);
 		partsSelectClass.Init();
+		partsSelectClass.seManager	= seManager;
 		BackFadeInit();
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();

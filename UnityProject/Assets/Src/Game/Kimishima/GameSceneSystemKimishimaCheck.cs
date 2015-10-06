@@ -68,6 +68,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
 		if(stateTime >= 1.0f){
+			cameraMove.maxY	= cameraMove.look.y + 50.0f;
 			ChangeState(StateNo.Result);
 			return;
 		}
