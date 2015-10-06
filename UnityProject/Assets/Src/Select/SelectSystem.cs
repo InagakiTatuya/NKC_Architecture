@@ -58,24 +58,24 @@ public	partial	class SelectSystem : MonoBehaviour {
 	}//更新_End//-------------------------------------------
 
 	//その他関数////////////////////////////////////////////
-	//チュートリアルボタンを押した_Begin//------------------
-	public	void	OnTutorialButtonEnter(){
+	public	void	OnTutorialButtonEnter(){//チュートリアルボタンを押した
 		ChangeState(StateNo.GoNext);
 		ButtonCanceler();
 		CreateFade();
 		selectNo	= 0;
 		if(seManager == null)	return;
 		seManager.Play(0);
-	}//チュートリアルボタンを押した_End//-------------------
-
-	//ゲーム開始ボタンを押した_Begin//----------------------
-	public	void	OnMainGameButtonEnter(){
+	}
+	public	void	OnMainGameButtonEnter(){//ゲーム開始ボタンを押した
 		ChangeState(StateNo.GoNext);
 		ButtonCanceler();
 		CreateFade();
 		selectNo	= 1;
 		if(seManager == null)	return;
 		seManager.Play(0);
-	}//ゲーム開始ボタンを押した_End//-----------------------
+	}
+	private	void	OnBannerButtonEnter(){//バナーボタンを押した
+		Application.OpenURL("http://www.denpa.ac.jp/");
+	}
 
 }//セレクトのシステム_End//---------------------------------

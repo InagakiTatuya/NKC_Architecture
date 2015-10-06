@@ -27,6 +27,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//フロア関連
 	private	int		floor;
+	public	int		GetFloor(){return	floor;}
 	private	Image	floorWindow	= null;
 	private	Text	floorText	= null;
 	private	Vector2	floorSize;
@@ -37,6 +38,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	PartsSelectClass	partsSelectClass;
 	private	int					jobBuf;
 
+	private	int					prevStateNo;
 	private	bool				execute;
 
 	//初期化////////////////////////////////////////////////
@@ -85,6 +87,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//更新//////////////////////////////////////////////////
 	//俺の更新関数
 	private	void	UpdateKimishimaSystem(){
+		if(stateNo == (int)StateNo.PartsSelect && prevStateNo != (int)StateNo.PartsSelect){
+			jobBuf	= job;
+		}
+		prevStateNo	= stateNo;
 		BackFadeUpdate();
 		UpdateFloorWindow();
 		PartsSelectClass.MessageID				message	= PartsSelectClass.MessageID.Non;
@@ -94,7 +100,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//パーツ選択ステート
 	private	void	UpdatePartsSelect(){
-		if(stateTime < 0.05f)	jobBuf	= job;
 		if(partsSelectClass.yaneFlg){
 			if(job == (int)Database.JobID.Yane)	job	= jobBuf;
 			else 								job	= (int)Database.JobID.Yane;
