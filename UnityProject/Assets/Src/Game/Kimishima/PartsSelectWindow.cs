@@ -49,6 +49,7 @@ class 	PartsSelectClass{
 	private	GameObject			canvasObject;
 	private	bool				nextFlg;
 	public	bool				yaneFlg;
+	public	SeManager			seManager;
 	
 	//コンストラクタ・デストラクタ//////////////////////////
 	//コンストラクタ
@@ -155,11 +156,13 @@ class 	PartsSelectClass{
 	//パーツ選択ウィンドウの決定ボタンが押された
 	public	void	OnPartsSelectButtonEnter(){
 		if(partsID < 0)	return;
+		seManager.Play(6);
 		ChangeState(StateNo.Close);
 	}
 	//屋根のボタンが押された
 	public	void	OnYaneButtonEnter(){
 		yaneFlg	= true;
+		seManager.Play(6);
 		ChangeState(StateNo.YaneChange);
 	}
 	
@@ -273,6 +276,7 @@ class 	PartsSelectClass{
 
 	private	void	GetButtonID(PointerUpSystem pointerUpSystem){//押されたボタンのIDを受け取る
 		partsID	= pointerUpSystem.id;
+		seManager.Play(6);
 		#if DEBUG_GAMESCENE
 		Debug.Log("Debug:タッチされたボタンは" + partsID);
 		#endif
