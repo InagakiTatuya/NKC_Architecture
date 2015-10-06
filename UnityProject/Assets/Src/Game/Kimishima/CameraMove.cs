@@ -33,6 +33,7 @@ public class CameraMove : MonoBehaviour {
 		set{f_up	= value;}
 	}
 
+	public	float	maxY;
 	private	Vector3	lookBuf;
 	private	Vector3	atBuf;
 	private	Vector3	upBuf;
@@ -84,8 +85,9 @@ public class CameraMove : MonoBehaviour {
 		if(touchDeltaTime == 0.0f)	return;
 		float	n	= Time.deltaTime / touchDeltaTime;
 		f_look.y	+= touch.deltaPosition.y * n;
+		if(f_look.y > maxY)	f_look.y	= maxY;
 		if(f_look.y < -25.0f)	f_look.y	= -25.0f;
-		float	rad		= touch.deltaPosition.x * n * -0.05f;
+		float	rad		= touch.deltaPosition.x * n * -0.005f;
 		float	newX,newZ;
 		f_look.x	-= 60.0f;
 		f_look.z	-= 60.0f;
