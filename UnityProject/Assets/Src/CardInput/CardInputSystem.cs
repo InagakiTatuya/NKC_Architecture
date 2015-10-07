@@ -31,6 +31,8 @@ public class CardInputSystem : MonoBehaviour {
     private const float INSCENE_TIME  = 0.4f; //INSTAET
     private const float OUTSCENE_TIME = 0.4f; //OUTSTATE
 
+    private string m_NextSceneName;
+
     //参照^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private MessageWind     m_MesWind;  //メッセージウィンドウ
 
@@ -67,15 +69,18 @@ public class CardInputSystem : MonoBehaviour {
 
         m_State = new ClassStateManager(STATE_NO_MAX, fnInitArr, fnUpdateArr);
 
+        //ネクストシーン-------------------------------------------------------
+        m_NextSceneName = "";
+
         //参照-----------------------------------------------------------------
         m_MesWind = GameObject.Find("Canvas/MessageWind")
-                                                .GetComponent<MessageWind>();
+                                            .GetComponent<MessageWind>();
         m_cardMgr = GameObject.Find("Canvas/CardArea/CardAnc-CardMgr")
-                                                .GetComponent<CardManager>();
+                                            .GetComponent<CardManager>();
         m_ciWind  = GameObject.Find("Canvas/CardInputWind")
-                                                .GetComponent<CardInputWind>();
+                                            .GetComponent<CardInputWind>();
         m_Fade    = GameObject.Find("Canvas/CanvasFade")
-                                                .GetComponent<CanvasFade>();
+                                            .GetComponent<CanvasFade>();
     }
 
     //更新=====================================================================
@@ -135,16 +140,23 @@ public class CardInputSystem : MonoBehaviour {
         Debug.Log(" Time:"+Time.time.ToString("0.00") + " - " +
             this.GetType().Name + " :: " +
             System.Reflection.MethodBase.GetCurrentMethod().Name);
+        
+        //次のシーンが指定されているか
+        if(m_NextSceneName == "") {
+            Debug.LogError("次のシーン名が指定されていません");
+            return;
+        }
         #endif
        //=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
 
+        
         m_Fade.Out(OUTSCENE_TIME);
     }
     private void UpdateForOutScene() {
 
         //一定時間になったら次のシーンへ移行
         if(m_State.getStateTime >= INSCENE_TIME) {
-            Application.LoadLevel("Game");
+            Application.LoadLevel(m_NextSceneName);
         }
     }
     //========================================================= CardInput ======
@@ -186,7 +198,18 @@ public class CardInputSystem : MonoBehaviour {
             return;
         }
 
+        m_NextSceneName = "Game";
         m_State.SetNextState(STATE_OUTSCENE);
     }
 
+    //戻るボタン===============================================================
+    //  タイミング：戻るボタンが押されたとき
+    //    セレクトシーン移行する。
+    //=========================================================================
+    public void OnReturnButtonEnter() {
+        if(m_State.getState != STATE_USUALLY) return;
+
+        m_NextSceneName = "Select";
+        m_State.SetNextState(STATE_OUTSCENE);
+    }
 }
