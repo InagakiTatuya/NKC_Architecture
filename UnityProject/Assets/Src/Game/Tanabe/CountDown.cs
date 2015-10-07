@@ -4,23 +4,23 @@ using UnityEngine.UI;
 
 public class CountDown : MonoBehaviour {
 
-	private GameSceneSystem system;
-	private Text text;
+	private GameSceneSystem	system;
+	private Text	text;
 
-	private int viewTimer;
-	private float time;
+	private int		viewTimer;
+	private float	time;
 
 	void Start () {
-		system = transform.root.GetComponent<GameSceneSystem>();
-		text = GetComponent<Text>();
+		system	=	transform.root.GetComponent<GameSceneSystem>();
+		text	=	GetComponent<Text>();
 		Reset();
 	}
 
 	void Update(){
 		if (system.Pause) return;
-		if (system.stateNo == (int)GameSceneSystem.StateNo.Check){
-			text.text = "" + viewTimer;
-			text.fontSize = (int)(280 * time);
+		if (system.stateNo ==	(int)GameSceneSystem.StateNo.Check){
+			text.text		=	"" + viewTimer;
+			text.fontSize	=	(int)(280 * time);
 			if (time >= 1.0f){
 				system.seManager.Play(2);
 				viewTimer--;
@@ -36,8 +36,8 @@ public class CountDown : MonoBehaviour {
 	}
 
 	void Reset(){
-		text.text = "";
-		time = 0;
-		viewTimer = 3;
+		time		=	0;
+		viewTimer	=	3;
+		text.text	=	"";
 	}
 }

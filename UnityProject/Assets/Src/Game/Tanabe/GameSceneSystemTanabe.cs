@@ -5,30 +5,39 @@ using System.Collections.Generic;
 public partial class GameSceneSystem : MonoBehaviour{
 	private GameObject pauseGUI;
 
-	private bool pause;
-	public bool Pause {get{ return pause; } set{ pause = value; }}
+	private bool	debugUnBreakFlag;
+	public	bool	DebugUnBreakFlag	{get{ return debugUnBreakFlag; } set{ debugUnBreakFlag = value; }}
 
-	private bool check;
-	public bool Check {get{ return check; } set{ check = value; }}
+	private bool	debugCollapseFlag;
+	public	bool	DebugCollapseFlag	{get{ return debugCollapseFlag; } set{ debugCollapseFlag = value; }}
+
+	private bool	pause;
+	public	bool	Pause	{get{ return pause; } set{ pause = value; }}
+
+	private bool	check;
+	public	bool	Check	{get{ return check; } set{ check = value; }}
 	
-	private bool roofSetFlag;
-	public bool RoofSetFlag {get{ return roofSetFlag; } set{ roofSetFlag = value; }}
+	private bool	roofSetFlag;
+	public	bool	RoofSetFlag	{get{ return roofSetFlag; } set{ roofSetFlag = value; }}
 
-	private bool partsSet;
-	public bool PartsSet{get{ return partsSet; } set{ partsSet = value; }}
+	private bool	partsSet;
+	public	bool	PartsSet	{get{ return partsSet; } set{ partsSet = value; }}
 
-	private List<FallObject> buildList;
-	public List<FallObject> BuildList {get{return buildList;} set{buildList = value;}}
+	private List<FallObject>	buildList;
+	public	List<FallObject>	BuildList {get{return buildList;} set{buildList = value;}}
 
 	void StartTanabe(){
-		pauseGUI = GameObject.Find("PAUSE_GUI");
-		buildList = new List<FallObject>();
+		pauseGUI			=	GameObject.Find("PAUSE_GUI");
+		buildList			=	new List<FallObject>();
+		debugCollapseFlag	=	false;
+		debugUnBreakFlag	=	false;
 	}
 
 	//更新関数
 	void UpdateTanabe(){
 		if(pauseGUI.activeSelf){
-			if(stateNo == (int)StateNo.GameOver || stateNo == (int)StateNo.Result) pauseGUI.SetActive(false);
+			if(stateNo == (int)StateNo.GameOver || 
+				stateNo == (int)StateNo.Result) pauseGUI.SetActive(false);
 		}
 	}
 
@@ -73,5 +82,13 @@ public partial class GameSceneSystem : MonoBehaviour{
 	//ポーズ終わり
 	private void UpdatePauseEnd(){
 
+	}
+
+	public void DebugCollapse(){
+		DebugCollapseFlag = true;
+	}
+
+	public void DebugUnBreak(){
+		DebugUnBreakFlag = true;
 	}
 }
