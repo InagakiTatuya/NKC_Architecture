@@ -59,6 +59,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		Vector3	at		= new Vector3(60,pos.y + 50,60);
 		cameraMove.look	= look;
 		cameraMove.at	= at;
+		cameraMove.maxY	= look.y + 50.0f;
 	}
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
@@ -68,7 +69,6 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
 		if(stateTime >= 1.0f){
-			cameraMove.maxY	= cameraMove.look.y + 50.0f;
 			ChangeState(StateNo.Result);
 			return;
 		}
