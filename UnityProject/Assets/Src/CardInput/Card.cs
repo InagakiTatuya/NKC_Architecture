@@ -51,6 +51,8 @@ public class Card : MonoBehaviour {
         m_ImageHair = transform.FindChild("PhotoBack/PhotoHair").GetComponent<Image>();
         m_ImageFace = transform.FindChild("PhotoBack/PhotoFace").GetComponent<Image>();
         m_Text      = transform.FindChild("Name").GetComponent<Text >();
+
+
         //データ---------------------------------------------------------------
         this.DataReset();
     }
@@ -68,6 +70,10 @@ public class Card : MonoBehaviour {
                      UnityAction<int> aOnButtonEnter,
                      UnityAction<int> aOnRemoveButtonEnter
                     ) {
+        //システムを取得-------------------------------------------------------
+        CardInputSystem ciSystem = GameObject.
+          Find(CardInputSystem.GAMEOBJCT_NAME).GetComponent<CardInputSystem>();
+
         //CardManagerの管理番号------------------------------------------------
         this.INDEXNO = aIndexNo;
 
@@ -81,7 +87,7 @@ public class Card : MonoBehaviour {
         eve = transform.FindChild("Remove").GetComponent<Button>().onClick;
         eve.RemoveAllListeners();
         eve.AddListener(delegate { aOnRemoveButtonEnter(INDEXNO); });
-
+        eve.AddListener(delegate { ciSystem.getSeMgr.Play(2); });
         //データ---------------------------------------------------------------
         DataReset();
     }
