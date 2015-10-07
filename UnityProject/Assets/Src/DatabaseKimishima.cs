@@ -65,7 +65,7 @@ public partial class Database : SingletonCustom<Database> {
 		//	"Yane 04",		"Yane 05",		"Yane 06",		"Yane 07",
 		//	"Yane 08",		"ダンボール",
 		}
-	};//パーツの名前_End//----------------------------------
+	};
 
 	//職業の説明文_Begin//----------------------------------
 	public	static	readonly	string[]	tableJobDesc	= new string[]{
@@ -73,7 +73,19 @@ public partial class Database : SingletonCustom<Database> {
 		"柱を作るSuper職人。\nその腕前は超!一流で\n見るものを魅了する。",
 		"壁を作るSuper職人。\nその腕前は超!一流で\n見るものを魅了する。",
 		"屋根を作るSuper職人。\nその腕前は超!一流で\n見るものを魅了する。",
-	};//職業の説明文_End//----------------------------------
+	};
+
+	///<summary>チュートリアルの文章</summary>//------------
+	public	static	readonly	string[]	tableTutorialText	= new string[]{
+		"先ず床を置くぞ！\n好きな素材を選択しよう。",
+		"フレームの中に指を置いてみよう！\n指を離すと素材が設置されるぞ！",
+		"次に柱を設置するぞ！\n好きな素材を選択しよう。",
+		"下の影を見ながらバランスよく積み重ねよう！",
+		"次に壁を設置するぞ！\n好きな素材を選択しよう。",
+		"同じように下の影を見ながらバランスよく設置していこう！\nそれでは好きな素材を選んで自由に建ててみよう。",
+		"倒れる前に屋根を置き記録を残そう！",
+		"これでチュートリアルは終了だ！\n次はゲーム本編で遊んでみよう！",
+	};
 
 	public	enum 	ColorBlockID{//色のID_Beign//-----------
 		White,
@@ -84,7 +96,7 @@ public partial class Database : SingletonCustom<Database> {
 		Cyan,
 		Blue,
 		Length,
-	}//色のID_End//-----------------------------------------
+	}
 	private	static	bool			colorBlocksInitedFlg	= false;
 	public	static	ColorBlock[]	colorBlocks;
 	//色を初期化_Begin//------------------------------------
@@ -117,6 +129,6 @@ public partial class Database : SingletonCustom<Database> {
 			colorBlocks[i].fadeDuration		= 0.1f;
 		}
 		colorBlocksInitedFlg	= true;
-	}//色を初期化_End//-------------------------------------
+	}
 
 }//データベース_End//---------------------------------------
