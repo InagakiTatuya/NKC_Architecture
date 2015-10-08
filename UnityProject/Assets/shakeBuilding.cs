@@ -25,7 +25,7 @@ public class shakeBuilding : MonoBehaviour {
 	void Update () {
 		if(!b){
 			if(system.BuildList.Count > 0){
-				if(system.BuildList[0].State == FallObject.STATE.STOP){
+				if(system.BuildList[0].State == FallObject.STATE.Stop){
 					transform.position = system.BuildList[0].transform.position;
 					b=true;
 				}

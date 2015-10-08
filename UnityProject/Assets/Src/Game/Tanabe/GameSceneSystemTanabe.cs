@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public partial class GameSceneSystem : MonoBehaviour{
 	private GameObject pauseGUI;
 
+	private	bool	startFadeFlag;
+
 	private bool	debugUnBreakFlag;
 	public	bool	DebugUnBreakFlag	{get{ return debugUnBreakFlag; } set{ debugUnBreakFlag = value; }}
 
@@ -23,18 +25,33 @@ public partial class GameSceneSystem : MonoBehaviour{
 	private bool	partsSet;
 	public	bool	PartsSet	{get{ return partsSet; } set{ partsSet = value; }}
 
+	private	FadeManager	fadeObj;
+	public	FadeManager	FadeObj	{get{ return fadeObj; } set{ fadeObj = value; }}
+
 	private List<FallObject>	buildList;
 	public	List<FallObject>	BuildList {get{return buildList;} set{buildList = value;}}
 
+
 	void StartTanabe(){
-		pauseGUI			=	GameObject.Find("PAUSE_GUI");
 		buildList			=	new List<FallObject>();
+		pauseGUI			=	transform.GetChild(3).gameObject;
+		fadeObj				=	transform.GetChild(10).GetChild(0).GetComponent<FadeManager>();
+
+		pause				=	false;
+		check				=	false;
+		roofSetFlag			=	false;
+		partsSet			=	false;
+		startFadeFlag		=	false;
 		debugCollapseFlag	=	false;
 		debugUnBreakFlag	=	false;
 	}
 
 	//更新関数
 	void UpdateTanabe(){
+		if(!startFadeFlag){
+			fadeObj.setFadeIn();
+			startFadeFlag = true;
+		}
 		if(pauseGUI.activeSelf){
 			if(stateNo == (int)StateNo.GameOver || 
 				stateNo == (int)StateNo.Result) pauseGUI.SetActive(false);
