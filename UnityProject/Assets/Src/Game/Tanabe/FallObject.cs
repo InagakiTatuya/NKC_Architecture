@@ -254,6 +254,20 @@ public partial class FallObject : MonoBehaviour {
 			rBody.useGravity	=	true;
 			rBody.velocity		=	Vector3.zero;
 			state				=	STATE.Bound;
+			switch(system.GetJob){
+				case 0:
+					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR, transform.position);
+					break;
+				case 1:
+					ParticleManager.obj.Play(ParticleManager.PAR_1_PILLAR, transform.position);
+					break;
+				case 2:
+					ParticleManager.obj.Play(ParticleManager.PAR_2_WALL, transform.position);
+					break;
+				case 3:
+					ParticleManager.obj.Play(ParticleManager.PAR_3_ROOF, transform.position);
+					break;
+			}
 		} else if(state == STATE.Bound){//バウンド終わり
 			if(system.GetJob == 3) system.RoofSetFlag = true;
 			//設置されたことを通達
