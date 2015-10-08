@@ -42,8 +42,8 @@ public	partial	class SelectSystem : MonoBehaviour {
 		};
 		for(int i = 0;i < tablePrefabName.Length;i ++)
 			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
-		CreateFade();
 		StartCreateButton();
+        CreateFade();
 		ChangeState(StateNo.Neutral);
 		selectNo	= -1;
 		f_timer		= 0.0f;
