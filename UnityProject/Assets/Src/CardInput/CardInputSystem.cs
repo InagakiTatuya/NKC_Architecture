@@ -39,12 +39,14 @@ public class CardInputSystem : MonoBehaviour {
     private CardManager     m_cardMgr;
     private CardInputWind   m_ciWind;
     private CanvasFade      m_Fade;
+    private SeManager       m_seMgr;
 
     //公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public  int getState        { get{return m_State.getState;       } }
 
     public CardManager   getCardMgr       { get{ return m_cardMgr;  } }
     public CardInputWind getCardInputWind { get{ return m_ciWind;   } }
+    public SeManager     getSeMgr         { get{ return m_seMgr;    } }
 
     //非公開関数///////////////////////////////////////////////////////////////
     //初期化===================================================================
@@ -81,6 +83,7 @@ public class CardInputSystem : MonoBehaviour {
                                             .GetComponent<CardInputWind>();
         m_Fade    = GameObject.Find("Canvas/CanvasFade")
                                             .GetComponent<CanvasFade>();
+        m_seMgr   = GameObject.Find("SEObject").GetComponent<SeManager>();
     }
 
     //更新=====================================================================
