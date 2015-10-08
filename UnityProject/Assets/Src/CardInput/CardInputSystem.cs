@@ -28,8 +28,8 @@ public class CardInputSystem : MonoBehaviour {
     //ステート^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     private ClassStateManager m_State;
 
-    private const float INSCENE_TIME  = 0.4f; //INSTAET
-    private const float OUTSCENE_TIME = 0.4f; //OUTSTATE
+    private const float INSCENE_TIME  = 0.25f; //INSTAET
+    private const float OUTSCENE_TIME = 0.25f; //OUTSTATE
 
     private string m_NextSceneName;
 

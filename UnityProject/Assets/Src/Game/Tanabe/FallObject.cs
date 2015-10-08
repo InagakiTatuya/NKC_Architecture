@@ -4,14 +4,14 @@ using System.Collections;
 public partial class FallObject : MonoBehaviour {
 	//ステート
 	public enum STATE{
-		FALL,
-		FALLEND,
-		CHECK,
-		STOP,
-		PAUSE,
-		BOUND,
+		Fall,
+		FallEnd,
+		Check,
+		Stop,
+		Pause,
+		Bound,
 	};
-	private	STATE	state,prevState;
+	private	STATE	state, prevState;
 	public	STATE	State	{get{ return state; } set{ state = value; }}
 
 	//一度に配置されるオブジェクトの数
@@ -43,7 +43,7 @@ public partial class FallObject : MonoBehaviour {
 		system			=	transform.root.GetComponent<GameSceneSystem>();
 		system.BuildList.Add(this);//建築物一覧に登録
 
-		state			=	STATE.FALL;
+		state			=	STATE.Fall;
 		prevState		=	state;
 		stateTime		=	0;
 
@@ -78,28 +78,28 @@ public partial class FallObject : MonoBehaviour {
 			}
 		}
 		//処理の必要がないので停止
-		if(state == STATE.STOP)	return;
+		if(state == STATE.Stop)	return;
 		if(system.Pause){
-			if(state == STATE.PAUSE) {}
+			if(state == STATE.Pause) {}
 			else{
 				if(!rBody.isKinematic){
 					//落下中は落下物のみ
-					if(state == STATE.FALL)			ObjectSleep(false);
+					if(state == STATE.Fall)			ObjectSleep(false);
 					//チェック中は全て
-					else if(state == STATE.CHECK)	ObjectSleep();
+					else if(state == STATE.Check)	ObjectSleep();
 				}
 				prevState	=	 state;
-				state		=	 STATE.PAUSE;
+				state		=	 STATE.Pause;
 			}
 			return;
 		}
-		if(state == STATE.PAUSE){
+		if(state == STATE.Pause){
 			state = prevState;
 			if(rBody.isKinematic){
 				//落下中は落下物のみ
-				if(state == STATE.FALL)			ObjectWakeUp(false);
+				if(state == STATE.Fall)			ObjectWakeUp(false);
 				//チェック中は全て
-				else if(state == STATE.CHECK)	ObjectWakeUp();
+				else if(state == STATE.Check)	ObjectWakeUp();
 			}
 		}
 
@@ -109,11 +109,11 @@ public partial class FallObject : MonoBehaviour {
 			stateTime	=	 0;
 		}
 		switch (state){
-			case STATE.BOUND:
+			case STATE.Bound:
 				break;
-			case STATE.FALL:
+			case STATE.Fall:
 				break;
-			case STATE.FALLEND:
+			case STATE.FallEnd:
 				//左右への移動と回転を許可
 				rBody.constraints	&=	RigidbodyConstraints.None;
 				if(system.DebugUnBreakFlag){
@@ -132,15 +132,15 @@ public partial class FallObject : MonoBehaviour {
 				if(childCount == 0){//全てのオブジェクトの設置を確認
 					system.seManager.Play(1);
 					if(system.GetJob == 2 || system.GetJob == 3){//壁か屋根設置時
-						state			=	STATE.CHECK;
+						state			=	STATE.Check;
 						system.Check	=	true;
 					}else{
-						state			=	STATE.STOP;
+						state			=	STATE.Stop;
 						system.PartsSet	=	true;
 					}
 				}
 				break;
-			case STATE.CHECK:
+			case STATE.Check:
 				if(system.DebugCollapseFlag){
 					breakFlag = true;
 					ObjectSleep();
@@ -149,7 +149,7 @@ public partial class FallObject : MonoBehaviour {
 				}
 				if(system.stateNo == (int)GameSceneSystem.StateNo.GameOver){//建築物が崩壊
 					ObjectCollapse();
-					state = STATE.STOP;
+					state = STATE.Stop;
 				}
 				if (stateTime == 0.0f){//建築物耐久チェック開始
 					if(rBody.isKinematic) ObjectWakeUp(true,true);
@@ -157,12 +157,12 @@ public partial class FallObject : MonoBehaviour {
 				if (system.completeFlg){//建築物耐久チェッククリア
 					if(system.stateNo	== (int)GameSceneSystem.StateNo.CardView || 
 						system.stateNo	== (int)GameSceneSystem.StateNo.Result){
-						state				=	STATE.STOP;
+						state				=	STATE.Stop;
 						system.completeFlg	=	false;
 						if(!rBody.isKinematic)	ObjectSleep();
 					}
 				}
-				if(rBody.isKinematic) state =	STATE.STOP;
+				if(rBody.isKinematic) state =	STATE.Stop;
 				break;
 		}
 		stateTime += Time.deltaTime;
@@ -172,7 +172,7 @@ public partial class FallObject : MonoBehaviour {
 	private void ObjectCollapse(){
 		system.BuildList.ForEach(e =>
 		{
-			e.state					=	STATE.STOP;
+			e.state					=	STATE.Stop;
 			e.rBody.isKinematic		=	false;
 			e.rBody.angularVelocity	=	new Vector3(Random.Range(-2,2),Random.Range(-2,2),Random.Range(-2,2));
 			e.rBody.AddForce(Vector3.up			* Random.Range(-15.0f,15.0f), ForceMode.Impulse);
@@ -249,12 +249,26 @@ public partial class FallObject : MonoBehaviour {
 			collapseConfirmTimer	=	0;
 			exitFlag				=	false;
 		}
-		if (state == STATE.FALL){//バウンド準備
+		if (state == STATE.Fall){//バウンド準備
 			rBody.AddForce(Vector3.up * boundSpeed, ForceMode.VelocityChange);
 			rBody.useGravity	=	true;
 			rBody.velocity		=	Vector3.zero;
-			state				=	STATE.BOUND;
-		} else if(state == STATE.BOUND){//バウンド終わり
+			state				=	STATE.Bound;
+			switch(system.GetJob){
+				case 0:
+					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR, transform.position);
+					break;
+				case 1:
+					ParticleManager.obj.Play(ParticleManager.PAR_1_PILLAR, transform.position);
+					break;
+				case 2:
+					ParticleManager.obj.Play(ParticleManager.PAR_2_WALL, transform.position);
+					break;
+				case 3:
+					ParticleManager.obj.Play(ParticleManager.PAR_3_ROOF, transform.position);
+					break;
+			}
+		} else if(state == STATE.Bound){//バウンド終わり
 			if(system.GetJob == 3) system.RoofSetFlag = true;
 			//設置されたことを通達
 			childCount--;
@@ -262,7 +276,7 @@ public partial class FallObject : MonoBehaviour {
 			rBody.isKinematic		=	true;
 			rBody.velocity			=	Vector3.zero;
 			rBody.angularVelocity	=	Vector3.zero;
-			state					=	STATE.FALLEND;
+			state					=	STATE.FallEnd;
 		}
 	}
 }
