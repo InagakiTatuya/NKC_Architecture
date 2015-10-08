@@ -69,6 +69,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
 		if(stateTime >= 1.0f){
+			gameOverFlg	= true;
 			ChangeState(StateNo.Result);
 			return;
 		}
@@ -93,6 +94,16 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			checkFlg	&= ~0x00000002;
 			if(!value)	return;
 			checkFlg	|=  0x00000002;
+		}
+	}
+	public	bool	gameOverFlg{
+		get{
+			return (checkFlg & 0x00000004) != 0x00000000;
+		}
+		set{
+			checkFlg	&= ~0x00000004;
+			if(!value)	return;
+			checkFlg	|=  0x00000004;
 		}
 	}
 }//ゲームシーンのシステム_End//-----------------------------
