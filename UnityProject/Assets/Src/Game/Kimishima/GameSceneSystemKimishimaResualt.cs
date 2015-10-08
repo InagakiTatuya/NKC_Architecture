@@ -184,7 +184,8 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		resultTextImage			= buf.AddComponent<Image>();
 		resultTextImage.sprite	= spriteBuf[10];
 		resultTextImage.color	= Color.white;
-		resultTextImage.rectTransform.localPosition	= new Vector3(96.0f,-64.0f,0.0f);
+		resultTextImage.rectTransform.localPosition	= new Vector3(96.0f,-72.0f,0.0f);
+		resultTextImage.rectTransform.localScale	= Vector3.one;
 		resultTextImage.rectTransform.sizeDelta		= new Vector2(64.0f,32.0f);
 	}//リザルトのテキストを生成_End//------------------------
 
