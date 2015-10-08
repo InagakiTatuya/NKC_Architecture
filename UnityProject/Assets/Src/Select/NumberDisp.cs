@@ -29,6 +29,7 @@ public class NumberDisp : MonoBehaviour {
 			GameObject	obj			= Instantiate(new GameObject());
 			obj.transform.parent	= transform.parent;
 			image[i]	= obj.AddComponent<Image>();
+			image[i].rectTransform.localScale	= Vector3.one;
 		}
 	}
 	
