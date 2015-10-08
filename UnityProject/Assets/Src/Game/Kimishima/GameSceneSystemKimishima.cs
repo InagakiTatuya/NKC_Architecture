@@ -38,6 +38,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	PartsSelectClass	partsSelectClass;
 	private	int					jobBuf;
 
+	//チュートリアル関連
+	private	int					f_tutorialFlg;
+	public	int					tutorialFlg{get{return	f_tutorialFlg;}}
+
 	private	int					prevStateNo;
 	private	bool				execute;
 
@@ -88,15 +92,16 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//更新//////////////////////////////////////////////////
 	//俺の更新関数
 	private	void	UpdateKimishimaSystem(){
-		if(stateNo == (int)StateNo.PartsSelect && prevStateNo != (int)StateNo.PartsSelect){
-			jobBuf	= job;
-		}
-		prevStateNo	= stateNo;
 		BackFadeUpdate();
 		UpdateFloorWindow();
 		PartsSelectClass.MessageID				message	= PartsSelectClass.MessageID.Non;
 		if(stateNo == (int)StateNo.PartsSelect)	message	= PartsSelectClass.MessageID.OnPartsSelectState;
 		partsSelectClass.Update(message,ref execute,job);
+		if(stateNo == (int)StateNo.PartsSelect && prevStateNo != (int)StateNo.PartsSelect){
+			jobBuf	= job;
+			Tutorial();
+		}
+		prevStateNo	= stateNo;
 	}
 
 	//パーツ選択ステート
@@ -111,6 +116,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		if(!execute)	return;
 		ChangeState(StateNo.PartsSet);
 		execute	= false;
+		Tutorial();
 	}
 
 	//階層ウィンドウを更新
@@ -125,6 +131,14 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		floor	++;
 		floorText.text	= floor.ToString();
 	}//階層を進める_End//-----------------------------------
+
+	private	void	Tutorial(){//チュートリアル文章を表示//-
+		if(!SelectSystem.TutorialFlg)	return;
+		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/TutorialObject",canvasObject);
+		TutorialParent	tp		= obj.GetComponent<TutorialParent>();
+		tp.tutorialID			= f_tutorialFlg;
+		f_tutorialFlg			++;
+	}
 
 }
 #endregion	//ゲームシーンのシステム
