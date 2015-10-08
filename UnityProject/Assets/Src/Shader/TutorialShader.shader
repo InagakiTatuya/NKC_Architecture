@@ -1,4 +1,4 @@
-﻿Shader "Custom/TextShader" {
+﻿Shader "Custom/TutorialShader" {
 	Properties	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
@@ -63,7 +63,7 @@
 				sum	+= tex2D(_MainTex,IN.texcoord + half2(-0.0001, 0.0f));
 				sum	+= tex2D(_MainTex,IN.texcoord + half2( 0.00,-0.0001f));
 				sum /= 5.0f;
-				if(sum.a > 0.5f)	return	half4(0.0f,0.75f,0.75f,IN.color.a);
+				if(sum.a > 0.5f)	return	half4(0.0f,0.0f,0.0f,IN.color.a);
 				if(sum.a > 0.0f)	return	half4(1.0f,1.0f,1.0f,pow(sum.a * 2.0f,0.15f) * IN.color.a);
 				return	half4(1.0f,1.0f,1.0f,0.0f);
 			}
