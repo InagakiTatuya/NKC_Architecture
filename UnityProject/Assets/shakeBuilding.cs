@@ -60,8 +60,8 @@ public class shakeBuilding : MonoBehaviour {
 			time = 0;
 			timer = timerMax;
 			q = Quaternion.identity;
-			if(system.DebugUnBreakFlag)	shakePower = 10.0f;
-			else						shakePower = 5.0f;
+			if(system.DebugUnBreakFlag)	shakePower = 1.0f + system.GetFloor();
+			else						shakePower = 1.0f + system.GetFloor()/2;
 			rot		= new Vector3(Random.Range(-1.0f,1.0f),Random.Range(-0.1f,0.1f),Random.Range(-1.0f,1.0f)) * shakePower;
 			rot2	= new Vector3(1,0,1) * 15;
 		}
