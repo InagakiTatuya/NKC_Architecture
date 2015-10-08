@@ -254,18 +254,20 @@ public partial class FallObject : MonoBehaviour {
 			rBody.useGravity	=	true;
 			rBody.velocity		=	Vector3.zero;
 			state				=	STATE.Bound;
+			temp				=	transform.position;
 			switch(system.GetJob){
 				case 0:
-					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR, transform.position);
+					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR,	temp);
 					break;
 				case 1:
-					ParticleManager.obj.Play(ParticleManager.PAR_1_PILLAR, transform.position);
+					temp.y -= 8;
+					ParticleManager.obj.Play(ParticleManager.PAR_1_PILLAR,	temp);
 					break;
 				case 2:
-					ParticleManager.obj.Play(ParticleManager.PAR_2_WALL, transform.position);
+					ParticleManager.obj.Play(ParticleManager.PAR_2_WALL,	temp);
 					break;
 				case 3:
-					ParticleManager.obj.Play(ParticleManager.PAR_3_ROOF, transform.position);
+					ParticleManager.obj.Play(ParticleManager.PAR_3_ROOF,	temp);
 					break;
 			}
 		} else if(state == STATE.Bound){//バウンド終わり

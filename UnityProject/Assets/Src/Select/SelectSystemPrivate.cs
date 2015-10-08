@@ -85,8 +85,8 @@ public	partial	class SelectSystem : MonoBehaviour {
 		obj				= TitleSystem.CreateObjectInCanvas("Prefab/Select/number",canvasObject);
 		NumberDisp	nd	= obj.GetComponent<NumberDisp>();
 		nd.pos			= tableButtonPos[1] + new Vector3(-42.0f,48.0f,0.0f);
-		nd.size			= new Vector2(16.0f,16.0f);
-		nd.offset		= -18.0f;
+		nd.size			= new Vector2(24.0f,24.0f);
+		nd.offset		= -28.0f;
 		nd.color		= new Color(0.0f,0.0f,0.0f,1.0f);
 		nd.value		= Database.GetMaxFloor(Database.MainDataName);
 	}//ボタンを初期化_End//---------------------------------
