@@ -50,6 +50,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int			resultDispFloor;
 	private	bool		newRecodeFlg;
 	private	int			resultSelectID;
+	private bool		nextSceneFadeFlag;
 	
 	//初期化////////////////////////////////////////////////
 	
@@ -91,6 +92,10 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		}
 	}
 	private	void	UpdateResultNextScene(){//次のシーンへ遷移
+		if(!nextSceneFadeFlag)	{
+			fadeObj.setFadeOut();
+			nextSceneFadeFlag = true;
+		}
 		if(resultStateTime < 0.5f)	return;
 		string[]	nextSceneName	= new string[]{"Game","Select"};
 		Application.LoadLevel(nextSceneName[resultSelectID]);
