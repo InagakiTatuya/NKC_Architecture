@@ -212,7 +212,7 @@ class 	PartsSelectClass{
 			text[i].text		= tableText[i];
 			text[i].alignment	= TextAnchor.MiddleLeft;
 			text[i].fontSize	= tableFontSize[i];
-			text[i].color		= new Color(0.0f,1.0f,1.0f,1.0f);
+			text[i].color		= new Color(0.0f,0.75f,0.75f,1.0f);
 			text[i].material	= Resources.Load<Material>("Material/Game/TextMaterial");
 		}
 	}

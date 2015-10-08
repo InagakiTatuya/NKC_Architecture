@@ -1,11 +1,9 @@
 fileFormatVersion: 2
-guid: d148b1d489e68d94e92aefb1967fbbf6
-timeCreated: 1444212307
+guid: 71e35395bf105a24bb8a3b1c9f96a533
+timeCreated: 1444269301
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName:
-    21300000: panda_0
-    21300002: panda_1
+  fileIDToRecycleName: {}
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -39,7 +37,7 @@ TextureImporter:
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -50,27 +48,7 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites:
-    - name: panda_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 256
-        height: 512
-      alignment: 9
-      pivot: {x: .5, y: .0500000007}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: panda_1
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 256
-        height: 512
-      alignment: 9
-      pivot: {x: .5, y: .0500000007}
-      border: {x: 0, y: 0, z: 0, w: 0}
+    sprites: []
   spritePackingTag: 
   userData: 
   assetBundleName: 

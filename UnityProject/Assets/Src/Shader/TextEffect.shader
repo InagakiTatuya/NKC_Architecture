@@ -1,7 +1,8 @@
-﻿Shader "Custom/TextShader" {
+﻿Shader "Custom/TextEffect" {
 	Properties	{
-		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-		_Color ("Tint", Color) = (1,1,1,1)
+		_MainTex ("Sprite Texture", 2D) = "white" {}
+		_Color ("Color", Color) = (1,1,1,1)
+		_OutlineColor ("Outline Color", Color) = (0,0,0,1)
 	}
 
 	SubShader	{
@@ -26,46 +27,40 @@
 			#pragma multi_compile DUMMY PIXELSNAP_ON
 			#include "UnityCG.cginc"
 			
-			struct appdata_t
-			{
+			struct appdata_t{
 				float4 vertex   : POSITION;
 				float4 color    : COLOR;
 				float2 texcoord : TEXCOORD0;
 			};
 
-			struct v2f
-			{
+			struct v2f{
 				float4 vertex   : SV_POSITION;
 				fixed4 color    : COLOR;
 				half2 texcoord  : TEXCOORD0;
 			};
 			
+			sampler2D _MainTex;
+			fixed4 _MainTex_ST;
 			fixed4 _Color;
+			fixed4 _OutlineColor;
 
 			v2f vert(appdata_t IN)	{
 				v2f OUT;
 				OUT.vertex		= mul(UNITY_MATRIX_MVP,IN.vertex);
-				OUT.texcoord	= IN.texcoord;
-				OUT.color		= IN.color * _Color;
+				OUT.texcoord	= IN.texcoord * _MainTex_ST.xy + _MainTex_ST.zw;
+				OUT.color		= IN.color;
 				#ifdef PIXELSNAP_ON
 				OUT.vertex		= UnityPixelSnap (OUT.vertex);
 				#endif
 
 				return OUT;
 			}
-
-			sampler2D _MainTex;
-
+			
 			fixed4 frag(v2f IN) : COLOR	{
-				half4	sum	= tex2D(_MainTex,IN.texcoord);
-				sum	+= tex2D(_MainTex,IN.texcoord + half2( 0.0001, 0.0f));
-				sum	+= tex2D(_MainTex,IN.texcoord + half2( 0.00, 0.0001f));
-				sum	+= tex2D(_MainTex,IN.texcoord + half2(-0.0001, 0.0f));
-				sum	+= tex2D(_MainTex,IN.texcoord + half2( 0.00,-0.0001f));
-				sum /= 5.0f;
-				if(sum.a > 0.5f)	return	half4(0.0f,0.75f,0.75f,IN.color.a);
-				if(sum.a > 0.0f)	return	half4(1.0f,1.0f,1.0f,pow(sum.a * 2.0f,0.15f) * IN.color.a);
-				return	half4(1.0f,1.0f,1.0f,0.0f);
+				half4	tex	= tex2D(_MainTex,IN.texcoord);
+				half4	buf	= _Color * tex.r + _OutlineColor * tex.b;
+				buf.a		*= tex.a;
+				return	buf;
 			}
 		ENDCG
 		}

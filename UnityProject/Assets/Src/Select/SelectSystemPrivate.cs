@@ -82,6 +82,13 @@ public	partial	class SelectSystem : MonoBehaviour {
 		obj				= TitleSystem.CreateObjectInCanvas("Prefab/Select/recode",canvasObject);
 		Image	image	= obj.GetComponent<Image>();
 		image.rectTransform.localPosition	= tableButtonPos[1] + new Vector3(-72.0f,48.0f,0.0f);
+		obj				= TitleSystem.CreateObjectInCanvas("Prefab/Select/number",canvasObject);
+		NumberDisp	nd	= obj.GetComponent<NumberDisp>();
+		nd.pos			= tableButtonPos[1] + new Vector3(-42.0f,48.0f,0.0f);
+		nd.size			= new Vector2(16.0f,16.0f);
+		nd.offset		= -18.0f;
+		nd.color		= new Color(0.0f,0.0f,0.0f,1.0f);
+		nd.value		= Database.GetMaxFloor(Database.MainDataName);
 	}//ボタンを初期化_End//---------------------------------
 	
 	//更新//////////////////////////////////////////////////
@@ -89,6 +96,12 @@ public	partial	class SelectSystem : MonoBehaviour {
 	private	UpdateFunc[]	updateFunc;
 	
 	private	void	UpdateNeutral(){//通常時の更新_Beign//--
+		if(fade == null)	return;
+		float	n	= 1.0f - Mathf.Min(stateTime * 4.0f,1.0f);
+		fadeColor.a	= n;
+		if(stateTime < 0.5f)	return;
+		Destroy(fade.gameObject);
+		fade		= null;
 	}//通常時の更新_End//-----------------------------------
 	
 	private	void	UpdateGoNext(){//次のシーンへ_Begin//---
@@ -122,7 +135,6 @@ public	partial	class SelectSystem : MonoBehaviour {
 	private	void	CreateFade(){
 		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Title/Fade",canvasObject);
 		fade			= obj.GetComponent<Image>();
-		fadeColor		= new Color(0.0f,0.0f,0.0f,0.0f);
 		fade.rectTransform.sizeDelta	= new Vector2(1024.0f,1024.0f);
 		fade.color		= fadeColor;
 	}//フェード関連を初期化_End//---------------------------
