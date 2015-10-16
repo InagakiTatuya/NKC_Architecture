@@ -32,7 +32,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 	//変数//////////////////////////////////////////////////
 	private	int			stateNo;
 	private	float		stateTime;
-	private	static	int	selectNo;
+	private	static	int	selectNo	= -1;
 	private	Button[]	button		= null;
 	private	Image[]		buttonImage	= null;
 	private	Image		fade		= null;
