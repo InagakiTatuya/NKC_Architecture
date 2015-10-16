@@ -75,8 +75,11 @@ public	partial	class SelectSystem : MonoBehaviour {
 		if(seManager == null)	return;
 		seManager.Play(0);
 	}
-	private	void	OnBannerButtonEnter(){//バナーボタンを押した
-		Application.OpenURL("http://www.denpa.ac.jp/");
+	private	void	OnBanner1ButtonEnter(){//バナーボタンを押した
+		Application.OpenURL("http://wakuwaku.kk-c.net/");
+	}
+	private	void	OnBanner2ButtonEnter(){//バナーボタンを押した
+		Application.OpenURL("http://labo.denpa.ac.jp/web-course/kkc_kan/#");
 	}
 
 }//セレクトのシステム_End//---------------------------------

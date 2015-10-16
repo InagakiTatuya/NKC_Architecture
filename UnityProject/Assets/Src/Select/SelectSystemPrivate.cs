@@ -45,22 +45,26 @@ public	partial	class SelectSystem : MonoBehaviour {
 		tableOnButtonEnterFunc	= new UnityAction[]{
 			this.OnTutorialButtonEnter,
 			this.OnMainGameButtonEnter,
-			this.OnBannerButtonEnter,
+			this.OnBanner1ButtonEnter,
+			this.OnBanner2ButtonEnter,
 		};
 		Vector3[]	tableButtonPos	= new Vector3[]{
 			new Vector3(0.0f, 256.0f,0.0f),
 			new Vector3(0.0f,   0.0f,0.0f),
-			new Vector3(0.0f,-288.0f,0.0f),
+			new Vector3(0.0f,-224.0f,0.0f),
+			new Vector3(0.0f,-352.0f,0.0f)
 		};
 		Vector3[]	tableButtonSize	= new Vector3[]{
 			new Vector2(512.0f,256.0f),
 			new Vector2(512.0f,256.0f),
-			new Vector2(420.0f,315.0f)
+			new Vector2(420.0f,105.0f),
+			new Vector2(420.0f,105.0f)
 		};
 		string[]	spriteName		= new string[]{
 			"Texture/Select/tutorial",
 			"Texture/Select/gamestart",
-			"Texture/Select/banner"
+			"Texture/Select/banner1",
+			"Texture/Select/banner2",
 		};
 		GameObject	obj;
 		button		= new Button[tableOnButtonEnterFunc.Length];
