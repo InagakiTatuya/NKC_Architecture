@@ -35,7 +35,7 @@ public	partial	class SelectSystem : MonoBehaviour {
 		updateFunc	= new UpdateFunc[]{//更新関数を初期化
 			UpdateNeutral,
 			UpdateGoNext,
-		};/////////
+		};
 		string[]	tablePrefabName	= new string[]{//プレファブの名前
 			"Prefab/Select/BackGround",
 			"Prefab/Select/SelectHeader",
