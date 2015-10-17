@@ -130,7 +130,6 @@ public partial class FallObject : MonoBehaviour {
 				rBody.angularVelocity	=	Vector3.zero;
 
 				if(childCount == 0){//全てのオブジェクトの設置を確認
-					system.seManager.Play(1);
 					if(system.GetJob == 2 || system.GetJob == 3){//壁か屋根設置時
 						state			=	STATE.Check;
 						system.Check	=	true;
@@ -250,12 +249,13 @@ public partial class FallObject : MonoBehaviour {
 			exitFlag				=	false;
 		}
 		if (state == STATE.Fall){//バウンド準備
+			system.seManager.Play(1);
 			rBody.AddForce(Vector3.up * boundSpeed, ForceMode.VelocityChange);
 			rBody.useGravity	=	true;
 			rBody.velocity		=	Vector3.zero;
 			state				=	STATE.Bound;
 			temp				=	transform.position;
-			switch(system.GetJob){
+			switch(system.GetJob){//設置パーティクル
 				case 0:
 					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR,	temp);
 					break;
