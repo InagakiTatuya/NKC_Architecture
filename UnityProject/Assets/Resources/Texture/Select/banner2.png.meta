@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: d0c16a415ca11fb448b7fd642f7eda4d
-timeCreated: 1444012834
+timeCreated: 1444967944
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -55,21 +55,21 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 240
-        width: 320
-        height: 240
+        y: 128
+        width: 512
+        height: 128
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: banner_1
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 320
-        height: 240
+        width: 512
+        height: 128
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

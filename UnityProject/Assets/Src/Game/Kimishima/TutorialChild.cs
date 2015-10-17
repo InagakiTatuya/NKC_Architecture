@@ -13,7 +13,7 @@ public class TutorialChild : MonoBehaviour {
 
 	//変数//------------------------------------------
 	private	Image	image;
-
+	
 	//初期化//----------------------------------------
 	void Start () {
 		image			= GetComponent<Image>();
@@ -24,6 +24,7 @@ public class TutorialChild : MonoBehaviour {
 	
 	//更新//------------------------------------------
 	void Update () {
-	
+		
 	}
+
 }
