@@ -22,6 +22,7 @@ public	partial class TitleSystem : MonoBehaviour{
 	//変数//////////////////////////////////////////////////
 	public	GameObject	canvasObject	= null;
 	public	SeManager	seManager		= null;
+	public	Material	textMaterial	= null;
 	private	static	float	f_timer;
 	public	static	float	timer{
 		get{return	f_timer;}
@@ -41,6 +42,7 @@ public	partial class TitleSystem : MonoBehaviour{
 		for(int i = 0;i < tablePrefabName.Length;i ++)
 			TitleSystem.CreateObjectInCanvas(tablePrefabName[i],canvasObject);
 		StartCreateButton();
+		StartCreateText();
 		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
