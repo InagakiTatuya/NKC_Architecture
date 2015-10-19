@@ -46,12 +46,14 @@ public	partial class TitleSystem : MonoBehaviour{
 	private	void	StartCreateText(){//著作権表記
 		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",canvasObject);
 		Text		text	= obj.GetComponent<Text>();
-		text.text			= "(c)test";
+		text.text			= "フォント\n\tM+ FONTS PROJECT\nBGM\n\t甘茶の音楽工房\n効果音\n\t効果音ラボ\t" +
+			"\tくらげ工匠\n\t小森平\t\t\t\tOn-Jin ～音人～\n\t01SoundEarth\tHURT RECORD";
 		text.fontSize		= 24;
 		text.color			= Color.white;
-		text.rectTransform.localPosition		= new Vector3(0.0f,-320.0f,0.0f);
+		text.alignment		= TextAnchor.UpperLeft;
+		text.rectTransform.localPosition		= new Vector3(24.0f,-512.0f,0.0f);
 		text.rectTransform.localScale	= Vector3.one;
-		text.rectTransform.sizeDelta	= new Vector2(544.0f,128.0f);
+		text.rectTransform.sizeDelta	= new Vector2(544.0f,512.0f);
 		if(textMaterial == null)	return;
 		text.material		= textMaterial;
 	}
