@@ -51,6 +51,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	bool		newRecodeFlg;
 	private	int			resultSelectID;
 	private bool		nextSceneFadeFlag;
+	private	bool		isRunning;
 	
 	//初期化////////////////////////////////////////////////
 	
@@ -109,22 +110,49 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		}
 	}
 	private	void	UpdateResultSSBegin(){
-		for(int i = 0;i < resultCameraButtonSystem.Length;i ++){
+		for(int i = 0;i < resultCameraButtonSystem.Length;i	++){
 			resultCameraButtonSystem[i].buttonSize	= Vector2.zero;
 		}
 		if(resultStateTime >= 0.5f)	ChangeResultState(ResultStateNo.SS);
 	}
 	private	void	UpdateResultSS(){
-		int id	= 0;
-		while(true){
-			string	name	= "建塔師のScreenショット" + id + ".png";
-			id	++;
-			if(File.Exists(name))	continue;
-			Application.CaptureScreenshot(name);
-			break;
-		}
-		ChangeResultState(ResultStateNo.SSEnd);
+		StartCoroutine("CaptureScreen");
 	}
+	IEnumerator CaptureScreen(){
+		//コルーチンの多重起動を防ぐ
+		if(isRunning)	yield break;
+		isRunning = true;
+
+		string	tempName;
+		string	name	=	"建塔師_" + DateTime.Now.Ticks + ".png";
+
+		if (Application.platform == RuntimePlatform.Android){
+			string	bufName	= "../../../../DCIM/Kentoushi/" + name;
+			Application.CaptureScreenshot(bufName);
+		}else{
+			Application.CaptureScreenshot(name);
+		}
+
+		yield return new WaitForEndOfFrame();//1F停止
+
+		ScanMedia(name);//アルバム更新
+		ChangeResultState(ResultStateNo.SSEnd);
+		isRunning = false;
+	}
+	private	void	ScanMedia(string fileName){//アルバムを更新して画像を適用させる
+        if (Application.platform != RuntimePlatform.Android)	return;
+#if UNITY_ANDROID
+        using (AndroidJavaClass		jcMediaScannerConnection	= new AndroidJavaClass ("android.media.MediaScannerConnection"))
+        using (AndroidJavaClass		jcUnityPlayer				= new AndroidJavaClass ("com.unity3d.player.UnityPlayer"))
+        using (AndroidJavaClass		jcEnvironment				= new AndroidJavaClass ("android.os.Environment"))
+        using (AndroidJavaObject	joActivity					= jcUnityPlayer.GetStatic	<AndroidJavaObject> ("currentActivity"))
+        using (AndroidJavaObject	joContext					= joActivity.Call			<AndroidJavaObject> ("getApplicationContext"))
+        using (AndroidJavaObject	joExDir						= jcEnvironment.CallStatic	<AndroidJavaObject> ("getExternalStorageDirectory")) {
+            string path = joExDir.Call<string> ("toString") + "/DCIM/Kentoushi/" + fileName;
+            jcMediaScannerConnection.CallStatic ("scanFile", joContext, new string[] { path }, new string[] { "image/png" }, null);
+        }
+#endif
+    }
 	private	void	UpdateResultSSEnd(){
 		for(int i = 0;i < resultCameraButtonSystem.Length;i ++){
 			resultCameraButtonSystem[i].buttonSize	= new Vector2(128,128);
@@ -232,6 +260,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			resultCameraButtonSystem[i].buttonSize	= new Vector2(128.0f,128.0f);
 			resultCameraButtonSystem[i].buttonID	= i;
 			resultCameraButtonSystem[i].buttonEnter	= OnCameraButtonEnter;
+		}
+	}
+
+	void	OnApplicationQuit(){
+		if(isRunning){
+			StopCoroutine("CaptureScreen");
+			isRunning	=	false;
 		}
 	}
 	

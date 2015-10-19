@@ -20,10 +20,10 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			"Prefab/Game/Build/Ice/Wall",
 			"Prefab/Game/Build/Ice/Roof",
 		},{
-			"Prefab/Game/Build/Brick/Floor",
-			"Prefab/Game/Build/Brick/Pillar",
-			"Prefab/Game/Build/Brick/Wall",
-			"Prefab/Game/Build/Brick/Roof",
+			"Prefab/Game/Build/Dannbo/Floor",
+			"Prefab/Game/Build/Dannbo/Pillar",
+			"Prefab/Game/Build/Dannbo/Wall",
+			"Prefab/Game/Build/Dannbo/Roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",
