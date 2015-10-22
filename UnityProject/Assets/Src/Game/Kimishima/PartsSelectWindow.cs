@@ -196,7 +196,7 @@ class 	PartsSelectClass{
 
 	private	void	CreatePartsSelectText(int job){//パーツウィンドウのテキストを生成
 		GameObject	obj;
-		Vector3[]	tableTextPos	= {new Vector3(-64.0f,240.0f,0.0f),new Vector3(96.0f,240.0f,0.0f),};
+		Vector3[]	tableTextPos	= {new Vector3(-176.0f,240.0f,0.0f),new Vector3(-16.0f,240.0f,0.0f),};
 		Vector2[]	tableSizeDelta	= {new Vector2(256.0f,128.0f),new Vector2(256.0f,128.0f),};
 		string[]	tableText		= {
 			Database.obj.JOB_NAME[job],
@@ -205,9 +205,13 @@ class 	PartsSelectClass{
 		int[]		tableFontSize	= {48,24,};
 		text	= new Text[(int)PartsSelectText.Length];
 		for(int i = 0;i < tableText.Length;i ++){
+			Vector3	scale	= Vector3.one;
+			if(i == 0 && job == 3)	scale.x	= 3.0f / 4.0f;
 			obj	= TitleSystem.CreateObjectInCanvas("Prefab/Select/Text",windowImage.gameObject);
 			text[i]				= obj.GetComponent<Text>();
+			text[i].rectTransform.pivot			= new Vector2(0.0f,0.5f);
 			text[i].rectTransform.localPosition	= tableTextPos[i];
+			text[i].rectTransform.localScale	= scale;
 			text[i].rectTransform.sizeDelta		= tableSizeDelta[i];
 			text[i].text		= tableText[i];
 			text[i].alignment	= TextAnchor.MiddleLeft;
