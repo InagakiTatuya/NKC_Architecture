@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler{
 	//設置物(上から)
@@ -76,12 +77,21 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	private Transform		childObj;
 	private Vector3			pos;
 	private Renderer		render;
-	private Color			color;
+	private Color			buildColor;
+	
+	//タッチフィールド用
+	private	bool			flg;
+	private Image			spriteImg;
+	private Color			spriteColor;
 
 	public void Awake(){
 		system					=	transform.root.GetComponent<GameSceneSystem>();
+		spriteImg				=	GetComponent<Image>();
+		spriteColor				=	spriteImg.color;
+		spriteColor.a			=	0;
 		moveObj					=	new GameObject[buildName.GetLength(0),buildName.GetLength(1)];
 		pos						=	Vector3.zero;
+		flg						=	false;
 		firstOutBuildingFlag	=	false;
 
 		for(int i=0;i<moveObj.GetLength(0);i++){
@@ -93,9 +103,9 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 					for(int k=0;k<moveObj[i,j].transform.childCount;k++){
 						render	=	moveObj[i,j].transform.GetChild(k).GetComponent<Renderer>();
 						if(render != null){
-							color					=	render.material.color;
-							color.a					=	0.5f;
-							render.material.color	=	color;
+							buildColor				=	render.material.color;
+							buildColor.a			=	0.5f;
+							render.material.color	=	buildColor;
 						}
 					}
 				}
@@ -105,7 +115,14 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	}
 
 	void Update(){
-
+		if(flg){
+			spriteColor.a	+=	Time.deltaTime*1.5f;
+			if(spriteColor.a>=1.0f)	flg	=	false;
+		}else{
+			spriteColor.a	-=	Time.deltaTime*1.5f;
+			if(spriteColor.a<=0.0f)	flg	=	true;
+		}
+		spriteImg.color	=	spriteColor;
 	}
 
 
@@ -160,6 +177,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 				if(downObj.transform.childCount == 0) DestroyObject(downObj);
 			}
 			gameObject.SetActive(false);
+			spriteColor.a	=	0;
 		}
 		moveObj[partsID,buildNo].SetActive(false);
 	}

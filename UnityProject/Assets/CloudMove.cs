@@ -2,15 +2,18 @@
 using System.Collections;
 
 public class CloudMove : MonoBehaviour {
+	
+	private GameSceneSystem system;
 
 	[SerializeField]
 	private float rotSpeed;
 
 	void Start () {
+		system	=	transform.root.GetComponent<GameSceneSystem>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
+		if(!system.Pause)	transform.Rotate(Vector3.up, rotSpeed * Time.deltaTime);
 	}
 }
