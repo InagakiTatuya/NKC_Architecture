@@ -29,7 +29,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//初期化///////////////////////////////////////////////
 	//初期化_Begin//---------------------------------------
 	private	void	BackFadeInit(){
-		fadeClass	= new FadeClass(this,canvasObject);
+		fadeClass	= new FadeClass(canvasObject);
 		fadeClass.Init();
 	}//初期化_End//----------------------------------------
 
@@ -64,13 +64,11 @@ public	class	FadeClass{//フェードを管理するクラス_Begin//
 	private	Color			backFadeColor;
 	private	int				backFadeStateNo;
 	private	float			backFadeTimer;
-	private	MonoBehaviour	sceneSystem;
 	private	GameObject		canvasObject;
 
 	//コンストラクタ・デストラクタ///////////////////////////
 	//コンストラクタ_Begin//---------------------------------
-	public	FadeClass(MonoBehaviour sceneSystem,GameObject canvasObject){
-		this.sceneSystem	= sceneSystem;
+	public	FadeClass(GameObject canvasObject){
 		this.canvasObject	= canvasObject;
 	}//コンストラクタ_End//----------------------------------
 
