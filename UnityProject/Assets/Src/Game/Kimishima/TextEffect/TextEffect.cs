@@ -30,12 +30,14 @@ public class TextEffect : MonoBehaviour {
 	private	Color		CharaColor		= Color.black;
 	private	Color		OutlineColor	= Color.white;
 
+	private	UnityAction[]	startFunc;
 	private	UnityAction[]	updateFunc;
 	
 	public	ID			id;
 	public	Texture2D	texture;
 	public	GameObject	targetObject;
 	public	Vector3		pos;
+	private	Vector3		vel;
 	private	Vector3		scale	= Vector3.one * 8;
 	private	Quaternion	rotate;
 	private	float		timer;
@@ -46,6 +48,7 @@ public class TextEffect : MonoBehaviour {
 		StartInitUpdateFunc();
 		rotate	= Quaternion.Euler(1.0f,1.0f,1.0f);
 		timer	= 0.0f;
+		StartFuncInvoke();
 	}
 	private	void	StartGetMaterial(){//マテリアルを読み込む
 		Renderer	renderer	= GetComponent<Renderer>();
@@ -58,6 +61,20 @@ public class TextEffect : MonoBehaviour {
 		material.SetTextureOffset	("_MainTex",offset);
 	}
 	private	void	StartInitUpdateFunc(){//更新関数を初期化
+		startFunc	= new UnityAction[]{
+			StartBon_bo,
+			StartBon_n,
+			StartGura_gu,
+			StartGura_ra,
+			StartGassharn_ga,
+			StartGassharn_xtu,
+			StartGassharn_shi,
+			StartGassharn_xya,
+			StartGassharn_haihun,
+			StartGassharn_n,
+			StartGassharn_ex,
+			null
+		};
 		updateFunc	= new UnityAction[]{
 			UpdateBon_bo,
 			UpdateBon_n,
@@ -72,6 +89,11 @@ public class TextEffect : MonoBehaviour {
 			UpdateGassharn_ex,
 			null
 		};
+	}
+	private	void	StartFuncInvoke(){
+		if(startFunc == null)			return;
+		if(startFunc[(int)id] == null)	return;
+		startFunc[(int)id]();
 	}
 	
 	//更新//------------------------------------------
@@ -98,47 +120,115 @@ public class TextEffect : MonoBehaviour {
 		material.SetColor("_OutlineColor",OutlineColor);
 	}
 
-	private	void	UpdateBon_bo(){//ボンのボ//-------
-		pos		+= new Vector3(2.0f,8.0f,0.0f) * Time.deltaTime;
-		scale	= Vector3.one * 4.0f * timer;
-		rotate	= Quaternion.Euler(0.0f,0.0f,30.0f);
-		CharaColor.a	= Mathf.Max(1.0f - timer,0.0f);
-		OutlineColor.a	= Mathf.Max(1.0f - timer,0.0f);
+	//ボンのボ//--------------------------------------
+	private	void	StartBon_bo(){//初期化
+		vel				= new Vector3(0.0f,128.0f,0.0f);
+		float	r		= Random.Range(-30.0f,0.0f);
+		float	newX	= Mathf.Cos(r * Mathf.Deg2Rad) * vel.x - Mathf.Sin(r * Mathf.Deg2Rad) * vel.y;
+		float	newY	= Mathf.Sin(r * Mathf.Deg2Rad) * vel.x + Mathf.Cos(r * Mathf.Deg2Rad) * vel.y;
+		vel.x			= newX;
+		vel.y			= newY;
+		rotate			= Quaternion.Euler(0.0f,0.0f,-r);
+	}
+	private	void	UpdateBon_bo(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos		+= vel * Time.deltaTime;
+		vel		*= 0.9f;
+		scale	= Vector3.one * 8.0f * Mathf.Pow(n,0.25f);
+		CharaColor		= Color.black * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
+		OutlineColor	= Color.white * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
 		if(timer > 1.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateBon_n(){//ボンのン//--------
-		pos		+= new Vector3(8.0f,2.0f,0.0f) * Time.deltaTime;
-		scale	= Vector3.one * 4.0f * timer;
-		rotate	= Quaternion.Euler(0.0f,0.0f,60.0f);
-		CharaColor.a	= Mathf.Max(1.0f - timer,0.0f);
-		OutlineColor.a	= Mathf.Max(1.0f - timer,0.0f);
+
+	//ボンのン//--------------------------------------
+	private	void	StartBon_n(){//初期化
+		vel				= new Vector3(0.0f,128.0f,0.0f);
+		float	r		= Random.Range(-90.0f,-60.0f);
+		float	newX	= Mathf.Cos(r * Mathf.Deg2Rad) * vel.x - Mathf.Sin(r * Mathf.Deg2Rad) * vel.y;
+		float	newY	= Mathf.Sin(r * Mathf.Deg2Rad) * vel.x + Mathf.Cos(r * Mathf.Deg2Rad) * vel.y;
+		vel.x			= newX;
+		vel.y			= newY;
+		rotate			= Quaternion.Euler(0.0f,0.0f,-r - 30);
+	}
+	private	void	UpdateBon_n(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos		+= vel * Time.deltaTime;
+		vel		*= 0.9f;
+		scale	= Vector3.one * 8.0f * Mathf.Pow(n,0.25f);
+		CharaColor		= Color.black * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
+		OutlineColor	= Color.white * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
 		if(timer > 1.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateGura_gu(){//グラのグ//------
+
+	//グラのグ//--------------------------------------
+	private	void	StartGura_gu(){//初期化
 
 	}
-	private	void	UpdateGura_ra(){//グラのラ//------
+	private	void	UpdateGura_gu(){//更新
 
 	}
-	private	void	UpdateGassharn_ga(){//ガッシャーン!!のガ
+
+	//グラのラ//--------------------------------------
+	private	void	StartGura_ra(){//初期化
 
 	}
-	private	void	UpdateGassharn_xtu(){//ガッシャーン!!のッ
+	private	void	UpdateGura_ra(){//更新
+
+	}
+
+	//ガッシャーン!!のガ//----------------------------
+	private	void	StartGassharn_ga(){//初期化
+
+	}
+	private	void	UpdateGassharn_ga(){//更新
+
+	}
+
+	//ガッシャーン!!のッ//----------------------------
+	private	void	StartGassharn_xtu(){
+
+	}
+	private	void	UpdateGassharn_xtu(){
 		
 	}
-	private	void	UpdateGassharn_shi(){//ガッシャーン!!のシ
+
+	//ガッシャーン!!のシ//----------------------------
+	private	void	StartGassharn_shi(){
+
+	}
+	private	void	UpdateGassharn_shi(){
 		
 	}
-	private	void	UpdateGassharn_xya(){//ガッシャーン!!のャ
+
+	//ガッシャーン!!のャ//----------------------------
+	private	void	StartGassharn_xya(){
 		
 	}
-	private	void	UpdateGassharn_haihun(){//ガッシャーン!!のー
+	private	void	UpdateGassharn_xya(){
 		
 	}
-	private	void	UpdateGassharn_n(){//ガッシャーン!!のン
+
+	//ガッシャーン!!のー//----------------------------
+	private	void	StartGassharn_haihun(){
 		
 	}
-	private	void	UpdateGassharn_ex(){//ガッシャーン!!の!!
+	private	void	UpdateGassharn_haihun(){
+		
+	}
+
+	//ガッシャーン!!のン//----------------------------
+	private	void	StartGassharn_n(){
+		
+	}
+	private	void	UpdateGassharn_n(){
+		
+	}
+
+	//ガッシャーン!!の!!//----------------------------
+	private	void	StartGassharn_ex(){
+		
+	}
+	private	void	UpdateGassharn_ex(){
 		
 	}
 }

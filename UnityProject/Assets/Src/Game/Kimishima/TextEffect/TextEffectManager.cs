@@ -20,7 +20,8 @@ public class TextEffectManager : MonoBehaviour {
 
 	//変数//---------------------------------------
 	public	EffectID	id;
-	public	GameObject	prefab	= null;
+	public	GameObject	prefab;
+	public	GameObject	targetObject;
 
 	//初期化//-------------------------------------
 	void Start () {
@@ -31,6 +32,7 @@ public class TextEffectManager : MonoBehaviour {
 			StartGasshan,
 		};
 		startFunc[(int)id]();
+		Destroy(this.gameObject);
 	}
 	private	void	StartBon(){//ボン//------------
 		TextEffect.ID[]	id	= new TextEffect.ID[]{
@@ -39,11 +41,10 @@ public class TextEffectManager : MonoBehaviour {
 		};
 		for(int i = 0;i < 2;i ++){
 			GameObject	obj	= Instantiate(prefab);
-			obj.transform.parent	= this.transform;
 			TextEffect	te	= obj.GetComponent<TextEffect>();
 			te.id			= id[i];
 			te.pos			= this.transform.position;
-			te.targetObject	= Camera.main.gameObject;
+			te.targetObject	= targetObject;
 		}
 	}
 	private	void	StartGura(){//グラ//-----------

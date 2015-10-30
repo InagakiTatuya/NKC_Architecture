@@ -45,6 +45,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int					prevStateNo;
 	private	bool				execute;
 
+	//テキストエフェクト
+	public	GameObject	textEffectPrefab;
+
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数
 	private	void	StartKimishimaSystem(){
@@ -102,6 +105,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			Tutorial();
 		}
 		prevStateNo	= stateNo;
+#if UNITY_EDITOR
+		//Debug
+		if(Input.GetKeyDown(KeyCode.M)){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			Debug.Log(te.targetObject.name);
+		}
+#endif
 	}
 
 	//パーツ選択ステート
