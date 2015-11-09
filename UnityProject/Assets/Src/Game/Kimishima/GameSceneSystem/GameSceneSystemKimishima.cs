@@ -111,6 +111,30 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			GameObject	obj			= Instantiate(textEffectPrefab);
 			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
 			te.targetObject			= Camera.main.gameObject;
+			te.id					= TextEffectManager.EffectID.Bon;
+			Debug.Log(te.targetObject.name);
+		}
+		if(Input.GetKeyDown(KeyCode.K)){
+			Transform	trans		= Camera.main.transform;
+			Vector3[]	offset		= new Vector3[]{
+				trans.right * -12.0f + trans.up * -14.0f,trans.right * 12.0f + trans.up * 14.0f,
+				trans.right * -6.0f + trans.up *  28.0f,trans.right * 6.0f + trans.up * -28.0f
+			};
+			for(int i = 0;i < 4;i ++){
+				GameObject	obj			= Instantiate(textEffectPrefab);
+				TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+				te.targetObject			= Camera.main.gameObject;
+				te.transform.position	= trans.position + trans.forward * 100 + offset[i];
+				te.id					= TextEffectManager.EffectID.Gura;
+				Debug.Log(te.targetObject.name);
+			}
+		}
+		if(Input.GetKeyDown(KeyCode.O)){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			te.transform.position	= Camera.main.transform.position + Camera.main.transform.forward * 80;
+			te.id					= TextEffectManager.EffectID.Gasshan;
 			Debug.Log(te.targetObject.name);
 		}
 #endif

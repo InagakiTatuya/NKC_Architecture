@@ -39,7 +39,7 @@ public class TextEffectManager : MonoBehaviour {
 			TextEffect.ID.Bon_bo,
 			TextEffect.ID.Bon_n
 		};
-		for(int i = 0;i < 2;i ++){
+		for(int i = 0;i < id.Length;i ++){
 			GameObject	obj	= Instantiate(prefab);
 			TextEffect	te	= obj.GetComponent<TextEffect>();
 			te.id			= id[i];
@@ -48,10 +48,35 @@ public class TextEffectManager : MonoBehaviour {
 		}
 	}
 	private	void	StartGura(){//グラ//-----------
-
+		TextEffect.ID[]	id	= new TextEffect.ID[]{
+			TextEffect.ID.Gura_gu,
+			TextEffect.ID.Gura_ra
+		};
+		for(int i = 0;i < id.Length;i ++){
+			GameObject	obj	= Instantiate(prefab);
+			TextEffect	te	= obj.GetComponent<TextEffect>();
+			te.id			= id[i];
+			te.pos			= this.transform.position;
+			te.targetObject	= targetObject;
+		}
 	}
 	private	void	StartGasshan(){//ガッシャーン//
-
+		TextEffect.ID[]	id	= new TextEffect.ID[]{
+			TextEffect.ID.Gassharn_ga,
+			TextEffect.ID.Gassharn_tsu,
+			TextEffect.ID.Gassharn_shi,
+			TextEffect.ID.Gassharn_ya,
+			TextEffect.ID.Gassharn_haihun,
+			TextEffect.ID.Gassharn_n,
+			TextEffect.ID.Gassharn_ex,
+		};
+		for(int i = 0;i < id.Length;i ++){
+			GameObject	obj	= Instantiate(prefab);
+			TextEffect	te	= obj.GetComponent<TextEffect>();
+			te.id			= id[i];
+			te.pos			= this.transform.position;
+			te.targetObject	= targetObject;
+		}
 	}
 
 }
