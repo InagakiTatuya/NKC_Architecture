@@ -78,12 +78,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 	private	void	UpdateCheckKimishimaCompleteCamera(){
 		if(cameraMove == null)	return;
+		GameObject	obj	= buildList[buildList.Count - 9].gameObject;
+		Debug.Log(obj.transform.position);
 		Vector3	pos		= buildList[buildList.Count - 9].gameObject.transform.position;
 		Vector3	look	= new Vector3(0,pos.y + 100,0);
 		Vector3	at		= new Vector3(60,pos.y + 50,60);
 		cameraMove.look	= look;
 		cameraMove.at	= at;
 		cameraMove.maxY	= look.y + 50.0f;
+		Debug.Log(look);
 	}
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
@@ -92,7 +95,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
-		if(stateTime >= 1.0f){
+		if(!gassharnFlg){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			te.transform.position	= Camera.main.transform.position + Camera.main.transform.forward * 80;
+			te.id					= TextEffectManager.EffectID.Gasshan;
+			gassharnFlg	= true;
+		}
+		if(stateTime >= 3.0f){
 			gameOverFlg	= true;
 			ChangeState(StateNo.Result);
 			return;
@@ -128,6 +139,16 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			checkFlg	&= ~0x00000004;
 			if(!value)	return;
 			checkFlg	|=  0x00000004;
+		}
+	}
+	public	bool	gassharnFlg{
+		get{
+			return (checkFlg & 0x00000008) != 0x00000000;
+		}
+		set{
+			checkFlg	&= ~0x00000008;
+			if(!value)	return;
+			checkFlg	|=  0x00000008;
 		}
 	}
 }//ゲームシーンのシステム_End//-----------------------------

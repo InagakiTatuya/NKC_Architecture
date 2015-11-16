@@ -47,22 +47,22 @@ public partial class Database : SingletonCustom<Database> {
 	public	static	readonly	string[,]	tablePartsName	= new string[,]{
 		{
 			"Yuka 00",		"Yuka 01",		"Yuka 02",		"Yuka 03",
-			//	"Yuka 04",		"Yuka 05",		"Yuka 06",		"Yuka 07",
+			"Yuka 04",		"Yuka 05"//,		"Yuka 06",		"Yuka 07",
 			//	"Yuka 08",		"ダンボール",
 		},
 		{
 			"Hashira 00",	"Hashira 01",	"Hashira 02",	"Hashira 03",
-			//	"Hashira 04",	"Hashira 05",	"Hashira 06",	"Hashira 07",
+			"Hashira 04",	"Hashira 05"//,	"Hashira 06",	"Hashira 07",
 			//	"Hashira 08",	"ダンボール",
 		},
 		{
 			"Kabe 00",		"Kabe 01",		"Kabe 02",		"Kabe 03",
-			//	"Kabe 04",		"Kabe 05",		"Kabe 06",		"Kabe 07",
+			"Kabe 04",		"Kabe 05"//,		"Kabe 06",		"Kabe 07",
 			//	"Kabe 08",		"ダンボール",
 		},
 		{
 			"Yane 00",		"Yane 01",		"Yane 02",		"Yane 03",
-			//	"Yane 04",		"Yane 05",		"Yane 06",		"Yane 07",
+			"Yane 04",		"Yane 05"//,		"Yane 06",		"Yane 07",
 			//	"Yane 08",		"ダンボール",
 		}
 	};

@@ -31,15 +31,15 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			"Prefab/Game/Build/Brick/Wall",
 			"Prefab/Game/Build/Brick/Roof",
 		},{
-			"Prefab/Game/Build/Brick/Floor",
-			"Prefab/Game/Build/Brick/Pillar",
-			"Prefab/Game/Build/Brick/Wall",
-			"Prefab/Game/Build/Brick/Roof",
+			"Prefab/Game/Build/Lego/floor",
+			"Prefab/Game/Build/Lego/pillar",
+			"Prefab/Game/Build/Lego/wall",
+			"Prefab/Game/Build/Lego/roof",
 		},{
-			"Prefab/Game/Build/Brick/Floor",
-			"Prefab/Game/Build/Brick/Pillar",
-			"Prefab/Game/Build/Brick/Wall",
-			"Prefab/Game/Build/Brick/Roof",
+			"Prefab/Game/Build/Tohu/floor",
+			"Prefab/Game/Build/Tohu/pillar",
+			"Prefab/Game/Build/Tohu/wall",
+			"Prefab/Game/Build/Tohu/roof",
 		},{
 			"Prefab/Game/Build/Brick/Floor",
 			"Prefab/Game/Build/Brick/Pillar",

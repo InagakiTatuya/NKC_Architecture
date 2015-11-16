@@ -70,6 +70,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		BackFadeInit();
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
+		FallObject.delegateBonPos	= CreateBon;
 #if DEBUG_GAMESCENE
 		Database.InitColorBlock();
 #endif
@@ -175,6 +176,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		tp.tutorialID			= f_tutorialFlg;
 		f_tutorialFlg			++;
 	}
-
+	//ボン出す
+	private	void	CreateBon(Vector3 pos){
+		GameObject	obj			= Instantiate(textEffectPrefab);
+		obj.transform.position	= pos + Camera.main.transform.forward * -25.0f;
+		TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+		te.targetObject			= Camera.main.gameObject;
+		te.id					= TextEffectManager.EffectID.Bon;
+	}
 }
 #endregion	//ゲームシーンのシステム
