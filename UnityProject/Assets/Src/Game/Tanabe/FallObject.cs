@@ -2,6 +2,12 @@
 using System.Collections;
 
 public partial class FallObject : MonoBehaviour {
+	public	delegate	void			DelegateBonPos(Vector3 pos);
+	public	static		DelegateBonPos	delegateBonPos;
+
+	static	private bool	breakFlag;
+	static	private bool	unBreakFlag;
+
 	//ステート
 	public enum STATE{
 		Fall,
@@ -22,9 +28,7 @@ public partial class FallObject : MonoBehaviour {
 	private Rigidbody		rBody;
 	private Vector3			recordVel,recordAngVel;
 	private Vector3			temp;
-	
-	static	private bool	breakFlag;
-	static	private bool	unBreakFlag;
+
 	private bool	boundFlag;
 	//state毎の経過時間
 	private float	stateTime;
@@ -34,6 +38,8 @@ public partial class FallObject : MonoBehaviour {
 
 	private float	collapseConfirmTime = 0.5f;
 	private float	collapseConfirmTimer;
+
+	public	bool	bonFlag;
 
 	void Start(){
 		recordVel		=	new Vector3();
@@ -255,6 +261,9 @@ public partial class FallObject : MonoBehaviour {
 			rBody.velocity		=	Vector3.zero;
 			state				=	STATE.Bound;
 			temp				=	transform.position;
+			if(bonFlag){
+				if(delegateBonPos	!=	null)	delegateBonPos(transform.position);
+			}
 			switch(system.GetJob){//設置パーティクル
 				case 0:
 					ParticleManager.obj.Play(ParticleManager.PAR_0_FLOOR,	temp);

@@ -45,6 +45,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int					prevStateNo;
 	private	bool				execute;
 
+	//テキストエフェクト
+	public	GameObject	textEffectPrefab;
+
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数
 	private	void	StartKimishimaSystem(){
@@ -67,6 +70,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		BackFadeInit();
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
+		FallObject.delegateBonPos	= CreateBon;
 #if DEBUG_GAMESCENE
 		Database.InitColorBlock();
 #endif
@@ -102,6 +106,39 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			Tutorial();
 		}
 		prevStateNo	= stateNo;
+#if UNITY_EDITOR
+		//Debug
+		if(Input.GetKeyDown(KeyCode.M)){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			te.id					= TextEffectManager.EffectID.Bon;
+			Debug.Log(te.targetObject.name);
+		}
+		if(Input.GetKeyDown(KeyCode.K)){
+			Transform	trans		= Camera.main.transform;
+			Vector3[]	offset		= new Vector3[]{
+				trans.right * -12.0f + trans.up * -14.0f,trans.right * 12.0f + trans.up * 14.0f,
+				trans.right * -6.0f + trans.up *  28.0f,trans.right * 6.0f + trans.up * -28.0f
+			};
+			for(int i = 0;i < 4;i ++){
+				GameObject	obj			= Instantiate(textEffectPrefab);
+				TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+				te.targetObject			= Camera.main.gameObject;
+				te.transform.position	= trans.position + trans.forward * 100 + offset[i];
+				te.id					= TextEffectManager.EffectID.Gura;
+				Debug.Log(te.targetObject.name);
+			}
+		}
+		if(Input.GetKeyDown(KeyCode.O)){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			te.transform.position	= Camera.main.transform.position + Camera.main.transform.forward * 80;
+			te.id					= TextEffectManager.EffectID.Gasshan;
+			Debug.Log(te.targetObject.name);
+		}
+#endif
 	}
 
 	//パーツ選択ステート
@@ -139,6 +176,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		tp.tutorialID			= f_tutorialFlg;
 		f_tutorialFlg			++;
 	}
-
+	//ボン出す
+	private	void	CreateBon(Vector3 pos){
+		GameObject	obj			= Instantiate(textEffectPrefab);
+		obj.transform.position	= pos + Camera.main.transform.forward * -25.0f;
+		TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+		te.targetObject			= Camera.main.gameObject;
+		te.id					= TextEffectManager.EffectID.Bon;
+	}
 }
 #endregion	//ゲームシーンのシステム

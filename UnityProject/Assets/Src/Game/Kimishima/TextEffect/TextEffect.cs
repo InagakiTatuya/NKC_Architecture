@@ -30,12 +30,15 @@ public class TextEffect : MonoBehaviour {
 	private	Color		CharaColor		= Color.black;
 	private	Color		OutlineColor	= Color.white;
 
+	private	UnityAction[]	startFunc;
 	private	UnityAction[]	updateFunc;
 	
 	public	ID			id;
 	public	Texture2D	texture;
 	public	GameObject	targetObject;
 	public	Vector3		pos;
+	private	Vector3		posBuf;
+	private	Vector3		vel;
 	private	Vector3		scale	= Vector3.one * 8;
 	private	Quaternion	rotate;
 	private	float		timer;
@@ -46,6 +49,7 @@ public class TextEffect : MonoBehaviour {
 		StartInitUpdateFunc();
 		rotate	= Quaternion.Euler(1.0f,1.0f,1.0f);
 		timer	= 0.0f;
+		StartFuncInvoke();
 	}
 	private	void	StartGetMaterial(){//マテリアルを読み込む
 		Renderer	renderer	= GetComponent<Renderer>();
@@ -58,6 +62,20 @@ public class TextEffect : MonoBehaviour {
 		material.SetTextureOffset	("_MainTex",offset);
 	}
 	private	void	StartInitUpdateFunc(){//更新関数を初期化
+		startFunc	= new UnityAction[]{
+			StartBon_bo,
+			StartBon_n,
+			StartGura_gu,
+			StartGura_ra,
+			StartGassharn_ga,
+			StartGassharn_xtu,
+			StartGassharn_shi,
+			StartGassharn_xya,
+			StartGassharn_haihun,
+			StartGassharn_n,
+			StartGassharn_ex,
+			null
+		};
 		updateFunc	= new UnityAction[]{
 			UpdateBon_bo,
 			UpdateBon_n,
@@ -73,13 +91,18 @@ public class TextEffect : MonoBehaviour {
 			null
 		};
 	}
+	private	void	StartFuncInvoke(){
+		if(startFunc == null)			return;
+		if(startFunc[(int)id] == null)	return;
+		startFunc[(int)id]();
+	}
 	
 	//更新//------------------------------------------
-	void Update () {
+	void FixedUpdate () {
 		UpdateFuncInvoke();
 		UpdateMaterial();
 		UpdateTranceform();
-		timer	+= Time.deltaTime;
+		timer	+= Time.fixedDeltaTime;
 	}
 	private	void	UpdateTranceform(){//オブジェクトステータスを更新
 		Vector3		dist	= targetObject.transform.position - pos;
@@ -98,47 +121,179 @@ public class TextEffect : MonoBehaviour {
 		material.SetColor("_OutlineColor",OutlineColor);
 	}
 
-	private	void	UpdateBon_bo(){//ボンのボ//-------
-		pos		+= new Vector3(2.0f,8.0f,0.0f) * Time.deltaTime;
-		scale	= Vector3.one * 4.0f * timer;
-		rotate	= Quaternion.Euler(0.0f,0.0f,30.0f);
-		CharaColor.a	= Mathf.Max(1.0f - timer,0.0f);
-		OutlineColor.a	= Mathf.Max(1.0f - timer,0.0f);
+	//ボンのボ//--------------------------------------
+	private	void	StartBon_bo(){//初期化
+		vel				= new Vector3(0.0f,256.0f,0.0f);
+		//rotate			= Quaternion.Euler(0.0f,0.0f,-r);
+	}
+	private	void	UpdateBon_bo(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos		+= vel * Time.fixedDeltaTime;
+		vel		*= 0.75f;
+		scale	= Vector3.one * 12.0f * Mathf.Pow(n,0.25f);
+		CharaColor		= Color.black * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
+		OutlineColor	= Color.white * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
 		if(timer > 1.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateBon_n(){//ボンのン//--------
-		pos		+= new Vector3(8.0f,2.0f,0.0f) * Time.deltaTime;
-		scale	= Vector3.one * 4.0f * timer;
-		rotate	= Quaternion.Euler(0.0f,0.0f,60.0f);
-		CharaColor.a	= Mathf.Max(1.0f - timer,0.0f);
-		OutlineColor.a	= Mathf.Max(1.0f - timer,0.0f);
+
+	//ボンのン//--------------------------------------
+	private	void	StartBon_n(){//初期化
+		vel				= new Vector3(256.0f,0.0f,0.0f);
+		rotate			= Quaternion.Euler(0.0f,0.0f,45.0f);
+	}
+	private	void	UpdateBon_n(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos		+= vel * Time.fixedDeltaTime;
+		vel		*= 0.75f;
+		scale	= Vector3.one * 12.0f * Mathf.Pow(n,0.25f);
+		CharaColor		= Color.black * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
+		OutlineColor	= Color.white * (1.0f - n) + new Color(0.5f,0.5f,0.5f,0.0f) * n;
 		if(timer > 1.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateGura_gu(){//グラのグ//------
 
+	//グラのグ//--------------------------------------
+	private	void	StartGura_gu(){//初期化
+		pos	+= new Vector3(0.0f,4.0f,0.0f);
+		CharaColor		= Color.black;
+		OutlineColor	= Color.yellow;
 	}
-	private	void	UpdateGura_ra(){//グラのラ//------
+	private	void	UpdateGura_gu(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos	+= new Vector3(Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f));
+		CharaColor.a	= Mathf.Pow(1.0f - n,0.5f);
+		OutlineColor.a	= Mathf.Pow(1.0f - n,0.5f);
+		rotate		= Quaternion.Euler(0.0f,0.0f,5.0f * Mathf.Sin(Mathf.PI * 8.0f * timer));
+		if(timer > 1.0f)	Destroy(this.gameObject);
+	}
 
+	//グラのラ//--------------------------------------
+	private	void	StartGura_ra(){//初期化
+		pos	+= new Vector3(0.0f,-4.0f,0.0f);
+		CharaColor		= Color.black;
+		OutlineColor	= Color.yellow;
 	}
-	private	void	UpdateGassharn_ga(){//ガッシャーン!!のガ
+	private	void	UpdateGura_ra(){//更新
+		float	n	= Mathf.Min(timer,1.0f);
+		pos	+= new Vector3(Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f));
+		CharaColor.a	= Mathf.Pow(1.0f - n,0.5f);
+		OutlineColor.a	= Mathf.Pow(1.0f - n,0.5f);
+		rotate		= Quaternion.Euler(0.0f,0.0f,5.0f * Mathf.Sin(Mathf.PI * 8.0f * timer));
+		if(timer > 1.0f)	Destroy(this.gameObject);
+	}
 
+	//ガッシャーン!!のガ//----------------------------
+	private	const	float	gassharnSpeed	= 2.0f;
+	private	void	StartGassharn_ga(){//初期化
+		posBuf		= pos + new Vector3(-20.0f,-5.0f,0.0f);
+		vel			= new Vector3(-12.0f,32.0f,0.0f) * gassharnSpeed;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
 	}
-	private	void	UpdateGassharn_xtu(){//ガッシャーン!!のッ
-		
+	private	void	UpdateGassharn_ga(){//更新
+		if(timer < 0.3f){
+			scale	= (scale + new Vector3(50.0f,50.0f,1.0f)) * 0.5f;
+		}
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateGassharn_shi(){//ガッシャーン!!のシ
-		
+	private	void	GassharnCommon(){
+		if(timer < 0.3f)	return;
+		if(timer < 1.0f){
+			pos		= pos * 0.8f + posBuf * 0.2f;
+			scale	= scale * 0.8f + new Vector3(10.0f,10.0f,1.0f) * 0.2f;
+			pos		+= new Vector3(Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f));
+			return;
+		}
+		pos		+= vel * Time.fixedDeltaTime;
+		vel.y	-= 2.0f;
+		rotate	= Quaternion.Euler(0.0f,0.0f,timer * 720.0f);
+		float	alpha	= 1.0f - Mathf.Min((timer - 1.0f) / 2.0f,1.0f);
+		CharaColor.a	= alpha;
+		OutlineColor.a	= alpha;
 	}
-	private	void	UpdateGassharn_xya(){//ガッシャーン!!のャ
-		
+
+	//ガッシャーン!!のッ//----------------------------
+	private	void	StartGassharn_xtu(){
+		posBuf		= pos + new Vector3(-10.0f,-3.75f,0.0f);
+		vel			= new Vector3(-8.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
 	}
-	private	void	UpdateGassharn_haihun(){//ガッシャーン!!のー
-		
+	private	void	UpdateGassharn_xtu(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
 	}
-	private	void	UpdateGassharn_n(){//ガッシャーン!!のン
-		
+
+	//ガッシャーン!!のシ//----------------------------
+	private	void	StartGassharn_shi(){
+		posBuf		= pos + new Vector3(0.0f,-2.5f,0.0f);
+		vel			= new Vector3(-4.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
 	}
-	private	void	UpdateGassharn_ex(){//ガッシャーン!!の!!
-		
+	private	void	UpdateGassharn_shi(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
+	}
+
+	//ガッシャーン!!のャ//----------------------------
+	private	void	StartGassharn_xya(){
+		posBuf		= pos + new Vector3(10.0f,-1.25f,0.0f);
+		vel			= new Vector3(0.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
+	}
+	private	void	UpdateGassharn_xya(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
+	}
+
+	//ガッシャーン!!のー//----------------------------
+	private	void	StartGassharn_haihun(){
+		posBuf		= pos + new Vector3(20.0f,0.0f,0.0f);
+		vel			= new Vector3(4.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
+	}
+	private	void	UpdateGassharn_haihun(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
+	}
+
+	//ガッシャーン!!のン//----------------------------
+	private	void	StartGassharn_n(){
+		posBuf		= pos + new Vector3(30.0f,1.25f,0.0f);
+		vel			= new Vector3(8.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
+	}
+	private	void	UpdateGassharn_n(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
+	}
+
+	//ガッシャーン!!の!!//----------------------------
+	private	void	StartGassharn_ex(){
+		posBuf		= pos + new Vector3(40.0f,2.5f,0.0f);
+		vel			= new Vector3(12.0f,32.0f,0.0f) * gassharnSpeed;
+		scale		= Vector3.zero;
+		rotate		= Quaternion.Euler(0.0f,0.0f,-30.0f);
+		CharaColor		= Color.red;
+		OutlineColor	= Color.black;
+	}
+	private	void	UpdateGassharn_ex(){
+		GassharnCommon();
+		if(timer > 3.0f)	Destroy(this.gameObject);
 	}
 }

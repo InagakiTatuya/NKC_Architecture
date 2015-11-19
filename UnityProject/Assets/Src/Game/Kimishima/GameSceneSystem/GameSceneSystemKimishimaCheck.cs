@@ -21,10 +21,34 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//変数//////////////////////////////////////////////////
 	private	int		checkFlg	= 0x00000000;
-
+	private	float	guraCreateTime;
+	private	int		guraCount	= 0;
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数//------------------------------------
 	private void UpdateCheckKimishima(){
+		if(Time.time - guraCreateTime > 1.1f){
+			guraCreateTime			= Time.time;
+			guraCount				= (guraCount + 1) % 2;
+			Transform	trans		= Camera.main.transform;
+			Vector3[,]	offset		= new Vector3[,]{
+				{
+					trans.forward *  80 + trans.right * -12.0f + trans.up * -14.0f,
+					trans.forward * 100 + trans.right * 12.0f + trans.up * 14.0f
+				},
+				{
+					trans.forward * 100 + trans.right * -6.0f + trans.up *  28.0f,
+					trans.forward *  80 + trans.right * 6.0f + trans.up * -28.0f
+				}
+			};
+			for(int i = 0;i < 2;i ++){
+				GameObject	obj			= Instantiate(textEffectPrefab);
+				TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+				te.targetObject			= Camera.main.gameObject;
+				te.transform.position	= trans.position + offset[guraCount,i];
+				te.id					= TextEffectManager.EffectID.Gura;
+				Debug.Log(te.targetObject.name);
+			}
+		}
 		floorSize.y = floorSize.y * 0.8f;
 		if(floorSize.y < 1.0f)	floorSize.y	= 0.0f;
 		if(UpdateCheckKimishimaCollapse())	return;
@@ -54,12 +78,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 	private	void	UpdateCheckKimishimaCompleteCamera(){
 		if(cameraMove == null)	return;
+		GameObject	obj	= buildList[buildList.Count - 9].gameObject;
+		Debug.Log(obj.transform.position);
 		Vector3	pos		= buildList[buildList.Count - 9].gameObject.transform.position;
 		Vector3	look	= new Vector3(0,pos.y + 100,0);
 		Vector3	at		= new Vector3(60,pos.y + 50,60);
 		cameraMove.look	= look;
 		cameraMove.at	= at;
 		cameraMove.maxY	= look.y + 50.0f;
+		Debug.Log(look);
 	}
 	//落下フラグを反映//------------------------------------
 	void	SetCollapseFlg(){
@@ -68,7 +95,15 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//GameOver//--------------------------------------------
 	private void UpdateGameOverKimishima(){
-		if(stateTime >= 1.0f){
+		if(!gassharnFlg){
+			GameObject	obj			= Instantiate(textEffectPrefab);
+			TextEffectManager	te	= obj.GetComponent<TextEffectManager>();
+			te.targetObject			= Camera.main.gameObject;
+			te.transform.position	= Camera.main.transform.position + Camera.main.transform.forward * 80;
+			te.id					= TextEffectManager.EffectID.Gasshan;
+			gassharnFlg	= true;
+		}
+		if(stateTime >= 3.0f){
 			gameOverFlg	= true;
 			ChangeState(StateNo.Result);
 			return;
@@ -104,6 +139,16 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			checkFlg	&= ~0x00000004;
 			if(!value)	return;
 			checkFlg	|=  0x00000004;
+		}
+	}
+	public	bool	gassharnFlg{
+		get{
+			return (checkFlg & 0x00000008) != 0x00000000;
+		}
+		set{
+			checkFlg	&= ~0x00000008;
+			if(!value)	return;
+			checkFlg	|=  0x00000008;
 		}
 	}
 }//ゲームシーンのシステム_End//-----------------------------
