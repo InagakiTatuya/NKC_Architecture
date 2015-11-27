@@ -77,7 +77,7 @@ public class MultiInputField : MonoBehaviour {
             #endif
         }
     }
-    public UnityAction<string> endEdit {
+    public UnityAction<string> onEndEdit {
         get {
             #if !UNITY_EDITOR && (UNITY_ANDROID || UNITY_IOS)
             return m_InputMobile.onEndEdit;

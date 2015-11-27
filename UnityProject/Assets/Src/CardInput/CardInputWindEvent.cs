@@ -20,7 +20,7 @@ public partial class CardInputWind : MonoBehaviour {
     private void EventsInit() {
         //名前入力
         m_Input.onValueChange  = OnChangeValueName;
-        m_Input.endEdit        = OnEndNameEidt;
+        m_Input.onEndEdit        = OnEndNameEidt;
         m_Input.characterLimit = NAME_MAX_LENGTH;
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - -

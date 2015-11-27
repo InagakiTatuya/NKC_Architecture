@@ -22,7 +22,7 @@ public class MobileInputField : MonoBehaviour {
 
     //イベント関数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public UnityAction<string> onValueChange;
-    public UnityAction<string> endEdit;
+    public UnityAction<string> onEndEdit;
 
     //公開プロパティ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public Text     textComponent {
@@ -88,7 +88,7 @@ public class MobileInputField : MonoBehaviour {
                 m_Text.text = m_Text.text.Remove(m_CharacterLimit);
             }
 
-            if(endEdit != null) endEdit(m_Text.text);
+            if(onEndEdit != null) onEndEdit(m_Text.text);
             m_Keyboard.text = ""; //キーボードのテキストを破棄
         }
 
@@ -111,7 +111,7 @@ public class MobileInputField : MonoBehaviour {
 
         }else{
             m_Text.text = "テストマン";
-            if(endEdit != null) endEdit(m_Text.text);
+            if(onEndEdit != null) onEndEdit(m_Text.text);
         }
     
     }
