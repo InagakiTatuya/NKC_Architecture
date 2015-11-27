@@ -77,7 +77,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	}
 	//階層ウィンドウを生成
 	private	void	StartKimishimaSystemCreateFloorWindow(){
-		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/FloorWindow",canvasObject);
 		floorWindow			= obj.GetComponent<Image>();
 		floorWindow.rectTransform.localPosition	= FLOORWINDOW_POS;
 		floorWindow.color	= Color.white;

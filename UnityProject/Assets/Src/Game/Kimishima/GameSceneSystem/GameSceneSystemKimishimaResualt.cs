@@ -189,7 +189,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 
 	//リザルトウィンドウを生成_Begin//------------------------
 	private	void	CreateResultWindow(){
-		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/FloorWindow",canvasObject);
 		resultWindow		= obj.GetComponent<Image>();
 		resultWindow.sprite	= Resources.Load<Sprite>("Texture/Result/window");
 		resultWindow.rectTransform.localPosition	= new Vector3(0.0f,192.0f);

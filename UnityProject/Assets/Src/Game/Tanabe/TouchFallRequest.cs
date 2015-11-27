@@ -3,8 +3,10 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler{
-	//設置物(上から)
+public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
+{
+	#region //field
+	#region //設置物(上から)
 	//床
 	//柱
 	//壁
@@ -26,10 +28,10 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			"Prefab/Game/Build/Dannbo/Wall",
 			"Prefab/Game/Build/Dannbo/Roof",
 		},{
-			"Prefab/Game/Build/Brick/Floor",
-			"Prefab/Game/Build/Brick/Pillar",
-			"Prefab/Game/Build/Brick/Wall",
-			"Prefab/Game/Build/Brick/Roof",
+			"Prefab/Game/Build/Marble/Floor",
+			"Prefab/Game/Build/Marble/Pillar",
+			"Prefab/Game/Build/Marble/Wall",
+			"Prefab/Game/Build/Marble/Roof",
 		},{
 			"Prefab/Game/Build/Lego/floor",
 			"Prefab/Game/Build/Lego/pillar",
@@ -62,130 +64,129 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 			"Prefab/Game/Build/Brick/Roof",
 		},
 	};
-	
+	#endregion
 	private GameSceneSystem system;
+	
+	private const float	depth	=	85.0f;
 
 	[SerializeField]
-	private float	fallSpeed = 50.0f;
+	private float	fallSpeed	=	50.0f;
+
 	private int		buildNo;
-	private int		partsID;
+	private int		partsId;
 	private bool	firstOutBuildingFlag;
 
 	//生成する建造物
 	private GameObject[,]	moveObj;
 	private GameObject		downObj;
 	private Transform		childObj;
-	private Vector3			pos;
-	private Renderer		render;
 	private Color			buildColor;
+	private Vector3			pos;
 	
 	//タッチフィールド用
-	private	bool			flg;
-	private Image			spriteImg;
-	private Color			spriteColor;
+	private FlashingUI		touchFieldFlashUI;
+	#endregion
 
-	public void Awake(){
-		system					=	transform.root.GetComponent<GameSceneSystem>();
-		spriteImg				=	GetComponent<Image>();
-		spriteColor				=	spriteImg.color;
-		spriteColor.a			=	0;
+	#region //method
+	void Awake(){
 		moveObj					=	new GameObject[buildName.GetLength(0),buildName.GetLength(1)];
+
+		system					=	transform.root.GetComponent<GameSceneSystem>();
+		touchFieldFlashUI		=	new FlashingUI(GetComponent<Image>(),1.5f);
+
 		pos						=	Vector3.zero;
-		flg						=	false;
 		firstOutBuildingFlag	=	false;
-
-		for(int i=0;i<moveObj.GetLength(0);i++){
-			for(int j=0;j<moveObj.GetLength(1);j++){
-				//プレビュー用
-				moveObj[i,j]					=	Instantiate(Resources.Load<GameObject>(buildName[i,j]));
-				moveObj[i,j].transform.parent	=	transform.root.GetChild(8);
-				if(moveObj[i,j].transform.tag != "Ice"){//既に透過されているので必要なし
-					for(int k=0;k<moveObj[i,j].transform.childCount;k++){
-						render	=	moveObj[i,j].transform.GetChild(k).GetComponent<Renderer>();
-						if(render != null){
-							buildColor				=	render.material.color;
-							buildColor.a			=	0.5f;
-							render.material.color	=	buildColor;
-						}
-					}
-				}
-				moveObj[i,j].SetActive(false);
-			}
-		}
 	}
-
 	void Update(){
-		if(flg){
-			spriteColor.a	+=	Time.deltaTime*1.5f;
-			if(spriteColor.a>=1.0f)	flg	=	false;
-		}else{
-			spriteColor.a	-=	Time.deltaTime*1.5f;
-			if(spriteColor.a<=0.0f)	flg	=	true;
-		}
-		spriteImg.color	=	spriteColor;
+		if(touchFieldFlashUI!=null) touchFieldFlashUI.Flash();
 	}
-
 
 	//UIオブジェクトがタッチされたら
 	public void OnPointerDown(PointerEventData e){
 		buildNo = system.GetJob;
-		partsID = system.PartsID;
+		partsId = system.PartsID;
 
-		SetPos(e);
+		InstanceData();
+		SetObjPos(e);
 		//選択されたオブジェクトのプレビューを許可
-		moveObj[partsID,buildNo].SetActive(true);
+		if(moveObj[partsId,buildNo] == null) return;
+		moveObj[partsId,buildNo].SetActive(true);
 	}
-
 	//UIオブジェクトがドラッグされたら
 	public void OnDrag(PointerEventData e){
-		SetPos(e);
-		/*
-		if (gameObject == e.pointerEnter)	color[buildNo] = Color.white;
-		else								color[buildNo] = Color.red;
-		color[buildNo].a = 0.5f;
-		render[buildNo].material.color = color[buildNo];
-		*/
+		SetObjPos(e);
 	}
-
 	//UIオブジェクトが放されたら
 	public void OnPointerUp(PointerEventData e){
-		//Debug.Log(targetObj +":"+ e.pointerEnter);
-		if (gameObject == e.pointerEnter){//オブジェクト設置範囲内で離された
+		if(moveObj[partsId,buildNo] == null) return;
+		if(gameObject == e.pointerEnter){//オブジェクト設置範囲内で離された
 			system.seManager.Play(0);
-			SetPos(e);
+			SetObjPos(e);
 			//設置するオブジェクトを生成
-			downObj					=	Resources.Load<GameObject>(buildName[partsID,buildNo]);
+			downObj					=	Resources.Load<GameObject>(buildName[partsId,buildNo]);
 			downObj					=	(GameObject)Instantiate(downObj, pos, Quaternion.identity);
 			//設置数を記録
 			FallObject.ChildCount	=	downObj.transform.childCount;
-			while(downObj.transform.childCount>0){//接続された子を独立させる
-				childObj = downObj.transform.GetChild(0);
-				if(childObj.tag == "Shadow"){//影は子として数えない
-					FallObject.ChildCount = 0;
-					break;
-				}
-				childObj.GetComponent<Collider	>().enabled	= true;
-				childObj.GetComponent<FallObject>().enabled	= true;
-				childObj.GetComponent<Rigidbody	>().AddForce(-transform.up * fallSpeed, ForceMode.VelocityChange);
-				if(!firstOutBuildingFlag){
-					childObj.parent			=	transform.root;
-					firstOutBuildingFlag	=	true;
-				}else{
-					childObj.parent			=	transform.root.GetChild(7);
-				}
-				//分解が完了したら削除
-				if(downObj.transform.childCount == 0) DestroyObject(downObj);
-			}
+
+			//設置オブジェクトを分解する
+			DisassemblyObj();
+			DestroyObject(downObj);
+			downObj = null;
+			
+			DestroyObject(moveObj[partsId,buildNo]);
+			moveObj[partsId,buildNo] = null;
+			
+			touchFieldFlashUI.SetColorAlpha(0.0f);
 			gameObject.SetActive(false);
-			spriteColor.a	=	0;
+
+			return;
 		}
-		moveObj[partsID,buildNo].SetActive(false);
+		moveObj[partsId,buildNo].SetActive(false);
 	}
 
-	void SetPos(PointerEventData e){
-		pos		=	e.position;
-		pos.z	=	85;
-		pos		=	Camera.main.ScreenToWorldPoint(pos);
-		moveObj[partsID,buildNo].transform.position = pos;
+	//設置オブジェクトを分解する
+	private void DisassemblyObj()
+	{
+		Transform childTransCache = downObj.transform;
+		int childNum = downObj.transform.childCount;
+		while(childNum>0){//接続された子を独立させる
+			childObj = childTransCache.GetChild(childNum-1);
+			if(childObj.tag == "Shadow"){//影は子として数えない
+				childNum--;
+				continue;
+			}
+			childObj.GetComponent<Collider	>().enabled	= true;
+			childObj.GetComponent<FallObject>().enabled	= true;
+			childObj.GetComponent<Rigidbody	>().AddForce(-childTransCache.up * fallSpeed, ForceMode.VelocityChange);
+			if(!firstOutBuildingFlag){
+				childObj.parent			=	transform.root;
+				firstOutBuildingFlag	=	true;
+			}else{
+				childObj.parent			=	transform.root.GetChild(7);
+			}
+			childNum--;
+		}
 	}
+	//オブジェクトの設置位置を設定
+	void SetObjPos(PointerEventData e){
+		if(moveObj[partsId,buildNo] == null) return;
+		pos		=	e.position;
+		pos.z	=	depth;
+		pos		=	Camera.main.ScreenToWorldPoint(pos);
+		moveObj[partsId,buildNo].transform.position = pos;
+	}
+	//選択されたオブジェクトのプレビュー用データ生成
+	void InstanceData(){
+		if(moveObj[partsId,buildNo] != null)			return;
+		if(partsId<0 || partsId>=moveObj.GetLength(0))	return;
+		if(buildNo<0 || buildNo>=moveObj.GetLength(1))	return;
+		
+		GameObject temp,loadTemp;
+		loadTemp				=	Resources.Load<GameObject>(buildName[partsId,buildNo]);
+		temp					=	Instantiate(loadTemp);
+		temp.transform.parent	=	transform.root.GetChild(8);
+		temp.SetActive(false);
+		moveObj[partsId,buildNo] = temp;
+	}
+	#endregion
 }

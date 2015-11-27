@@ -186,7 +186,7 @@ class 	PartsSelectClass{
 	}
 
 	private	void	CreateWindow(){//パーツ選択ウィンドウを生成
-		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/FloorWindow",canvasObject);
+		GameObject	obj		= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/FloorWindow",canvasObject);
 		windowImage			= obj.GetComponent<Image>();
 		windowImage.sprite	= Resources.Load<Sprite>("Texture/Game/Window");
 		windowImage.rectTransform.localPosition	= new Vector3(0.0f,64.0f);
@@ -245,14 +245,14 @@ class 	PartsSelectClass{
 	}
 
 	private	void	CreatePartsSelectScrollView(int job){//スクロールビューを生成
-		string		prefabName	= "Prefab/Game/PartsSelectScrollView";
+		string		prefabName	= "Prefab/Game/GUI/PartsSelectScrollView";
 		GameObject	obj			= TitleSystem.CreateObjectInCanvas(prefabName,windowImage.gameObject);
 		GameObject	contents	= obj.transform.GetChild(0).gameObject;
 		int			length		= Database.tablePartsName.GetLength(1) / 3;
 		if((Database.tablePartsName.GetLength(1) % 3) != 0)	length	++;
 		pointerUpSystem			= new PointerUpSystem[Database.tablePartsName.GetLength(1)];
 		for(int i = 0;i < length;i ++){
-			GameObject	test	= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectWindowButton",canvasObject);
+			GameObject	test	= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/PartsSelectWindowButton",canvasObject);
 			test.transform.SetParent(contents.transform);
 			for(int j = 0;j < 3;j ++){
 				int		id		= i * 3 + j;
@@ -263,7 +263,7 @@ class 	PartsSelectClass{
 	}
 
 	private	void	CreatePartsSelectWindowButton(GameObject contents,int job,int id){//パーツ選択ウィンドウのボタンを生成
-		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/PartsSelectPanel",contents);
+		GameObject	obj			= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/PartsSelectPanel",contents);
 		Image		image		= obj.GetComponent<Image>();
 		Vector3		imagePos	= new Vector3(-128.0f + (id % 3) * 128.0f,0.0f,0.0f);
 		string[]	buttonName	= new string[]{"yuka","hashira","kabe","yane"};
