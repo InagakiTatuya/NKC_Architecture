@@ -44,7 +44,8 @@ public partial class CardInputWind : MonoBehaviour {
     private MessageWind       m_MesWind;  //メッセージウィンドウ
     
     //見た目
-    private MobileInputField  m_Input;     //名前入力
+    private MultiInputField   m_Input;     //名前入力
+    private InputField        m_InputPc;   //名前入力（PC用）
     private Image             m_ImageHair; //髪型
     private Image             m_ImageFace; //顔
     private Image             m_ImageBody; //体
@@ -70,8 +71,8 @@ public partial class CardInputWind : MonoBehaviour {
                                                 .GetComponent<MessageWind>();
         
         //名前入力
-        m_Input     = m_Wind.FindChild("Card/InputField")
-                                        .GetComponent<MobileInputField>();
+        m_Input     = m_Wind.FindChild("Card/MultiInputField")
+                                        .GetComponent<MultiInputField>();
         
         //見た目
         m_ImageHair = m_Wind.FindChild("Card/PhotoBack/PhotoHair")
@@ -351,10 +352,5 @@ public partial class CardInputWind : MonoBehaviour {
     //  CradInptuWindEvent.cs に定義
 
 
-    //void OnGUI() {
-    //    GUI.TextField(new Rect(0, Screen.height - 100, Screen.width / 3, 100),
-    //        "name = " + m_DataBff.pleyerName + "\nHair = " + m_DataBff.imageHairNo +
-    //        "\nFace = " + m_DataBff.imageFaceNo + "\nBody = " + m_DataBff.imageBodyNo 
-    //        );
-    //}
+
 }

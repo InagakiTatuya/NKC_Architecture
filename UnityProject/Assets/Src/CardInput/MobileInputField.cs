@@ -1,4 +1,9 @@
-﻿using UnityEngine;
+﻿//#############################################################################
+//  モバイルキーボードで入力するフィールドを制御するクラス
+//  作者：稲垣達也
+//#############################################################################
+
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -6,13 +11,18 @@ using System.Collections;
 
 [RequireComponent(typeof(Button))]
 public class MobileInputField : MonoBehaviour {
+
+    //非公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    private TouchScreenKeyboard m_Keyboard;
+
     //Inspecterで編集^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     [SerializeField]private Text m_Text;            //入力データ
     [SerializeField]private Text m_Placeholder;     //未入力のとき表示する文字
     [SerializeField]private int  m_CharacterLimit;  //文字数制限（０で無限）
 
-    //非公開変数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    private TouchScreenKeyboard m_Keyboard;
+    //イベント関数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    public UnityAction<string> onValueChange;
+    public UnityAction<string> endEdit;
 
     //公開プロパティ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     public Text     textComponent {
@@ -28,14 +38,16 @@ public class MobileInputField : MonoBehaviour {
             }
         }//End set
     }
+
+    public string placeholder {
+        get{ return m_Placeholder.text;  }
+        set{ m_Placeholder.text = value; }
+    }
+
     public int      characterLimit{
         get { return m_CharacterLimit;  } 
         set { m_CharacterLimit = value; }
     }
-
-    //イベント関数^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    public UnityAction<string> onValueChange;
-    public UnityAction<string> endEdit;
 
     //初期化===================================================================
     void Awake() {
@@ -103,17 +115,4 @@ public class MobileInputField : MonoBehaviour {
         }
     
     }
-
-    //void OnGUI() {
-    //    if(m_Keyboard != null)
-    //        GUI.TextField(new Rect(0,0,300,280),"area = "+ TouchScreenKeyboard.area +
-    //            "\nhideInput = " + TouchScreenKeyboard.hideInput + "\nisSupported = " + TouchScreenKeyboard.isSupported + 
-    //            "\nvisible = " + TouchScreenKeyboard.visible +
-    //            "\n---\ncurrent = " + (EventSystem.current.currentSelectedGameObject.Equals(this.gameObject)) +
-    //            "\n---\nact = " + m_Keyboard.active + "\ndone = " + m_Keyboard.done + 
-    //            "\ntext = " + m_Keyboard.text + "\nwasCanceled = " + m_Keyboard.wasCanceled + 
-    //            "\nendEdit" + (m_Keyboard.done || !m_Keyboard.active) + "\nonValueChange = " + (m_Keyboard.text.Length > 0) +
-    //            "\n---\nText = " + this.text
-    //            );
-    //}
 }

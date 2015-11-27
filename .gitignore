@@ -1,4 +1,4 @@
-
+﻿
 *.csproj
 *.sln
 *.suo
@@ -9,4 +9,4 @@ UnityProject/obj/Debug
 
 
 *.userprefs
-UnityProject/建塔師のScreenショット0.png
+*.unityproj
