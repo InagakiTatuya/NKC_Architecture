@@ -162,7 +162,7 @@ public class TextEffect : MonoBehaviour {
 		pos	+= new Vector3(Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f),Random.Range(-0.2f,0.2f));
 		CharaColor.a	= Mathf.Pow(1.0f - n,0.5f);
 		OutlineColor.a	= Mathf.Pow(1.0f - n,0.5f);
-		rotate		= Quaternion.Euler(0.0f,0.0f,5.0f * Mathf.Sin(Mathf.PI * 8.0f * timer));
+		rotate			= Quaternion.Euler(0.0f,0.0f,5.0f * Mathf.Sin(Mathf.PI * 8.0f * timer));
 		if(timer > 1.0f)	Destroy(this.gameObject);
 	}
 

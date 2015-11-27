@@ -76,7 +76,7 @@ public	class	FadeClass{//フェードを管理するクラス_Begin//
 	//初期化_Begin//-----------------------------------------
 	public	void	Init(){
 		backFadeColor	= Color.black;
-		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Game/Fade",canvasObject);
+		GameObject	obj	= TitleSystem.CreateObjectInCanvas("Prefab/Game/GUI/Fade",canvasObject);
 		backFadeImage	= obj.GetComponent<Image>();
 		tableBackFade	= new UnityAction[]{
 			this.BackFadeUpdateFadeIn,
