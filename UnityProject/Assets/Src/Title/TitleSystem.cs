@@ -20,6 +20,7 @@ public	partial class TitleSystem : MonoBehaviour{
 //パブリックフィールド//------------------------------------
 
 	//変数//////////////////////////////////////////////////
+    private static  bool    screenSizeChanged   = false;
 	public	GameObject	canvasObject	= null;
 	public	SeManager	seManager		= null;
 	public	Material	textMaterial	= null;
@@ -31,6 +32,7 @@ public	partial class TitleSystem : MonoBehaviour{
 	//初期化////////////////////////////////////////////////
 	public	void	Start(){//初期化_Begin//----------------
 		Database.InitColorBlock();
+        ScreenSizeChange();
 		updateFunc	= new UpdateFunc[]{//更新関数を初期化
 			UpdateNeutral,
 			UpdateGoNext,
@@ -46,6 +48,12 @@ public	partial class TitleSystem : MonoBehaviour{
 		ChangeState(StateNo.Neutral);
 		f_timer	= 0.0f;
 	}//初期化_End//-----------------------------------------
+
+    private void    ScreenSizeChange(){
+        if(screenSizeChanged)   return;
+        Screen.SetResolution(408,720,false);
+        screenSizeChanged   = true;
+    }
 
 	//更新//////////////////////////////////////////////////
 	public	void	Update(){//更新_Beign//-----------------
