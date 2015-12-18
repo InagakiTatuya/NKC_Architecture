@@ -22,6 +22,7 @@ public class TitleLogoEffect : MonoBehaviour {
 		size	= image.rectTransform.sizeDelta;
 		sizeBuf	= size;
 		timer	= 0.0f;
+		gameObject.SetActive(false);
 	}
 	
 	//更新//--------------------------------------------
