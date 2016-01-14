@@ -35,7 +35,7 @@ public class SeManager : MonoBehaviour {
 	}
 
 	//関数//--------------------------------------------
-	public	void	Play(int id){
+	public	void	Play(int id,float volume = 1.0f,float pitch = 1.0f){
 		if(se == null)					return;
 		if(id < 0 || id >= se.Length)	return;
 		if(audioSource == null)			return;
@@ -43,6 +43,8 @@ public class SeManager : MonoBehaviour {
 		if(audioTimer == null)			return;
 		if(audioTimer[id] < 0.05f)		return;
 		audioSource[id].Play();
+		audioSource[id].volume	= volume;
+		audioSource[id].pitch	= pitch;
 		audioTimer[id]	= 0.0f;
 	}
 }
