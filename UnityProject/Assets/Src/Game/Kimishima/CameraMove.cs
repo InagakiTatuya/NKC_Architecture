@@ -32,6 +32,7 @@ public class CameraMove : MonoBehaviour {
 		get{return	f_up;}
 		set{f_up	= value;}
 	}
+	public	Vector3	shake;
 
 	public	float	maxY;
 	private	Vector3	lookBuf;
@@ -52,6 +53,7 @@ public class CameraMove : MonoBehaviour {
 		f_look	= transform.position;
 		f_at	= new Vector3(60.0f,-50.0f,60.0f);
 		f_up	= Vector3.up;
+		shake	= Vector3.zero;
 		lookBuf	= look;
 		atBuf	= at;
 		upBuf	= up;
@@ -67,8 +69,8 @@ public class CameraMove : MonoBehaviour {
 		lookBuf	= lookBuf * (1.0f - lookPower) + look * lookPower;
 		atBuf	= atBuf   * (1.0f - atPower  ) + at   * atPower;
 		upBuf	= upBuf   * (1.0f - upPower  ) + up   * upPower;
-		transform.position	= lookBuf;
-		transform.LookAt(atBuf,upBuf);
+		transform.position	= lookBuf + shake;
+		transform.LookAt(atBuf + shake,upBuf);
 	}
 
 	//タッチ操作

@@ -4,11 +4,6 @@
 //更新者 :	君島一刀
 //----------------------------------------------------------
 
-//プリプロセッサ////////////////////////////////////////////
-#if UNITY_EDITOR
-	#define	DEBUG_GAMESCENE
-#endif
-
 //名前空間//////////////////////////////////////////////////
 using UnityEngine;
 using UnityEngine.Events;
@@ -20,6 +15,7 @@ public partial class FallObject : MonoBehaviour {
 
 	public	static	UnityAction	collapseFunc	= null;
 	private	bool	exitFlag;
+	public	bool	gameOverFlg					= false;
 
 	//初期化関数//------------------------------------------
 	void	StartKimishimaFallObject(){
@@ -31,7 +27,7 @@ public partial class FallObject : MonoBehaviour {
 		if(system.stateNo != (int)GameSceneSystem.StateNo.Check) return;
 		if(!exitFlag)	exitFlag = true;
 		return;
-#if	DEBUG_GAMESCENE
+#if UNITY_EDITOR
 		Debug.Log(gameObject.name + " が倒壊!!");
 #endif
 	}//コリジョンが離れたとき_End//-------------------------

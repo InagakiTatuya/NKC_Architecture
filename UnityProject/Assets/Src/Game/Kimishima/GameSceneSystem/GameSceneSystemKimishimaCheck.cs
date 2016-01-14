@@ -23,6 +23,7 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	private	int		checkFlg	= 0x00000000;
 	private	float	guraCreateTime;
 	private	int		guraCount	= 0;
+
 	//更新//////////////////////////////////////////////////
 	//チェック用の関数//------------------------------------
 	private void UpdateCheckKimishima(){
@@ -102,10 +103,38 @@ public	partial class GameSceneSystem : MonoBehaviour{
 			te.transform.position	= Camera.main.transform.position + Camera.main.transform.forward * 80;
 			te.id					= TextEffectManager.EffectID.Gasshan;
 			gassharnFlg	= true;
+			for(int i = 0;i < buildList.Count;i ++){
+				if(buildList[i] == null)	continue;
+				buildList[i].seManagere		= seManager;
+				buildList[i].gameOverFlg	= true;
+			}
+			seManager.Play(7,1.0f,0.5f);
 		}
+		if(stateTime < 0.25f){
+		//	float	pitch		= Random.Range(0.125f,0.25f);
+			if(!seManager.isPlaying(9))
+				seManager.Play(9,crackVolume,0.25f);
+			crackVolume *= 0.9f;
+		}
+		if(cameraShakeCount == 0){
+			Vector3	shake;
+			shake.x	= Random.Range(-1,1) * cameraShakePow * 4.0f;
+			shake.z	= Random.Range(-1,1) * cameraShakePow * 4.0f;
+			shake.y	= Random.Range(-1,1) * cameraShakePow * 4.0f;
+			cameraMove.shake	= shake;
+			Vector3	up;
+			up.x	= Random.Range(-1,1) * cameraShakePow / 16.0f;
+			up.z	= Random.Range(-1,1) * cameraShakePow / 16.0f;
+			up.y	= 1.0f;
+			cameraMove.up		= up.normalized;
+			cameraShakePow		*= 0.9f;
+		}
+		cameraShakeCount	= (cameraShakeCount + 1) % cameraShakeTiming;
 		if(stateTime >= 3.0f){
 			gameOverFlg	= true;
 			ChangeState(StateNo.Result);
+			cameraMove.shake	= Vector3.zero;
+			cameraMove.up		= Vector3.up;
 			return;
 		}
 	}

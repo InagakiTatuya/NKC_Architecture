@@ -85,6 +85,7 @@ public class TouchFallRequest : MonoBehaviour, IPointerDownHandler, IDragHandler
 	
 	//タッチフィールド用
 	private FlashingUI		touchFieldFlashUI;
+
 	#endregion
 
 	#region //method

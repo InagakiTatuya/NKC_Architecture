@@ -2,6 +2,12 @@
 using System.Collections;
 
 public partial class FallObject : MonoBehaviour {
+
+	//Se用の変数とセッターだぜいby君島//------------
+	private	SeManager	f_seManager	= null;
+	public	SeManager	seManagere{set{f_seManager	= value;}}
+	//----------------------------------------------
+
 	public	delegate	void			DelegateBonPos(Vector3 pos);
 	public	static		DelegateBonPos	delegateBonPos;
 
@@ -250,6 +256,13 @@ public partial class FallObject : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision col){
+		if(gameOverFlg && f_seManager != null){
+			float	volume		= Random.Range(0.125f,0.5f);
+			float	pitch		= Random.Range(0.125f,0.25f);
+			int[]	tableSeID	= new int[]{1,8,9};
+			int		seID		= Random.Range(0,tableSeID.Length - 1);
+			if(!f_seManager.isPlaying(tableSeID[seID]))	f_seManager.Play(tableSeID[seID],volume,pitch);
+		}
 		if(exitFlag){
 			collapseConfirmTimer	=	0;
 			exitFlag				=	false;
