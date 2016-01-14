@@ -47,4 +47,12 @@ public class SeManager : MonoBehaviour {
 		audioSource[id].pitch	= pitch;
 		audioTimer[id]	= 0.0f;
 	}
+
+	public	bool	isPlaying(int id){
+		if(se == null)					return	false;
+		if(id < 0 || id >= se.Length)	return	false;
+		if(audioSource == null)			return	false;
+		if(audioSource[id] == null)		return	false;
+		return	audioSource[id].isPlaying;
+	}
 }

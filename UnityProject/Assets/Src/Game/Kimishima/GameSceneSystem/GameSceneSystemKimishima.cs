@@ -48,6 +48,13 @@ public	partial class GameSceneSystem : MonoBehaviour{
 	//テキストエフェクト
 	public	GameObject	textEffectPrefab;
 
+	//効果音関連
+	private	float				crackVolume;
+	//カメラのシェイク関連
+	private	float				cameraShakePow;
+	private	int					cameraShakeCount;
+	private	const	int			cameraShakeTiming	= 16;
+
 	//初期化////////////////////////////////////////////////
 	//俺の初期化関数
 	private	void	StartKimishimaSystem(){
@@ -71,6 +78,9 @@ public	partial class GameSceneSystem : MonoBehaviour{
 		StartKimishimaSystemCreateFloorWindow();
 		StartKimishimaSystemCreateFloorText();
 		FallObject.delegateBonPos	= CreateBon;
+		crackVolume					= 1.0f;
+		cameraShakePow				= 1.0f;
+		cameraShakeCount			= 0;
 #if DEBUG_GAMESCENE
 		Database.InitColorBlock();
 #endif
